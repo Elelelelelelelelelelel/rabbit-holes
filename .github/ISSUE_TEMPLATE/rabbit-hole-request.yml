@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for spotting a hole! The best questions are everyday mysteries — things people notice constantly but can't explain. If it gets built, you'll be credited on the page.
+        Thanks for spotting a hole! You propose the question — the series author does the digging. The best questions are everyday mysteries: things people notice constantly but can't explain. If yours gets built, you'll be credited on the page.
   - type: input
     id: question
     attributes:

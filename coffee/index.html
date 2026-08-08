@@ -157,31 +157,21 @@
   .sim-verdict.mid{color:var(--accent)}
   .sim-verdict.good{color:var(--ok)}
 
-  /* ten-day curfew lab */
-  .lab-chips{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:6px}
-  .lab-chip{height:9px;border-radius:4px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15)}
-  .lab-chip.done.normal{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent}
-  .lab-chip.done.curfew{background:linear-gradient(90deg,#2E6B4A,var(--ok));border-color:transparent}
-  .lab-legend{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);
-    font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
-  .lab-night{font-family:var(--display);font-size:14px;letter-spacing:.06em;margin-bottom:14px}
-  .lab-night .ph-normal{color:var(--accent-hot)}
-  .lab-night .ph-curfew{color:var(--ok)}
-  .feel-row{display:flex;gap:8px;flex-wrap:wrap}
-  .feel-row button{flex:1 1 44px;padding:9px 6px;border-radius:8px;cursor:pointer;font-family:var(--display);
-    font-size:14px;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
-  .feel-row button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
-  .lab-save{margin-top:16px}
-  .lab-links{margin-top:10px;font-size:12.5px;color:var(--dim)}
-  .lab-links button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
-  .lab-results{margin-top:18px}
-  .lab-cols{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
-  .lab-col{flex:1 1 180px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
-  .lab-col h5{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-  .lab-col.c-normal h5{color:var(--accent-hot)}
-  .lab-col.c-curfew h5{color:var(--ok)}
-  .lab-col .row{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;color:var(--dim)}
-  .lab-col .row b{color:var(--crema)}
+  /* depth-lock puzzles */
+  .puzzle{margin-top:16px;padding:18px;border-radius:10px;border:1px solid var(--line);background:rgba(7,11,20,.5)}
+  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .pz-q{font-size:15.5px;font-weight:700;margin:10px 0 14px}
+  .pz-opts{display:grid;gap:8px}
+  .pz-opts button{text-align:left;padding:11px 14px;border-radius:8px;background:var(--ink-raise);
+    border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;font:inherit;font-size:14.5px;
+    transition:border-color .2s ease, background .2s ease}
+  .pz-opts button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
+  .pz-opts button:focus-visible{outline:2px solid var(--accent-hot);outline-offset:2px}
+  .pz-feed{margin-top:12px;font-size:13.5px;font-weight:700;color:var(--danger)}
+  .puzzle.shake{animation:pzshake .4s ease}
+  @keyframes pzshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+
+  /* discussion panel + shared button row */
   .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
   .btn-mini{padding:10px 16px;font-size:13px}
   .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
@@ -294,7 +284,13 @@ const CONFIG = {
         <p>Two people drinking the same 9pm espresso are not running the same experiment. By midnight, one body may have already destroyed most of the caffeine, whilst the other still carries a nearly full dose. And even with equal caffeine on board, one brain may barely register it.</p>
         <p class="dim">Everything below this level explains <em>how</em> that happens — molecule by molecule.</p>`,
       sum:"A good stopping point: people differ hugely in how fast they clear caffeine and how strongly their brain reacts to it — and that's biology, not habit.",
-      take:"Night-coffee sleepers aren't tougher — their bodies clear caffeine faster and/or their brains react to it less. It's biology."
+      take:"Night-coffee sleepers aren't tougher — their bodies clear caffeine faster and/or their brains react to it less. It's biology.",
+      puzzle:{
+        q:"What mainly separates the night-espresso sleeper from everyone else?",
+        options:["Stronger willpower and better habits","Biology: how fast they clear caffeine and how their brain responds","They secretly drink decaf","They've simply trained themselves not to notice tiredness"],
+        answer:1,
+        hint:"The level's title says it plainly: it's real, and it's not willpower."
+      }
     },
     {
       kicker:"Level 2 · The Molecule",
@@ -305,7 +301,13 @@ const CONFIG = {
         <div class="callout"><span class="tag">Key idea</span>
         If caffeine only mutes a signal, then two things decide the night: <strong>how loud your sleepiness signal is</strong>, and <strong>how long the mute button stays pressed</strong>. Both differ between people.</div>`,
       sum:"A good stopping point: caffeine adds no energy — it temporarily mutes your brain's sleepiness signal.",
-      take:"Caffeine is a masking agent: it blocks the sleepiness signal instead of adding energy."
+      take:"Caffeine is a masking agent: it blocks the sleepiness signal instead of adding energy.",
+      puzzle:{
+        q:"What does caffeine actually do?",
+        options:["Adds a small amount of energy to the body","Speeds the heart up enough to keep you awake","Blocks a signal so your brain can't hear its own tiredness","Burns adenosine as fuel"],
+        answer:2,
+        hint:"It's a masking agent — it hides something rather than adding anything."
+      }
     },
     {
       kicker:"Level 3 · The Impostor",
@@ -315,7 +317,13 @@ const CONFIG = {
         <p>Here's the trick: the caffeine molecule happens to be shaped enough like adenosine to <strong>fit into the same parking spaces</strong> — mainly receptors called A1 and A2A — without switching them on. It's an impostor occupying the seat so the real messenger can't sit down.</p>
         <p class="dim">Crucially, adenosine keeps piling up behind the blockade. When the caffeine finally leaves, all that backed-up sleepiness floods in at once — the infamous crash.</p>`,
       sum:"A good stopping point: caffeine impersonates adenosine and blocks the receptors that make you feel sleepy — whilst real sleep pressure keeps building behind it.",
-      take:"It works by impersonating adenosine, parking in sleep receptors (A1/A2A) without activating them — sleep pressure keeps building behind the blockade."
+      take:"It works by impersonating adenosine, parking in sleep receptors (A1/A2A) without activating them — sleep pressure keeps building behind the blockade.",
+      puzzle:{
+        q:"Caffeine parks in receptors that were built for which molecule?",
+        options:["Melatonin","Dopamine","Cortisol","Adenosine"],
+        answer:3,
+        hint:"It's the byproduct that builds up like sand in an hourglass whilst you're awake."
+      }
     },
     {
       kicker:"Level 4 · The Clock",
@@ -326,7 +334,13 @@ const CONFIG = {
       widget:"halfLife",
       afterWidgetHTML:`<p class="dim">A fast metaboliser's 9pm espresso is mostly gone by midnight. A slow metaboliser's <em>3pm</em> coffee can still be a quarter-dose at 1am. Same drink, different night.</p>`,
       sum:"A good stopping point: caffeine's half-life averages ~5 hours but ranges from ~2 to 10+ between people — that alone can decide the night.",
-      take:"Half-life varies from ~2 to 10+ hours between people, so the same evening cup can be a trace or nearly a full dose at bedtime."
+      take:"Half-life varies from ~2 to 10+ hours between people, so the same evening cup can be a trace or nearly a full dose at bedtime.",
+      puzzle:{
+        q:"What's the average half-life of caffeine?",
+        options:["About 30 minutes","About 5 hours","About 24 hours","About 3 days"],
+        answer:1,
+        hint:"Long enough that a 3pm coffee can still matter at bedtime for slow metabolisers."
+      }
     },
     {
       kicker:"Level 5 · The Factory",
@@ -341,7 +355,13 @@ const CONFIG = {
         </div>
         <p class="dim">People casually say “fast metaboliser” and “slow metaboliser”. This enzyme is what they're actually talking about. And what controls the enzyme? One level down.</p>`,
       sum:"A good stopping point: one liver enzyme, CYP1A2, clears ~95% of caffeine, and its activity varies up to ~40-fold between people.",
-      take:"One enzyme — CYP1A2 — clears ~95% of caffeine, and its speed varies up to ~40× between people."
+      take:"One enzyme — CYP1A2 — clears ~95% of caffeine, and its speed varies up to ~40× between people.",
+      puzzle:{
+        q:"Which enzyme dismantles about 95% of the caffeine you drink?",
+        options:["ADORA2A","Lactase","CYP1A2","Melatonin synthase"],
+        answer:2,
+        hint:"It's the liver's speed dial — this level is named after it."
+      }
     },
     {
       kicker:"Level 6 · The Code",
@@ -353,7 +373,13 @@ const CONFIG = {
         <div class="callout"><span class="tag">The 2×2 of coffee drinkers</span>
         Fast clearance <em>and</em> low sensitivity → the friend with a post-dinner espresso ritual. Slow clearance <em>and</em> high sensitivity → the person wrecked by an afternoon green tea. Most of us land somewhere between.</div>`,
       sum:"A good stopping point: variants in CYP1A2 set your clearance speed, and variants in ADORA2A set how sensitive your brain is to what remains.",
-      take:"Two genes run the show: CYP1A2 variants set clearance speed; ADORA2A variants set how hard the brain reacts to a blocked receptor."
+      take:"Two genes run the show: CYP1A2 variants set clearance speed; ADORA2A variants set how hard the brain reacts to a blocked receptor.",
+      puzzle:{
+        q:"What does the ADORA2A gene decide?",
+        options:["How fast the liver clears caffeine","How strongly the brain reacts to a blocked receptor","How bitter coffee tastes to you","How much adenosine you produce per hour"],
+        answer:1,
+        hint:"CYP1A2 is the clearance gene; ADORA2A is the sensitivity gene."
+      }
     },
     {
       kicker:"Level 7 · The Counterattack",
@@ -363,7 +389,13 @@ const CONFIG = {
         <p>Within a week or two of daily use, much of caffeine's alerting punch fades. This is why a habitual four-cup drinker can feel almost nothing from a nightcap coffee that would leave a caffeine-naïve person vibrating.</p>
         <p>Two catches. First, tolerance to caffeine's <strong>sleep-disrupting effects is only partial</strong> — regular drinkers still show measurable sleep changes in lab studies. Second, all those extra receptors are why quitting hurts: with no caffeine in the seats, normal adenosine levels suddenly hit an oversized receptor array. That's the withdrawal headache and fog.</p>`,
       sum:"A good stopping point: daily use makes the brain grow extra adenosine receptors, dulling caffeine's kick — but tolerance to its sleep disruption is only partial.",
-      take:"Daily use builds tolerance — the brain adds adenosine receptors — but tolerance to caffeine's sleep disruption is only partial."
+      take:"Daily use builds tolerance — the brain adds adenosine receptors — but tolerance to caffeine's sleep disruption is only partial.",
+      puzzle:{
+        q:"How does the brain adapt to daily caffeine?",
+        options:["It builds more adenosine receptors","It stops producing adenosine altogether","It shrinks its adenosine receptors","It learns to break caffeine down itself"],
+        answer:0,
+        hint:"Think of a besieged system adding more seats than the impostor can occupy."
+      }
     },
     {
       kicker:"Level 8 · The Modifiers",
@@ -375,7 +407,13 @@ const CONFIG = {
         <div class="callout"><span class="tag">Translation</span>
         Your caffeine tolerance isn't just <em>yours</em> — it's yours <em>right now</em>. The person who “could always sleep after coffee” can lose that ability by changing a prescription, quitting cigarettes, or becoming pregnant.</div>`,
       sum:"A good stopping point: smoking speeds caffeine clearance; contraceptives, pregnancy and some medications slow it dramatically. Your tolerance is a moving target.",
-      take:"Life modifies the dial: smoking doubles clearance; contraceptives, pregnancy (15 h+ half-life) and some medications slow it drastically."
+      take:"Life modifies the dial: smoking doubles clearance; contraceptives, pregnancy (15 h+ half-life) and some medications slow it drastically.",
+      puzzle:{
+        q:"Which of these dramatically SLOWS caffeine clearance?",
+        options:["Smoking","Char-grilled meat","Pregnancy","Cruciferous vegetables"],
+        answer:2,
+        hint:"By the third trimester the half-life can stretch to 15 hours or more."
+      }
     },
     {
       kicker:"Level 9 · The Plot Twist",
@@ -386,7 +424,13 @@ const CONFIG = {
         <p>So part of the honest answer to our big question is uncomfortable: <strong>some night-coffee drinkers aren't unaffected — they're unaware.</strong> They fall asleep on schedule but skim shallower waters all night, then blame the resulting grogginess on needing… more coffee.</p>
         <p class="dim">That said, the genetic lottery is real here too: studies suggest fast metabolisers and low-sensitivity genotypes show smaller objective sleep disruption. Some people genuinely do get away with it. Fewer than believe they do.</p>`,
       sum:"A good stopping point: many people who “sleep fine” after coffee are losing deep sleep without noticing — falling asleep isn't the whole story.",
-      take:"“Still sleeps” ≠ “sleeps well”: evening caffeine cuts deep slow-wave sleep even in people who notice nothing. Some are unaffected; more are simply unaware."
+      take:"“Still sleeps” ≠ “sleeps well”: evening caffeine cuts deep slow-wave sleep even in people who notice nothing. Some are unaffected; more are simply unaware.",
+      puzzle:{
+        q:"In the study that gave people 400 mg of caffeine six hours before bed, what happened?",
+        options:["They slept better than the control group","They lost over an hour of sleep but barely noticed","They couldn't fall asleep at all","Nothing — six hours is plenty of clearance time"],
+        answer:1,
+        hint:"The uncomfortable phrase from this level: not unaffected — unaware."
+      }
     },
     {
       kicker:"Level 10 · The Bottom of the Cup",
@@ -396,8 +440,8 @@ const CONFIG = {
         <div class="callout"><span class="tag">The night-coffee equation</span>
         <strong>Dose × timing</strong> → filtered by <strong>enzyme speed (CYP1A2 gene + modifiers)</strong> → hits a brain tuned by <strong>receptor genetics (ADORA2A)</strong> and reshaped by <strong>tolerance</strong> → competes against your accumulated <strong>sleep pressure</strong> that night. The output is whether — and how deeply — you sleep.</div>
         <p>Your cousin who sleeps after espresso likely rolled fast-clearance genes, low-sensitivity receptors, a daily habit that built tolerance, and enough sleep pressure by 10pm to overwhelm what little caffeine remains. You may have rolled the opposite hand. Neither of you chose it.</p>
-        <p><strong>Want your own answer without a DNA test?</strong> Run the ten-day experiment, right here: keep your normal coffee for five days, then hold a strict caffeine curfew (nothing after ~midday) for five more. Log each night below — the lab keeps score, saves privately in your browser, and hands you a shareable verdict at the end.</p>`,
-      widget:"curfewLab",
+        <p><strong>Want your own answer without a DNA test?</strong> Run the ten-day experiment: keep your normal coffee for five days, then hold a strict caffeine curfew (nothing after ~midday) for five more. Track how long it takes to fall asleep, night wakings, and — most telling — how you feel at 9am. If the curfew week feels noticeably better, your genes have voted.</p>`,
+      widget:"discussPanel",
       afterWidgetHTML:`
         <p class="dim">One caveat worth keeping: this page explains mechanisms, not medical advice. Sleep problems that persist regardless of caffeine deserve a proper appointment with your GP.</p>`,
       sum:"",
@@ -471,182 +515,22 @@ const WIDGETS = {
     }
   },
 
-  /* ---- Level 10: the ten-day curfew lab (log nights, get a verdict, share it) ---- */
-  curfewLab: {
+  /* ---- Level 10: the discussion panel (links out to GitHub — nothing is logged here) ---- */
+  discussPanel: {
     html: `
-      <div class="sim" data-lab>
-        <h4>The ten-day curfew lab</h4>
-        <div class="lab-chips" data-el="chips"></div>
-        <div class="lab-legend"><span>☕ Nights 1–5 · coffee as usual</span><span>🚫 Nights 6–10 · caffeine curfew</span></div>
-
-        <div data-el="entry">
-          <div class="lab-night" data-el="nightLabel"></div>
-          <div class="sim-grid">
-            <div>
-              <label>How long did it take you to fall asleep? · <output data-el="minOut">20 min</output></label>
-              <input type="range" data-el="mins" min="0" max="90" step="5" value="20">
-            </div>
-            <div>
-              <label>How did you feel this morning? (1 = wrecked · 5 = brilliant)</label>
-              <div class="feel-row" data-el="feel">
-                <button type="button" data-f="1">😵 1</button><button type="button" data-f="2">😪 2</button>
-                <button type="button" data-f="3" class="active">😐 3</button><button type="button" data-f="4">🙂 4</button>
-                <button type="button" data-f="5">✨ 5</button>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-deeper lab-save" type="button" data-el="save">Log this night</button>
+      <div class="sim">
+        <h4>The discussion panel</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Ran the ten-day experiment? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub — public and free to join. This page stores nothing and logs nothing about you.</p>
+        <div class="share-row">
+          <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
+          <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>
         </div>
-
-        <div class="lab-results" data-el="results" hidden>
-          <div class="lab-cols">
-            <div class="lab-col c-normal"><h5>☕ Coffee as usual</h5>
-              <div class="row"><span>Nights logged</span><b data-el="nN">0</b></div>
-              <div class="row"><span>Fell asleep in</span><b data-el="nM">—</b></div>
-              <div class="row"><span>Morning score</span><b data-el="nF">—</b></div></div>
-            <div class="lab-col c-curfew"><h5>🚫 Caffeine curfew</h5>
-              <div class="row"><span>Nights logged</span><b data-el="cN">0</b></div>
-              <div class="row"><span>Fell asleep in</span><b data-el="cM">—</b></div>
-              <div class="row"><span>Morning score</span><b data-el="cF">—</b></div></div>
-          </div>
-          <div class="sim-verdict mid" data-el="verdict" hidden></div>
-          <div class="share-row" data-el="shareRow" hidden>
-            <button class="btn btn-deeper btn-mini" type="button" data-el="copy">Copy my results</button>
-            <button class="btn btn-stop btn-mini" type="button" data-el="native" hidden>Share…</button>
-            <a class="btn btn-stop btn-mini" data-el="tweet" target="_blank" rel="noopener">Post on X</a>
-            <a class="btn btn-stop btn-mini" data-el="thread" target="_blank" rel="noopener">Share in the community thread</a>
-          </div>
-          <div class="share-note" data-el="shareNote" hidden>Your results are copied as plain text — paste them anywhere. The community thread lives in this project's GitHub Discussions.</div>
-        </div>
-
-        <div class="lab-links">
-          <button type="button" data-el="undo">Undo last night</button> ·
-          <button type="button" data-el="restart">Restart the experiment</button>
-        </div>
+        <div class="share-note">Opens this project's GitHub Discussions in a new tab. A free GitHub account is all you need to post.</div>
       </div>`,
     init(root){
-      const $ = k => root.querySelector(`[data-el="${k}"]`);
-      const KEY = "rh-lab-" + CONFIG.slug;
-      let nights = [];
-      try{ nights = JSON.parse(localStorage.getItem(KEY) || "[]"); }catch(e){}
-      if(!Array.isArray(nights)) nights = [];
-      let feel = 3;
-
-      const avg = a => a.reduce((s,x)=>s+x,0)/a.length;
-      const phaseOf = i => i < 5 ? "normal" : "curfew";
-
-      function stats(){
-        const n = nights.filter((_,i)=>phaseOf(i)==="normal");
-        const c = nights.filter((_,i)=>phaseOf(i)==="curfew");
-        return {
-          n, c,
-          nM: n.length ? avg(n.map(x=>x.m)) : null,
-          nF: n.length ? avg(n.map(x=>x.f)) : null,
-          cM: c.length ? avg(c.map(x=>x.m)) : null,
-          cF: c.length ? avg(c.map(x=>x.f)) : null
-        };
-      }
-
-      function verdictText(s){
-        const dm = s.nM - s.cM;           // minutes saved by the curfew
-        const df = s.cF - s.nF;           // morning-score gain
-        if(dm >= 10 || df >= 0.8)
-          return "⚖️ Verdict: the curfew week won convincingly. Evening caffeine is costing you sleep — your genes have voted.";
-        if(dm <= 2 && Math.abs(df) <= 0.3)
-          return "⚖️ Verdict: barely any difference. You may genuinely be one of the fast-clearance lucky ones.";
-        return "⚖️ Verdict: a modest but real difference. Caffeine is nibbling at your nights rather than devouring them.";
-      }
-
-      function shareText(s){
-        const url = location.href.split("#")[0];
-        return "🧪 My 10-day caffeine curfew experiment\n" +
-          `☕ Coffee as usual — fell asleep in ~${Math.round(s.nM)} min, mornings ${s.nF.toFixed(1)}/5\n` +
-          `🚫 Caffeine curfew — fell asleep in ~${Math.round(s.cM)} min, mornings ${s.cF.toFixed(1)}/5\n` +
-          verdictText(s).replace("⚖️ Verdict: ","⚖️ ") + "\n" +
-          "Run your own descent: " + url;
-      }
-
-      function render(){
-        /* chips */
-        const chips = $("chips");
-        chips.innerHTML = "";
-        for(let i=0;i<10;i++){
-          const d = document.createElement("div");
-          d.className = "lab-chip " + phaseOf(i) + (i < nights.length ? " done" : "");
-          chips.appendChild(d);
-        }
-        /* entry vs finished */
-        const done = nights.length >= 10;
-        $("entry").hidden = done;
-        if(!done){
-          const n = nights.length + 1;
-          $("nightLabel").innerHTML = n <= 5
-            ? `Night ${n} of 10 · <span class="ph-normal">☕ coffee as usual</span>`
-            : `Night ${n} of 10 · <span class="ph-curfew">🚫 caffeine curfew — nothing after midday</span>`;
-        }
-        /* stats */
-        const s = stats();
-        const any = nights.length > 0;
-        $("results").hidden = !any;
-        if(any){
-          $("nN").textContent = s.n.length; $("cN").textContent = s.c.length;
-          $("nM").textContent = s.nM === null ? "—" : "~" + Math.round(s.nM) + " min";
-          $("nF").textContent = s.nF === null ? "—" : s.nF.toFixed(1) + " / 5";
-          $("cM").textContent = s.cM === null ? "—" : "~" + Math.round(s.cM) + " min";
-          $("cF").textContent = s.cF === null ? "—" : s.cF.toFixed(1) + " / 5";
-        }
-        /* verdict + sharing once complete */
-        $("verdict").hidden = !done;
-        $("shareRow").hidden = !done;
-        $("shareNote").hidden = !done;
-        if(done){
-          const v = verdictText(s);
-          const el = $("verdict");
-          el.textContent = v;
-          el.className = "sim-verdict " + (v.includes("won convincingly") ? "bad" : v.includes("lucky ones") ? "good" : "mid");
-          const text = shareText(s);
-          $("tweet").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
-          $("thread").href = "https://github.com/" + CONFIG.githubRepo + "/discussions";
-          if(navigator.share){
-            $("native").hidden = false;
-            $("native").onclick = ()=>navigator.share({text}).catch(()=>{});
-          }
-          $("copy").onclick = ()=>{
-            const okMsg = ()=>{ $("copy").textContent = "Copied ✓"; setTimeout(()=>$("copy").textContent = "Copy my results", 1800); };
-            if(navigator.clipboard && navigator.clipboard.writeText){
-              navigator.clipboard.writeText(text).then(okMsg).catch(()=>fallbackCopy(text, okMsg));
-            } else fallbackCopy(text, okMsg);
-          };
-        }
-      }
-
-      function fallbackCopy(text, done){
-        const ta = document.createElement("textarea");
-        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
-        document.body.appendChild(ta); ta.select();
-        try{ document.execCommand("copy"); done(); }catch(e){}
-        document.body.removeChild(ta);
-      }
-
-      function save(){ try{ localStorage.setItem(KEY, JSON.stringify(nights)); }catch(e){} }
-
-      $("mins").addEventListener("input", ()=>{ $("minOut").textContent = $("mins").value + " min"; });
-      $("feel").addEventListener("click", e=>{
-        const b = e.target.closest("button[data-f]");
-        if(!b) return;
-        $("feel").querySelectorAll("button").forEach(x=>x.classList.remove("active"));
-        b.classList.add("active");
-        feel = parseInt(b.dataset.f,10);
-      });
-      $("save").addEventListener("click", ()=>{
-        if(nights.length >= 10) return;
-        nights.push({ m: parseInt($("mins").value,10), f: feel });
-        save(); render();
-      });
-      $("undo").addEventListener("click", ()=>{ nights.pop(); save(); render(); });
-      $("restart").addEventListener("click", ()=>{ nights = []; save(); render(); });
-
-      render();
+      const url = "https://github.com/" + CONFIG.githubRepo + "/discussions";
+      root.querySelector('[data-el="discuss"]').href = url;
+      root.querySelector('[data-el="read"]').href = url;
     }
   }
 };
@@ -676,8 +560,10 @@ const WIDGETS = {
   function updateHud(){
     depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
     depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    const beans = current - 1;
     document.getElementById("hudDepth").innerHTML =
-      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}`;
+      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
+      (beans > 0 ? ` · ☕ ×${beans}` : "");
   }
 
   /* hero */
@@ -707,6 +593,13 @@ const WIDGETS = {
         ${lv.afterWidgetHTML || ""}
       </div>`;
     if(n < N){
+      const pzHTML = lv.puzzle ? `
+        <div class="puzzle" data-puzzle="${n}" hidden>
+          <div class="pz-label">🔐 Depth lock — one question to descend</div>
+          <div class="pz-q">${lv.puzzle.q}</div>
+          <div class="pz-opts">${lv.puzzle.options.map((o,j)=>`<button type="button" data-opt="${j}">${o}</button>`).join("")}</div>
+          <div class="pz-feed" hidden></div>
+        </div>` : "";
       inner += `
       <div class="checkpoint">
         <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
@@ -714,8 +607,8 @@ const WIDGETS = {
         <div class="cp-actions">
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
-        </div>
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth.</div>
+        </div>${pzHTML}
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means picking the depth lock: one question, answered from the level you've just read, worth one bean.</div>
       </div>`;
     } else {
       inner += `
@@ -759,7 +652,7 @@ const WIDGETS = {
   }
 
   /* unlock */
-  function unlock(n){
+  function unlock(n, msg){
     const card = document.getElementById("lv"+n);
     if(!card.classList.contains("locked")){
       card.scrollIntoView({behavior:"smooth", block:"start"});
@@ -770,7 +663,7 @@ const WIDGETS = {
     current = Math.max(current, n);
     save();
     updateHud();
-    showToast(`⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+    showToast(msg || `⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
     requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
@@ -800,7 +693,40 @@ const WIDGETS = {
   /* clicks */
   document.body.addEventListener("click", e=>{
     const deeper = e.target.closest("[data-next]");
-    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    if(deeper){
+      const n = parseInt(deeper.dataset.next,10);           // level to open
+      const card = document.getElementById("lv"+n);
+      const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
+      if(card.classList.contains("locked") && pzPanel){
+        pzPanel.hidden = false;                             // present the depth lock
+        pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+      } else {
+        unlock(n);                                          // already unlocked, or no puzzle set
+      }
+      return;
+    }
+    const opt = e.target.closest(".pz-opts button");
+    if(opt){
+      const panel = opt.closest(".puzzle");
+      const lvN = parseInt(panel.dataset.puzzle,10);        // level the puzzle sits in
+      const pz = L[lvN-1].puzzle;
+      if(parseInt(opt.dataset.opt,10) === pz.answer){
+        panel.hidden = true;
+        panel.querySelector(".pz-feed").hidden = true;
+        panel.dataset.wrong = "0";
+        unlock(lvN+1, `⬢ LOCK PICKED — LEVEL ${lvN+1} UNLOCKED · ☕ +1 BEAN`);
+      } else {
+        const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
+        panel.dataset.wrong = String(wrong);
+        const feed = panel.querySelector(".pz-feed");
+        feed.hidden = false;
+        feed.textContent = (wrong > 1 && pz.hint)
+          ? "Hint: " + pz.hint
+          : "Not quite — the answer is hiding in the level you've just read.";
+        panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
+      }
+      return;
+    }
     const stop = e.target.closest("[data-stop]");
     if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
   });

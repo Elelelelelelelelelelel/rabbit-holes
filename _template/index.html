@@ -157,31 +157,21 @@
   .sim-verdict.mid{color:var(--accent)}
   .sim-verdict.good{color:var(--ok)}
 
-  /* ten-day curfew lab */
-  .lab-chips{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:6px}
-  .lab-chip{height:9px;border-radius:4px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15)}
-  .lab-chip.done.normal{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent}
-  .lab-chip.done.curfew{background:linear-gradient(90deg,#2E6B4A,var(--ok));border-color:transparent}
-  .lab-legend{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);
-    font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
-  .lab-night{font-family:var(--display);font-size:14px;letter-spacing:.06em;margin-bottom:14px}
-  .lab-night .ph-normal{color:var(--accent-hot)}
-  .lab-night .ph-curfew{color:var(--ok)}
-  .feel-row{display:flex;gap:8px;flex-wrap:wrap}
-  .feel-row button{flex:1 1 44px;padding:9px 6px;border-radius:8px;cursor:pointer;font-family:var(--display);
-    font-size:14px;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
-  .feel-row button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
-  .lab-save{margin-top:16px}
-  .lab-links{margin-top:10px;font-size:12.5px;color:var(--dim)}
-  .lab-links button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
-  .lab-results{margin-top:18px}
-  .lab-cols{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
-  .lab-col{flex:1 1 180px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
-  .lab-col h5{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-  .lab-col.c-normal h5{color:var(--accent-hot)}
-  .lab-col.c-curfew h5{color:var(--ok)}
-  .lab-col .row{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;color:var(--dim)}
-  .lab-col .row b{color:var(--crema)}
+  /* depth-lock puzzles */
+  .puzzle{margin-top:16px;padding:18px;border-radius:10px;border:1px solid var(--line);background:rgba(7,11,20,.5)}
+  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .pz-q{font-size:15.5px;font-weight:700;margin:10px 0 14px}
+  .pz-opts{display:grid;gap:8px}
+  .pz-opts button{text-align:left;padding:11px 14px;border-radius:8px;background:var(--ink-raise);
+    border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;font:inherit;font-size:14.5px;
+    transition:border-color .2s ease, background .2s ease}
+  .pz-opts button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
+  .pz-opts button:focus-visible{outline:2px solid var(--accent-hot);outline-offset:2px}
+  .pz-feed{margin-top:12px;font-size:13.5px;font-weight:700;color:var(--danger)}
+  .puzzle.shake{animation:pzshake .4s ease}
+  @keyframes pzshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+
+  /* discussion panel + shared button row */
   .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
   .btn-mini{padding:10px 16px;font-size:13px}
   .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
@@ -244,8 +234,9 @@ const CONFIG = {
   siteTitle: "🕳️ NAME OF THIS RABBIT HOLE",
   homeHref: "../index.html",
 
-  /* Your GitHub repository, as "username/repo". Used by any
-     widget that links to your Discussions or Issues.            */
+  /* Your GitHub repository, as "username/repo". Used by the
+     discussion-panel widget and anything else linking to your
+     Issues or Discussions.                                      */
   githubRepo: "yourusername/rabbit-holes",
 
   /* ── 2. THEME ────────────────────────────────────────────────
@@ -306,16 +297,25 @@ const CONFIG = {
                        <div class="l">caption</div></div> …</div>
        widget    — (optional) key into WIDGETS below; injected
                    after bodyHTML. One signature interactive per
-                   hole is the house style. The coffee hole has
-                   two worth borrowing from: a simulator (level 4)
-                   and a full experiment tracker with shareable
-                   results (level 10).
+                   hole is the house style. The coffee hole has a
+                   simulator (level 4) and a discussion panel
+                   (level 10) worth borrowing.
        afterWidgetHTML — (optional) content shown after the widget
        sum       — checkpoint text: one sentence beginning with a
                    phrase like "A good stopping point:" that makes
                    stopping feel legitimate, not like quitting
        take      — one-line takeaway, listed cumulatively in the
                    "You surfaced" recap. Must stand alone.
+       puzzle    — (levels 1–9) the DEPTH LOCK: a one-question
+                   multiple-choice quiz that opens the next level.
+                   { q, options:[4 strings], answer:index (0-based),
+                     hint:"shown after a second wrong try" }
+                   Rules of the house: the answer must be findable
+                   in the level just read; wrong options should be
+                   plausible, never jokes; the hint should point,
+                   not tell. Solving one earns the reader a bean
+                   (☕ counter in the HUD). Omit puzzle on a level
+                   and its "Go deeper" button unlocks freely.
 
      WRITING THE DEPTH CURVE (the format's real craft):
        Levels 1–2   the honest short answer, zero jargon
@@ -327,7 +327,8 @@ const CONFIG = {
        Level 9      the plot twist — the thing that reframes
                     everything above it
        Level 10     the synthesis, plus something the reader can
-                    DO — ideally an experiment they log and share. */
+                    DO, and the discussion panel so they can talk
+                    about it. */
   levels: [
     {
       kicker:"Level 1 · The Surface",
@@ -336,7 +337,13 @@ const CONFIG = {
         <p>The short answer in bold strokes: <strong>the one-sentence truth</strong> a curious person could walk away with.</p>
         <p class="dim">Everything below this level explains <em>how</em> — piece by piece.</p>`,
       sum:"A good stopping point: restate the level's claim in one plain sentence.",
-      take:"The one-line version of this level for the recap list."
+      take:"The one-line version of this level for the recap list.",
+      puzzle:{
+        q:"A question whose answer sits in the level above?",
+        options:["A plausible wrong answer","The right answer","Another plausible wrong answer","A tempting misconception"],
+        answer:1,
+        hint:"A nudge towards where in the level the answer lives — without giving it away."
+      }
     },
     {
       kicker:"Level 2 · The Myth",
@@ -346,7 +353,13 @@ const CONFIG = {
         <div class="callout"><span class="tag">Key idea</span>
         The reframe that the rest of the descent will build on.</div>`,
       sum:"A good stopping point: the misconception is dead; the reframe stands.",
-      take:"One line: the myth, corrected."
+      take:"One line: the myth, corrected.",
+      puzzle:{
+        q:"Another depth-lock question drawn from this level?",
+        options:["Option one","Option two","Option three","Option four"],
+        answer:0,
+        hint:"Point back at the callout."
+      }
     },
     {
       kicker:"Level 3 · The Mechanism",
@@ -356,22 +369,26 @@ const CONFIG = {
       widget:"exampleWidget",
       afterWidgetHTML:`<p class="dim">Optional aside after the interactive.</p>`,
       sum:"A good stopping point: the reader now owns the core mechanism.",
-      take:"One line: the mechanism."
+      take:"One line: the mechanism.",
+      puzzle:{
+        q:"And so on — one lock per level, 1 through 9?",
+        options:["Yes","Also yes","Yes again","All of the above"],
+        answer:3,
+        hint:"The last level needs no lock — the finale replaces its checkpoint."
+      }
     }
     /* …continue to level 10, following the depth curve above.
-       Give every level except the last a sum + take, and give
-       the last level neither sum nor checkpoint (the finale
-       replaces it) — just a take for the recap. */
+       Give every level except the last a sum + take + puzzle,
+       and give the last level only a take (the finale replaces
+       its checkpoint, so no sum and no puzzle). Put the
+       discussPanel widget on level 10 so readers can comment. */
   ]
 };
 
 /* ── 7. WIDGETS (optional) ─────────────────────────────────────
    One signature interactive per hole. html is injected into the
    level; init(root) receives the level card element and wires it
-   up. Scope every querySelector to root so widgets never clash.
-   For a richer example — an experiment tracker that saves nights
-   to localStorage and produces shareable results — see the
-   curfewLab widget in coffee/index.html.                        */
+   up. Scope every querySelector to root so widgets never clash. */
 const WIDGETS = {
   exampleWidget: {
     html: `
@@ -397,6 +414,27 @@ const WIDGETS = {
       }
       slider.addEventListener("input", run);
       run();
+    }
+  },
+
+  /* Copy-paste ready: the discussion panel for level 10.
+     Links readers to your GitHub Discussions — this page itself
+     stores and logs nothing about them. */
+  discussPanel: {
+    html: `
+      <div class="sim">
+        <h4>The discussion panel</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub — public and free to join. This page stores nothing and logs nothing about you.</p>
+        <div class="share-row">
+          <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
+          <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>
+        </div>
+        <div class="share-note">Opens this project's GitHub Discussions in a new tab. A free GitHub account is all you need to post.</div>
+      </div>`,
+    init(root){
+      const url = "https://github.com/" + CONFIG.githubRepo + "/discussions";
+      root.querySelector('[data-el="discuss"]').href = url;
+      root.querySelector('[data-el="read"]').href = url;
     }
   }
 };
@@ -426,8 +464,10 @@ const WIDGETS = {
   function updateHud(){
     depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
     depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    const beans = current - 1;
     document.getElementById("hudDepth").innerHTML =
-      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}`;
+      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
+      (beans > 0 ? ` · ☕ ×${beans}` : "");
   }
 
   /* hero */
@@ -457,6 +497,13 @@ const WIDGETS = {
         ${lv.afterWidgetHTML || ""}
       </div>`;
     if(n < N){
+      const pzHTML = lv.puzzle ? `
+        <div class="puzzle" data-puzzle="${n}" hidden>
+          <div class="pz-label">🔐 Depth lock — one question to descend</div>
+          <div class="pz-q">${lv.puzzle.q}</div>
+          <div class="pz-opts">${lv.puzzle.options.map((o,j)=>`<button type="button" data-opt="${j}">${o}</button>`).join("")}</div>
+          <div class="pz-feed" hidden></div>
+        </div>` : "";
       inner += `
       <div class="checkpoint">
         <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
@@ -464,8 +511,8 @@ const WIDGETS = {
         <div class="cp-actions">
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
-        </div>
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth.</div>
+        </div>${pzHTML}
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means picking the depth lock: one question, answered from the level you've just read, worth one bean.</div>
       </div>`;
     } else {
       inner += `
@@ -509,7 +556,7 @@ const WIDGETS = {
   }
 
   /* unlock */
-  function unlock(n){
+  function unlock(n, msg){
     const card = document.getElementById("lv"+n);
     if(!card.classList.contains("locked")){
       card.scrollIntoView({behavior:"smooth", block:"start"});
@@ -520,7 +567,7 @@ const WIDGETS = {
     current = Math.max(current, n);
     save();
     updateHud();
-    showToast(`⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+    showToast(msg || `⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
     requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
@@ -550,7 +597,40 @@ const WIDGETS = {
   /* clicks */
   document.body.addEventListener("click", e=>{
     const deeper = e.target.closest("[data-next]");
-    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    if(deeper){
+      const n = parseInt(deeper.dataset.next,10);           // level to open
+      const card = document.getElementById("lv"+n);
+      const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
+      if(card.classList.contains("locked") && pzPanel){
+        pzPanel.hidden = false;                             // present the depth lock
+        pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+      } else {
+        unlock(n);                                          // already unlocked, or no puzzle set
+      }
+      return;
+    }
+    const opt = e.target.closest(".pz-opts button");
+    if(opt){
+      const panel = opt.closest(".puzzle");
+      const lvN = parseInt(panel.dataset.puzzle,10);        // level the puzzle sits in
+      const pz = L[lvN-1].puzzle;
+      if(parseInt(opt.dataset.opt,10) === pz.answer){
+        panel.hidden = true;
+        panel.querySelector(".pz-feed").hidden = true;
+        panel.dataset.wrong = "0";
+        unlock(lvN+1, `⬢ LOCK PICKED — LEVEL ${lvN+1} UNLOCKED · ☕ +1 BEAN`);
+      } else {
+        const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
+        panel.dataset.wrong = String(wrong);
+        const feed = panel.querySelector(".pz-feed");
+        feed.hidden = false;
+        feed.textContent = (wrong > 1 && pz.hint)
+          ? "Hint: " + pz.hint
+          : "Not quite — the answer is hiding in the level you've just read.";
+        panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
+      }
+      return;
+    }
     const stop = e.target.closest("[data-stop]");
     if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
   });
