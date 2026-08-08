@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rabbit Holes — everyday mysteries, ten levels deep</title>
+<meta name="description" content="Interactive descents into everyday mysteries. Each question runs ten levels deep — stop whenever you're satisfied, or go all the way to the bottom.">
+<meta property="og:title" content="The Rabbit Holes">
+<meta property="og:description" content="Everyday mysteries, ten levels deep. Choose a question and descend.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#070B14;
+    --ink:#0D1424;
+    --ink-raise:#16203A;
+    --crema:#F2E7D5;
+    --dim:#8FA3C4;
+    --display:'Chakra Petch',sans-serif;
+    --body:'Karla',sans-serif;
+    --radius:16px;
+    --maxw:960px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink-deep);color:var(--crema);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+  ::selection{background:#E8A44C;color:var(--ink-deep)}
+
+  .backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 500px at 75% -10%, rgba(232,164,76,.06), transparent 60%),
+      radial-gradient(900px 600px at 15% 110%, rgba(30,43,77,.55), transparent 65%),
+      var(--ink-deep);}
+  .backdrop::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(242,231,213,.35), transparent 100%),
+      radial-gradient(1px 1px at 34% 64%, rgba(242,231,213,.22), transparent 100%),
+      radial-gradient(1.4px 1.4px at 58% 18%, rgba(232,164,76,.3), transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(242,231,213,.2), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 76%, rgba(155,123,232,.3), transparent 100%),
+      radial-gradient(1px 1px at 22% 86%, rgba(242,231,213,.18), transparent 100%);}
+
+  main{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:70px 20px 60px}
+
+  .masthead{text-align:center;margin-bottom:14px}
+  .masthead .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+  .masthead h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6.4vw,58px);line-height:1.08;margin-bottom:16px}
+  .masthead h1 .shaft{display:inline-block;background:linear-gradient(180deg,#FFC46B, #8A5A1E);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .masthead p{color:var(--dim);max-width:56ch;margin:0 auto}
+
+  /* total exploration meter */
+  .total{max-width:520px;margin:30px auto 46px;text-align:center}
+  .total .t-label{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  .total .t-bar{height:8px;border-radius:4px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15);overflow:hidden}
+  .total .t-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#8A5A1E,#E8A44C,#FFC46B);transition:width 1s cubic-bezier(.2,.9,.25,1)}
+  .total .t-cap{font-size:13px;color:var(--dim);margin-top:8px}
+  .total .t-cap b{color:var(--crema)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+
+  .hole{
+    position:relative;display:flex;flex-direction:column;gap:0;
+    border-radius:var(--radius);overflow:hidden;text-decoration:none;color:inherit;
+    border:1px solid var(--hole-line, rgba(143,163,196,.18));
+    background:linear-gradient(180deg, rgba(22,32,58,.55), rgba(13,20,36,.92));
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  a.hole:hover{transform:translateY(-6px);border-color:var(--hole-accent);
+    box-shadow:0 28px 60px rgba(0,0,0,.5), 0 0 30px color-mix(in srgb, var(--hole-accent) 20%, transparent)}
+  a.hole:focus-visible{outline:2px solid var(--hole-accent);outline-offset:3px}
+
+  .hole-top{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--hole-line, rgba(143,163,196,.14))}
+  .hole-emoji{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:24px;
+    background:color-mix(in srgb, var(--hole-accent) 14%, transparent);
+    border:1px solid color-mix(in srgb, var(--hole-accent) 35%, transparent)}
+  .hole-status{font-family:var(--display);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    padding:5px 10px;border-radius:999px;border:1px solid}
+  .hole-status.live{color:var(--hole-accent);border-color:color-mix(in srgb, var(--hole-accent) 55%, transparent);
+    background:color-mix(in srgb, var(--hole-accent) 10%, transparent)}
+  .hole-status.soon{color:var(--dim);border-color:rgba(143,163,196,.3)}
+
+  .hole-body{padding:18px 20px 16px;flex:1}
+  .hole-kicker{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--hole-accent);margin-bottom:8px}
+  .hole-body h2{font-family:var(--display);font-weight:600;font-size:19.5px;line-height:1.3;margin-bottom:10px}
+  .hole-body p{font-size:14.5px;color:var(--dim)}
+
+  .hole-foot{padding:14px 20px 18px;border-top:1px dashed rgba(143,163,196,.18)}
+  .mini-label{display:flex;justify-content:space-between;font-family:var(--display);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+  .mini-label b{color:var(--crema)}
+  .mini-bar{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+  .mini-seg{height:5px;border-radius:2.5px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.12)}
+  .mini-seg.filled{background:linear-gradient(90deg, var(--hole-deep), var(--hole-accent));border-color:transparent}
+
+  div.hole{opacity:.62;cursor:default}
+  div.hole .hole-foot{color:var(--dim);font-size:13px}
+
+  /* dig your own hole */
+  .dig{margin:56px auto 0;max-width:640px;text-align:center;padding:32px 26px;border-radius:var(--radius);
+    border:1px dashed rgba(232,164,76,.35);background:linear-gradient(180deg, rgba(22,32,58,.4), rgba(13,20,36,.7))}
+  .dig h2{font-family:var(--display);font-size:22px;margin-bottom:8px}
+  .dig h2 span{color:#E8A44C}
+  .dig>p{color:var(--dim);font-size:15px;margin-bottom:20px}
+  .dig-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .dig-row input{flex:1 1 280px;padding:13px 16px;border-radius:10px;font:inherit;font-size:15px;
+    background:rgba(7,11,20,.6);border:1px solid rgba(143,163,196,.3);color:var(--crema);outline:none}
+  .dig-row input:focus{border-color:#E8A44C;box-shadow:0 0 0 3px rgba(232,164,76,.15)}
+  .dig-row input::placeholder{color:rgba(143,163,196,.6)}
+  .dig-btn{font-family:var(--display);font-weight:700;letter-spacing:.08em;border-radius:10px;cursor:pointer;
+    border:none;padding:13px 22px;font-size:14px;color:var(--ink-deep);text-decoration:none;display:inline-block;
+    background:linear-gradient(135deg,#FFC46B,#E8A44C);box-shadow:0 6px 22px rgba(232,164,76,.3);
+    transition:transform .15s ease, box-shadow .2s ease}
+  .dig-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(232,164,76,.45)}
+  .dig-btn:focus-visible{outline:2px solid #FFC46B;outline-offset:3px}
+  .dig-small{font-size:12.5px;color:var(--dim);margin-top:14px}
+  .dig-small a{color:#FFC46B}
+
+  footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:40px 20px 46px}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+
+<main>
+  <header class="masthead">
+    <div class="eyebrow">Interactive explainers · Choose your descent</div>
+    <h1>The <span class="shaft">Rabbit&nbsp;Holes</span></h1>
+    <p>Everyday mysteries, ten levels deep. Each question starts with the honest short answer and descends towards the strange machinery underneath. Stop whenever you're satisfied — every checkpoint is a proper ending.</p>
+  </header>
+
+  <div class="total" id="totalWrap" hidden>
+    <div class="t-label">Total depth explored</div>
+    <div class="t-bar"><div class="t-fill" id="totalFill"></div></div>
+    <div class="t-cap"><b id="totalNum">0</b> of <span id="totalMax">0</span> levels descended across all holes</div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <section class="dig" aria-labelledby="digTitle">
+    <h2 id="digTitle">Dig <span>your</span> own hole</h2>
+    <p>Got a question that deserves ten levels? Send it in — the best ones get built into full descents, and you'll be credited as the one who spotted the hole.</p>
+    <div class="dig-row">
+      <input id="digQ" type="text" maxlength="180" placeholder="Why do we…?" aria-label="Your question">
+      <a class="dig-btn" id="digBtn" href="#" target="_blank" rel="noopener">Suggest it on GitHub →</a>
+    </div>
+    <p class="dig-small">Opens a ready-filled suggestion in this project's GitHub issues — a free <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a> is all you need to post it.</p>
+  </section>
+</main>
+
+<footer>The Rabbit Holes · a series of ten-level descents · progress is saved privately in your own browser</footer>
+
+<script>
+/* ================================================================
+   ⚙️  YOUR GITHUB REPOSITORY — replace once it exists, as
+   "username/repo". Powers the "Dig your own hole" suggestion box.
+   ================================================================ */
+const GITHUB_REPO = "yourusername/rabbit-holes";
+
+/* ================================================================
+   ✏️  ADD NEW RABBIT HOLES HERE
+   status "live" needs a matching folder (href). "soon" renders as
+   a teaser card with no link. Colours: accent / hot / deep shades
+   of one hue per hole — see _template/index.html for guidance.
+   ================================================================ */
+const HOLES = [
+  {
+    slug:"coffee", status:"live", href:"coffee/",
+    emoji:"☕", kicker:"Sleep · Pharmacology · Genetics",
+    title:"Why can some people drink coffee at night and still sleep?",
+    blurb:"Adenosine impostors, a 40-fold enzyme lottery, and the plot twist nobody notices about their own sleep.",
+    accent:"#E8A44C", hot:"#FFC46B", deep:"#8A5A1E"
+  },
+  {
+    slug:"dejavu", status:"soon",
+    emoji:"🌀", kicker:"Memory · Neuroscience",
+    title:"Why do we get déjà vu?",
+    blurb:"A filing error, a split-second lag, and the brain's own fact-checker catching itself in the act.",
+    accent:"#9B7BE8", hot:"#C0A8FF", deep:"#4E3A8A"
+  },
+  {
+    slug:"time", status:"soon",
+    emoji:"⏳", kicker:"Perception · Ageing",
+    title:"Why does time speed up as you get older?",
+    blurb:"Novelty, memory density, and why a childhood summer lasted a decade whilst last year lasted a fortnight.",
+    accent:"#5CC8C2", hot:"#8FE8E2", deep:"#26635F"
+  },
+  {
+    slug:"earworms", status:"soon",
+    emoji:"🎵", kicker:"Music · Cognition",
+    title:"Why do songs get stuck in your head?",
+    blurb:"Unfinished loops, the Zeigarnik effect, and the strange science of evicting an earworm.",
+    accent:"#E86A9C", hot:"#FFA0C4", deep:"#7E2E52"
+  }
+];
+
+(function(){
+  "use strict";
+  const grid = document.getElementById("grid");
+  let totalDepth = 0, liveCount = 0;
+
+  HOLES.forEach(h=>{
+    let depth = 0;
+    if(h.status === "live"){
+      liveCount++;
+      try{ depth = Math.min(10, parseInt(localStorage.getItem("rh-progress-"+h.slug)||"0",10)||0); }catch(e){}
+      totalDepth += depth;
+    }
+
+    const el = document.createElement(h.status === "live" ? "a" : "div");
+    el.className = "hole";
+    el.style.setProperty("--hole-accent", h.accent);
+    el.style.setProperty("--hole-deep", h.deep);
+    el.style.setProperty("--hole-line", "color-mix(in srgb, "+h.accent+" 18%, transparent)");
+    if(h.status === "live") el.href = h.href;
+
+    let foot;
+    if(h.status === "live"){
+      let segs = "";
+      for(let i=0;i<10;i++) segs += `<div class="mini-seg${i<depth?" filled":""}"></div>`;
+      const label = depth === 0 ? "Not yet descended"
+                  : depth >= 10 ? "Bottom reached"
+                  : `Depth <b>${depth} / 10</b>`;
+      foot = `<div class="hole-foot">
+        <div class="mini-label"><span>${label}</span><span>${depth === 0 ? "Begin ↓" : depth >= 10 ? "★" : "Resume ↓"}</span></div>
+        <div class="mini-bar">${segs}</div></div>`;
+    } else {
+      foot = `<div class="hole-foot">This shaft is still being dug. Check back soon.</div>`;
+    }
+
+    el.innerHTML = `
+      <div class="hole-top">
+        <div class="hole-emoji" aria-hidden="true">${h.emoji}</div>
+        <div class="hole-status ${h.status}">${h.status === "live" ? "Open" : "In the works"}</div>
+      </div>
+      <div class="hole-body">
+        <div class="hole-kicker">${h.kicker}</div>
+        <h2>${h.title}</h2>
+        <p>${h.blurb}</p>
+      </div>${foot}`;
+    grid.appendChild(el);
+  });
+
+  /* dig your own hole → prefilled GitHub issue */
+  const digQ = document.getElementById("digQ");
+  const digBtn = document.getElementById("digBtn");
+  function digHref(){
+    const q = digQ.value.trim();
+    const base = `https://github.com/${GITHUB_REPO}/issues/new`;
+    const params = new URLSearchParams({
+      template: "rabbit-hole-request.yml",
+      title: "[Rabbit hole] " + (q || "your question here"),
+      labels: "rabbit-hole-request"
+    });
+    if(q) params.set("question", q);
+    return base + "?" + params.toString();
+  }
+  digBtn.href = digHref();
+  digQ.addEventListener("input", ()=>{ digBtn.href = digHref(); });
+  digQ.addEventListener("keydown", e=>{ if(e.key === "Enter") digBtn.click(); });
+
+  /* total meter — only shown once the reader has actually descended somewhere */
+  if(totalDepth > 0){
+    const max = liveCount * 10;
+    document.getElementById("totalWrap").hidden = false;
+    document.getElementById("totalNum").textContent = totalDepth;
+    document.getElementById("totalMax").textContent = max;
+    requestAnimationFrame(()=>{
+      document.getElementById("totalFill").style.width = Math.round(100*totalDepth/max) + "%";
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+name: 🕳️ Suggest a rabbit hole
+description: Propose a question that deserves a ten-level descent.
+title: "[Rabbit hole] "
+labels: ["rabbit-hole-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for spotting a hole! The best questions are everyday mysteries — things people notice constantly but can't explain. If it gets built, you'll be credited on the page.
+  - type: input
+    id: question
+    attributes:
+      label: The question
+      description: Phrase it the way a curious person would actually ask it.
+      placeholder: "Why do we get goosebumps from music?"
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why does this one deserve ten levels?
+      description: Optional — what's the surprising machinery you suspect is underneath?
+      placeholder: "Everyone experiences it, nobody can explain it, and I've heard it involves…"
+    validations:
+      required: false
+  - type: input
+    id: credit
+    attributes:
+      label: How should we credit you? (optional)
+      placeholder: "Name, @handle, or leave blank to stay anonymous"
+    validations:
+      required: false

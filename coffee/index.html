@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why can some people drink coffee at night and still sleep? — The Rabbit Holes</title>
+<meta name="description" content="An interactive ten-level descent into the science of caffeine and sleep: adenosine, half-lives, the CYP1A2 enzyme, genetics, tolerance and the plot twist nobody notices.">
+<meta property="og:title" content="Why can some people drink coffee at night and still sleep?">
+<meta property="og:description" content="Descend ten levels into the science of caffeine and sleep. Stop whenever you're satisfied — or go all the way to the bottom of the cup.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#070B14;
+    --ink:#0D1424;
+    --ink-raise:#16203A;
+    --accent:#E8A44C;       /* set per rabbit hole via CONFIG.theme */
+    --accent-hot:#FFC46B;
+    --accent-deep:#8A5A1E;
+    --crema:#F2E7D5;
+    --dim:#8FA3C4;
+    --line:rgba(232,164,76,.16);
+    --danger:#E86A5C;
+    --ok:#7BC68F;
+    --display:'Chakra Petch',sans-serif;
+    --body:'Karla',sans-serif;
+    --radius:14px;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink-deep);color:var(--crema);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--accent);color:var(--ink-deep)}
+  a{color:var(--accent-hot)}
+
+  .backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 500px at 80% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(30,43,77,.55), transparent 65%),
+      var(--ink-deep);}
+  .backdrop::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(242,231,213,.35), transparent 100%),
+      radial-gradient(1px 1px at 34% 64%, rgba(242,231,213,.22), transparent 100%),
+      radial-gradient(1.4px 1.4px at 58% 18%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(242,231,213,.20), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 76%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 22% 86%, rgba(242,231,213,.18), transparent 100%);}
+
+  .hud{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(7,11,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .hud-inner{max-width:var(--maxw);margin:0 auto;padding:10px 20px 12px}
+  .hud-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .hud-title{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  .hud-title a{color:inherit;text-decoration:none}
+  .hud-depth{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hud-depth strong{color:var(--crema)}
+  .depth-bar{margin-top:8px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+  .depth-seg{height:6px;border-radius:3px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15);transition:background .5s ease, box-shadow .5s ease}
+  .depth-seg.filled{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent;box-shadow:0 0 10px color-mix(in srgb, var(--accent) 45%, transparent)}
+
+  main{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:120px 20px 80px}
+
+  .hero{padding:40px 0 24px}
+  .hero .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5.6vw,46px);line-height:1.14;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero-lede{display:flex;align-items:flex-end;gap:14px;margin:26px 0 8px}
+  .hero-lede svg{flex:none}
+  .steam path{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:.55;animation:steam 4s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:1.3s;opacity:.35}
+  .steam path:nth-child(3){animation-delay:2.4s;opacity:.45}
+  @keyframes steam{0%{transform:translateY(4px);opacity:0}35%{opacity:.55}100%{transform:translateY(-10px);opacity:0}}
+  .hero-note{font-size:14px;color:var(--dim)}
+  .hero-note b{color:var(--crema);font-weight:700}
+
+  .level{margin:34px 0;border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(22,32,58,.55), rgba(13,20,36,.9));
+    box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+  .level.locked{display:none}
+  .level.unlocking{animation:unlock .8s cubic-bezier(.2,.9,.25,1) both}
+  @keyframes unlock{
+    0%{opacity:0;transform:translateY(46px) scale(.97);filter:brightness(2) saturate(0)}
+    60%{filter:brightness(1.25)}
+    100%{opacity:1;transform:none;filter:none}}
+  .level-head{display:flex;align-items:center;gap:14px;padding:18px 26px;border-bottom:1px solid var(--line);background:rgba(7,11,20,.35)}
+  .lv-badge{flex:none;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;
+    font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink-deep);
+    background:linear-gradient(135deg,var(--accent-hot),var(--accent-deep));
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .lv-meta .lv-kicker{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+  .lv-meta h2{font-family:var(--display);font-weight:600;font-size:clamp(19px,3.4vw,24px);line-height:1.2}
+  .level-body{padding:26px}
+  .level-body p{margin-bottom:16px}
+  .level-body p:last-child{margin-bottom:0}
+  .level-body .dim{color:var(--dim)}
+  .callout{margin:20px 0;padding:16px 18px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 6%, transparent);font-size:15.5px}
+  .callout .tag{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+  .stat{flex:1 1 140px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--dim);line-height:1.4;margin-top:2px}
+
+  .checkpoint{padding:20px 26px 24px;border-top:1px dashed rgba(143,163,196,.25);background:rgba(7,11,20,.3)}
+  .checkpoint .cp-label{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .checkpoint .cp-sum{font-size:15.5px;margin-bottom:16px}
+  .cp-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{font-family:var(--display);font-weight:700;letter-spacing:.08em;border-radius:10px;cursor:pointer;border:none;
+    padding:13px 22px;font-size:14.5px;transition:transform .15s ease, box-shadow .2s ease}
+  .btn:focus-visible{outline:2px solid var(--accent-hot);outline-offset:3px}
+  a.btn{text-decoration:none;display:inline-block;text-align:center}
+  .btn-deeper{color:var(--ink-deep);background:linear-gradient(135deg,var(--accent-hot),var(--accent));
+    box-shadow:0 6px 22px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .btn-deeper:hover{transform:translateY(-2px);box-shadow:0 10px 28px color-mix(in srgb, var(--accent) 50%, transparent)}
+  .btn-deeper:active{transform:translateY(0)}
+  .btn-stop{color:var(--dim);background:transparent;border:1px solid rgba(143,163,196,.3);font-weight:600}
+  .btn-stop:hover{color:var(--crema);border-color:var(--dim)}
+  .cp-hint{font-size:13px;color:var(--dim);flex-basis:100%}
+
+  .toast{position:fixed;top:76px;right:18px;z-index:60;background:var(--ink-raise);border:1px solid var(--accent);
+    border-radius:10px;padding:12px 18px;font-family:var(--display);font-size:13px;letter-spacing:.1em;color:var(--accent-hot);
+    box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+    opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;max-width:min(86vw,360px)}
+  .toast.show{opacity:1;transform:none}
+
+  .modal-scrim{position:fixed;inset:0;z-index:70;background:rgba(7,11,20,.7);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-scrim.open{display:flex}
+  .modal{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--ink);border:1px solid var(--line);
+    border-radius:var(--radius);padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal h3{font-family:var(--display);font-size:20px;margin-bottom:4px}
+  .modal .sub{color:var(--dim);font-size:14px;margin-bottom:18px}
+  .modal ul{list-style:none;margin-bottom:20px}
+  .modal li{padding:9px 0 9px 26px;position:relative;font-size:15px;border-bottom:1px solid rgba(143,163,196,.1)}
+  .modal li::before{content:"";position:absolute;left:4px;top:16px;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+  .modal .cp-actions{margin-top:4px}
+
+  .sim{margin:22px 0;padding:20px;border-radius:12px;background:rgba(7,11,20,.55);border:1px solid rgba(143,163,196,.16)}
+  .sim h4{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .sim-grid{display:grid;gap:16px}
+  .sim label{font-size:13.5px;color:var(--dim);display:block;margin-bottom:6px}
+  .sim label output{color:var(--crema);font-weight:700}
+  input[type=range]{width:100%;appearance:none;height:6px;border-radius:3px;background:var(--ink-raise);outline:none}
+  input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);
+    border:3px solid var(--ink-deep);box-shadow:0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--ink-deep);cursor:pointer}
+  .metab-toggle{display:flex;gap:8px;flex-wrap:wrap}
+  .metab-toggle button{flex:1 1 90px;padding:9px 10px;border-radius:8px;cursor:pointer;font-family:var(--display);font-size:12.5px;
+    letter-spacing:.05em;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .metab-toggle button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .sim-result{margin-top:6px;padding:16px;border-radius:10px;text-align:center;background:color-mix(in srgb, var(--accent) 7%, transparent);border:1px solid var(--line)}
+  .sim-result .big{font-family:var(--display);font-weight:700;font-size:32px;color:var(--accent-hot)}
+  .sim-result .cap{font-size:13.5px;color:var(--dim);margin-top:4px}
+  .sim-verdict{font-size:14px;margin-top:10px;font-weight:700}
+  .sim-verdict.bad{color:var(--danger)}
+  .sim-verdict.mid{color:var(--accent)}
+  .sim-verdict.good{color:var(--ok)}
+
+  /* ten-day curfew lab */
+  .lab-chips{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:6px}
+  .lab-chip{height:9px;border-radius:4px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15)}
+  .lab-chip.done.normal{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent}
+  .lab-chip.done.curfew{background:linear-gradient(90deg,#2E6B4A,var(--ok));border-color:transparent}
+  .lab-legend{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);
+    font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .lab-night{font-family:var(--display);font-size:14px;letter-spacing:.06em;margin-bottom:14px}
+  .lab-night .ph-normal{color:var(--accent-hot)}
+  .lab-night .ph-curfew{color:var(--ok)}
+  .feel-row{display:flex;gap:8px;flex-wrap:wrap}
+  .feel-row button{flex:1 1 44px;padding:9px 6px;border-radius:8px;cursor:pointer;font-family:var(--display);
+    font-size:14px;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .feel-row button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .lab-save{margin-top:16px}
+  .lab-links{margin-top:10px;font-size:12.5px;color:var(--dim)}
+  .lab-links button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+  .lab-results{margin-top:18px}
+  .lab-cols{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .lab-col{flex:1 1 180px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .lab-col h5{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+  .lab-col.c-normal h5{color:var(--accent-hot)}
+  .lab-col.c-curfew h5{color:var(--ok)}
+  .lab-col .row{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;color:var(--dim)}
+  .lab-col .row b{color:var(--crema)}
+  .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .btn-mini{padding:10px 16px;font-size:13px}
+  .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+  .finale{text-align:center;padding:40px 26px 44px}
+  .finale .medal{width:92px;height:92px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 35% 30%, var(--accent-hot), var(--accent-deep));
+    box-shadow:0 0 40px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 0 20px rgba(0,0,0,.25);
+    animation:medal 3.2s ease-in-out infinite}
+  @keyframes medal{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .finale h2{font-family:var(--display);font-size:26px;margin-bottom:8px}
+  .finale p{color:var(--dim);max-width:52ch;margin:0 auto 10px}
+
+  footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px 46px;max-width:var(--maxw);margin:0 auto}
+  footer button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit}
+
+  @media (max-width:560px){
+    .level-head{padding:16px 18px}.level-body{padding:20px 18px}.checkpoint{padding:18px}
+    .hud-depth span.hide-s{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<header class="hud"><div class="hud-inner">
+  <div class="hud-row">
+    <div class="hud-title"><a href="../index.html" id="hudHome"></a></div>
+    <div class="hud-depth" id="hudDepth"></div>
+  </div>
+  <div class="depth-bar" id="depthBar"></div>
+</div></header>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<main id="main"></main>
+<footer id="pageFooter"></footer>
+<div class="modal-scrim" id="modalScrim" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h3 id="modalTitle">You surfaced at Level <span id="modalLevel">1</span></h3>
+    <div class="sub">A complete answer, at the depth you chose. Here's what you're taking with you:</div>
+    <ul id="modalList"></ul>
+    <div class="cp-actions">
+      <button class="btn btn-deeper" id="modalResume" type="button">Actually… go deeper ↓</button>
+      <a class="btn btn-stop" id="modalHome" href="../index.html">I'm done — back to the surface</a>
+      <div class="cp-hint">Your depth is saved — you can climb back down any time.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ✏️  EDIT THIS SECTION ONLY — everything below "ENGINE" is shared
+   ================================================================ */
+const CONFIG = {
+  slug: "coffee",                       // unique id — used to save progress
+  siteTitle: "☕ The Coffee Rabbit Hole",
+  homeHref: "../index.html",
+
+  /* Your GitHub repository, as "username/repo". Used by the
+     experiment lab's "share in the community thread" link.
+     ⚠ Replace this once your repository exists.               */
+  githubRepo: "yourusername/rabbit-holes",
+
+  theme: {                              // per-hole colour scheme
+    accent: "#E8A44C",
+    accentHot: "#FFC46B",
+    accentDeep: "#8A5A1E",
+    line: "rgba(232,164,76,.16)"
+  },
+
+  depthNames: ["Surface","Shallows","Impostor Zone","Clock Layer","Enzyme Works",
+               "Gene Vault","Adaptation Trench","Modifier Fields","Twilight Stratum","Bedrock"],
+
+  hero: {
+    eyebrow: "An interactive descent · 10 levels deep",
+    titleHTML: 'Why can some people drink coffee at night and <em>still sleep?</em>',
+    icon: `<svg width="74" height="70" viewBox="0 0 74 70" fill="none" aria-hidden="true">
+      <g class="steam">
+        <path d="M24 22c0-5 4-5 4-10s-4-5-4-9"/><path d="M36 20c0-5 4-5 4-10s-4-5-4-9"/><path d="M48 22c0-5 4-5 4-10s-4-5-4-9"/>
+      </g>
+      <path d="M14 30h44v14a22 22 0 0 1-44 0V30z" fill="#16203A" stroke="currentColor" stroke-width="2" style="color:var(--accent)"/>
+      <path d="M17 33h38v6c-6 4-32 4-38 0v-6z" fill="var(--accent)" opacity=".5"/>
+      <path d="M58 34h5a7 7 0 0 1 0 14h-6" stroke="var(--accent)" stroke-width="2" fill="none"/></svg>`,
+    ledeHTML: `Your cousin downs a double espresso at 9pm and is snoring by 10.30. You <b>look</b> at a latte after lunch and stare at the ceiling until 2am. Neither of you is imagining it — and the real answer runs ten levels deep.`,
+    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or go deeper.`
+  },
+
+  footerHTML: `Built as an interactive explainer · Figures (half-lives, enzyme variation, study findings) reflect published sleep &amp; pharmacology research and are approximate for individuals.`,
+
+  finale: {
+    emoji: "☕",
+    title: "Depth 10 / 10 — Bottom reached",
+    text: "You descended from “some people are just built differently” to genes, enzymes, receptor warfare, and the limits of your own perception of sleep. That's the whole rabbit hole. Sleep well — or at least, know exactly why you don't."
+  },
+
+  /* --- The ten levels. Each has:
+       kicker   — small label above the title
+       title    — level heading
+       bodyHTML — the content (use <p>, .callout, .stat-row as in the CSS)
+       widget   — optional key into WIDGETS, injected after bodyHTML
+       sum      — checkpoint summary shown at the stopping point
+       take     — one-line takeaway listed in the "You surfaced" recap     --- */
+  levels: [
+    {
+      kicker:"Level 1 · The Surface",
+      title:"It's real, and it's not willpower",
+      bodyHTML:`
+        <p>The short answer: <strong>people process and respond to caffeine at wildly different speeds</strong>, and both of those things are largely set by biology — not habit, discipline, or “just being used to it”.</p>
+        <p>Two people drinking the same 9pm espresso are not running the same experiment. By midnight, one body may have already destroyed most of the caffeine, whilst the other still carries a nearly full dose. And even with equal caffeine on board, one brain may barely register it.</p>
+        <p class="dim">Everything below this level explains <em>how</em> that happens — molecule by molecule.</p>`,
+      sum:"A good stopping point: people differ hugely in how fast they clear caffeine and how strongly their brain reacts to it — and that's biology, not habit.",
+      take:"Night-coffee sleepers aren't tougher — their bodies clear caffeine faster and/or their brains react to it less. It's biology."
+    },
+    {
+      kicker:"Level 2 · The Molecule",
+      title:"Caffeine doesn't give energy — it hides tiredness",
+      bodyHTML:`
+        <p>First, a myth to bury: caffeine isn't fuel. It adds zero energy to your body. It's a small plant-made molecule (plants evolved it partly as a natural insecticide) that works by <strong>blocking a signal</strong>, not by creating one.</p>
+        <p>Think of it as a masking agent. Your tiredness is still there, accumulating in the background the whole time. Caffeine simply prevents your brain from <em>hearing</em> it.</p>
+        <div class="callout"><span class="tag">Key idea</span>
+        If caffeine only mutes a signal, then two things decide the night: <strong>how loud your sleepiness signal is</strong>, and <strong>how long the mute button stays pressed</strong>. Both differ between people.</div>`,
+      sum:"A good stopping point: caffeine adds no energy — it temporarily mutes your brain's sleepiness signal.",
+      take:"Caffeine is a masking agent: it blocks the sleepiness signal instead of adding energy."
+    },
+    {
+      kicker:"Level 3 · The Impostor",
+      title:"Adenosine, sleep pressure, and a shape-shifter",
+      bodyHTML:`
+        <p>Every hour you're awake, your brain cells burn energy and leave behind a byproduct called <strong>adenosine</strong>. It builds up like sand in an hourglass. When adenosine docks into its receptors, neurones quieten down and you feel that heavy-lidded pull towards sleep. Scientists call this <strong>sleep pressure</strong>.</p>
+        <p>Here's the trick: the caffeine molecule happens to be shaped enough like adenosine to <strong>fit into the same parking spaces</strong> — mainly receptors called A1 and A2A — without switching them on. It's an impostor occupying the seat so the real messenger can't sit down.</p>
+        <p class="dim">Crucially, adenosine keeps piling up behind the blockade. When the caffeine finally leaves, all that backed-up sleepiness floods in at once — the infamous crash.</p>`,
+      sum:"A good stopping point: caffeine impersonates adenosine and blocks the receptors that make you feel sleepy — whilst real sleep pressure keeps building behind it.",
+      take:"It works by impersonating adenosine, parking in sleep receptors (A1/A2A) without activating them — sleep pressure keeps building behind the blockade."
+    },
+    {
+      kicker:"Level 4 · The Clock",
+      title:"The half-life problem",
+      bodyHTML:`
+        <p>Caffeine leaves the body slowly. Its average <strong>half-life is about five hours</strong> — but “average” is doing a lot of work in that sentence. Depending on the person, the true half-life ranges from roughly <strong>2 to over 10 hours</strong>.</p>
+        <p>That single number rewrites the whole night. Try it:</p>`,
+      widget:"halfLife",
+      afterWidgetHTML:`<p class="dim">A fast metaboliser's 9pm espresso is mostly gone by midnight. A slow metaboliser's <em>3pm</em> coffee can still be a quarter-dose at 1am. Same drink, different night.</p>`,
+      sum:"A good stopping point: caffeine's half-life averages ~5 hours but ranges from ~2 to 10+ between people — that alone can decide the night.",
+      take:"Half-life varies from ~2 to 10+ hours between people, so the same evening cup can be a trace or nearly a full dose at bedtime."
+    },
+    {
+      kicker:"Level 5 · The Factory",
+      title:"Your liver's speed dial: CYP1A2",
+      bodyHTML:`
+        <p>So what sets your half-life? Almost entirely one enzyme. In the liver, a protein called <strong>CYP1A2</strong> dismantles about <strong>95% of the caffeine</strong> you consume, snipping it into smaller molecules that get flushed out.</p>
+        <p>How much CYP1A2 you produce — and how energetically it works — varies enormously from person to person. Measured activity can differ by <strong>up to ~40-fold</strong> across individuals.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">~95%</div><div class="l">of caffeine cleared by the CYP1A2 enzyme</div></div>
+          <div class="stat"><div class="n">40×</div><div class="l">variation in enzyme activity between people</div></div>
+          <div class="stat"><div class="n">1</div><div class="l">main gene controlling the whole assembly line</div></div>
+        </div>
+        <p class="dim">People casually say “fast metaboliser” and “slow metaboliser”. This enzyme is what they're actually talking about. And what controls the enzyme? One level down.</p>`,
+      sum:"A good stopping point: one liver enzyme, CYP1A2, clears ~95% of caffeine, and its activity varies up to ~40-fold between people.",
+      take:"One enzyme — CYP1A2 — clears ~95% of caffeine, and its speed varies up to ~40× between people."
+    },
+    {
+      kicker:"Level 6 · The Code",
+      title:"The genetic lottery",
+      bodyHTML:`
+        <p>Two genes dominate the story:</p>
+        <p><strong>CYP1A2 — the clearance gene.</strong> A single-letter variant (geneticists know it as <em>rs762551</em>) splits the population. People with two copies of the “A” version build a fast, inducible enzyme and shred caffeine quickly. Carriers of the “C” version run the slow assembly line — the same cup lingers for hours longer.</p>
+        <p><strong>ADORA2A — the sensitivity gene.</strong> This one builds the A2A adenosine receptor itself — caffeine's actual target. Variants here (such as <em>rs5751876</em>) change how strongly the brain reacts to a blocked receptor. Some variants are linked to caffeine-induced anxiety and measurably worse sleep after evening caffeine; others make the brain relatively indifferent.</p>
+        <div class="callout"><span class="tag">The 2×2 of coffee drinkers</span>
+        Fast clearance <em>and</em> low sensitivity → the friend with a post-dinner espresso ritual. Slow clearance <em>and</em> high sensitivity → the person wrecked by an afternoon green tea. Most of us land somewhere between.</div>`,
+      sum:"A good stopping point: variants in CYP1A2 set your clearance speed, and variants in ADORA2A set how sensitive your brain is to what remains.",
+      take:"Two genes run the show: CYP1A2 variants set clearance speed; ADORA2A variants set how hard the brain reacts to a blocked receptor."
+    },
+    {
+      kicker:"Level 7 · The Counterattack",
+      title:"Tolerance: the brain fights back",
+      bodyHTML:`
+        <p>Genes aren't the whole story — the brain adapts. Blockade its adenosine receptors every day, and it responds like any besieged system: it <strong>builds more receptors</strong> (and adjusts related signalling), so the same dose blocks a smaller <em>fraction</em> of the total.</p>
+        <p>Within a week or two of daily use, much of caffeine's alerting punch fades. This is why a habitual four-cup drinker can feel almost nothing from a nightcap coffee that would leave a caffeine-naïve person vibrating.</p>
+        <p>Two catches. First, tolerance to caffeine's <strong>sleep-disrupting effects is only partial</strong> — regular drinkers still show measurable sleep changes in lab studies. Second, all those extra receptors are why quitting hurts: with no caffeine in the seats, normal adenosine levels suddenly hit an oversized receptor array. That's the withdrawal headache and fog.</p>`,
+      sum:"A good stopping point: daily use makes the brain grow extra adenosine receptors, dulling caffeine's kick — but tolerance to its sleep disruption is only partial.",
+      take:"Daily use builds tolerance — the brain adds adenosine receptors — but tolerance to caffeine's sleep disruption is only partial."
+    },
+    {
+      kicker:"Level 8 · The Modifiers",
+      title:"Things that secretly move your dial",
+      bodyHTML:`
+        <p>CYP1A2 isn't fixed at birth-speed forever. Everyday factors crank it up or throttle it down:</p>
+        <p><strong>Speeds clearance up:</strong> smoking roughly <em>doubles</em> caffeine breakdown (which is partly why smokers often drink more coffee — and why quitting smoking suddenly makes their usual intake feel excessive). Plenty of cruciferous vegetables and char-grilled meat also nudge the enzyme up.</p>
+        <p><strong>Slows clearance down:</strong> oral contraceptives can roughly double the half-life. Pregnancy is dramatic — by the third trimester, caffeine's half-life can stretch to <strong>15 hours or more</strong>. Certain medications (the antidepressant fluvoxamine is the classic example) can nearly shut the enzyme off. Liver disease and even acute alcohol slow it too.</p>
+        <div class="callout"><span class="tag">Translation</span>
+        Your caffeine tolerance isn't just <em>yours</em> — it's yours <em>right now</em>. The person who “could always sleep after coffee” can lose that ability by changing a prescription, quitting cigarettes, or becoming pregnant.</div>`,
+      sum:"A good stopping point: smoking speeds caffeine clearance; contraceptives, pregnancy and some medications slow it dramatically. Your tolerance is a moving target.",
+      take:"Life modifies the dial: smoking doubles clearance; contraceptives, pregnancy (15 h+ half-life) and some medications slow it drastically."
+    },
+    {
+      kicker:"Level 9 · The Plot Twist",
+      title:"“Still sleeps” is not the same as “sleeps well”",
+      bodyHTML:`
+        <p>Here's the level most people never reach. Falling asleep is only one measurement — and it's the one we're worst at judging ourselves.</p>
+        <p>In sleep-laboratory studies, evening caffeine reliably <strong>cuts deep, slow-wave sleep</strong> — the physically restorative stage — and can delay the body's internal clock by pushing back melatonin release, even in people who report sleeping “fine”. One well-known controlled study gave people 400&nbsp;mg of caffeine a full <strong>six hours before bed</strong>: objective monitors showed they lost over an hour of sleep, whilst the participants themselves barely noticed the difference.</p>
+        <p>So part of the honest answer to our big question is uncomfortable: <strong>some night-coffee drinkers aren't unaffected — they're unaware.</strong> They fall asleep on schedule but skim shallower waters all night, then blame the resulting grogginess on needing… more coffee.</p>
+        <p class="dim">That said, the genetic lottery is real here too: studies suggest fast metabolisers and low-sensitivity genotypes show smaller objective sleep disruption. Some people genuinely do get away with it. Fewer than believe they do.</p>`,
+      sum:"A good stopping point: many people who “sleep fine” after coffee are losing deep sleep without noticing — falling asleep isn't the whole story.",
+      take:"“Still sleeps” ≠ “sleeps well”: evening caffeine cuts deep slow-wave sleep even in people who notice nothing. Some are unaffected; more are simply unaware."
+    },
+    {
+      kicker:"Level 10 · The Bottom of the Cup",
+      title:"The full equation — and how to test yourself",
+      bodyHTML:`
+        <p>Assemble everything and the mystery dissolves into a stack of multipliers:</p>
+        <div class="callout"><span class="tag">The night-coffee equation</span>
+        <strong>Dose × timing</strong> → filtered by <strong>enzyme speed (CYP1A2 gene + modifiers)</strong> → hits a brain tuned by <strong>receptor genetics (ADORA2A)</strong> and reshaped by <strong>tolerance</strong> → competes against your accumulated <strong>sleep pressure</strong> that night. The output is whether — and how deeply — you sleep.</div>
+        <p>Your cousin who sleeps after espresso likely rolled fast-clearance genes, low-sensitivity receptors, a daily habit that built tolerance, and enough sleep pressure by 10pm to overwhelm what little caffeine remains. You may have rolled the opposite hand. Neither of you chose it.</p>
+        <p><strong>Want your own answer without a DNA test?</strong> Run the ten-day experiment, right here: keep your normal coffee for five days, then hold a strict caffeine curfew (nothing after ~midday) for five more. Log each night below — the lab keeps score, saves privately in your browser, and hands you a shareable verdict at the end.</p>`,
+      widget:"curfewLab",
+      afterWidgetHTML:`
+        <p class="dim">One caveat worth keeping: this page explains mechanisms, not medical advice. Sleep problems that persist regardless of caffeine deserve a proper appointment with your GP.</p>`,
+      sum:"",
+      take:"The full equation: dose × timing × enzyme speed × receptor genetics × tolerance × sleep pressure. Test yourself with a ten-day caffeine-curfew experiment."
+    }
+  ]
+};
+
+/* --- Optional interactive widgets. Key = the `widget` name used in a level. --- */
+const WIDGETS = {
+  halfLife: {
+    html: `
+      <div class="sim">
+        <h4>Bedtime caffeine simulator</h4>
+        <div class="sim-grid">
+          <div>
+            <label>Caffeine dose · <output data-out="dose">150 mg</output> <span style="opacity:.7">(espresso ≈ 65, coffee ≈ 100–200)</span></label>
+            <input type="range" data-in="dose" min="30" max="300" step="5" value="150">
+          </div>
+          <div>
+            <label>Hours between the cup and bedtime · <output data-out="hours">3 h</output></label>
+            <input type="range" data-in="hours" min="0" max="12" step="0.5" value="3">
+          </div>
+          <div>
+            <label>Metaboliser speed (half-life)</label>
+            <div class="metab-toggle" data-in="metab">
+              <button data-hl="2.5" type="button">⚡ Fast · 2.5 h</button>
+              <button data-hl="5" class="active" type="button">Average · 5 h</button>
+              <button data-hl="9" type="button">🐢 Slow · 9 h</button>
+            </div>
+          </div>
+        </div>
+        <div class="sim-result">
+          <div class="big" data-out="mg">99 mg</div>
+          <div class="cap">still circulating at lights-out</div>
+          <div class="sim-verdict mid" data-out="verdict">Roughly a full espresso still on board.</div>
+        </div>
+      </div>`,
+    init(root){
+      const dose = root.querySelector('[data-in="dose"]');
+      const hours = root.querySelector('[data-in="hours"]');
+      const metab = root.querySelector('[data-in="metab"]');
+      const out = k => root.querySelector(`[data-out="${k}"]`);
+      let halfLife = 5;
+      function run(){
+        const d = parseFloat(dose.value), h = parseFloat(hours.value);
+        out("dose").textContent = d + " mg";
+        out("hours").textContent = h + " h";
+        const mg = Math.round(d * Math.pow(0.5, h / halfLife));
+        out("mg").textContent = mg + " mg";
+        let cls, msg;
+        if(mg >= 90){ cls="bad"; msg="More than a full espresso still on board — the receptors stay blocked deep into the night."; }
+        else if(mg >= 40){ cls="mid"; msg="Roughly an espresso's worth remaining — enough to shave deep sleep for many people."; }
+        else if(mg >= 15){ cls="mid"; msg="A weak-tea trace remains. Sensitive brains may still notice; most won't."; }
+        else { cls="good"; msg="Effectively cleared — sleep pressure wins this round."; }
+        const v = out("verdict");
+        v.className = "sim-verdict " + cls;
+        v.textContent = msg;
+      }
+      dose.addEventListener("input", run);
+      hours.addEventListener("input", run);
+      metab.addEventListener("click", e=>{
+        const btn = e.target.closest("button[data-hl]");
+        if(!btn) return;
+        metab.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        halfLife = parseFloat(btn.dataset.hl);
+        run();
+      });
+      run();
+    }
+  },
+
+  /* ---- Level 10: the ten-day curfew lab (log nights, get a verdict, share it) ---- */
+  curfewLab: {
+    html: `
+      <div class="sim" data-lab>
+        <h4>The ten-day curfew lab</h4>
+        <div class="lab-chips" data-el="chips"></div>
+        <div class="lab-legend"><span>☕ Nights 1–5 · coffee as usual</span><span>🚫 Nights 6–10 · caffeine curfew</span></div>
+
+        <div data-el="entry">
+          <div class="lab-night" data-el="nightLabel"></div>
+          <div class="sim-grid">
+            <div>
+              <label>How long did it take you to fall asleep? · <output data-el="minOut">20 min</output></label>
+              <input type="range" data-el="mins" min="0" max="90" step="5" value="20">
+            </div>
+            <div>
+              <label>How did you feel this morning? (1 = wrecked · 5 = brilliant)</label>
+              <div class="feel-row" data-el="feel">
+                <button type="button" data-f="1">😵 1</button><button type="button" data-f="2">😪 2</button>
+                <button type="button" data-f="3" class="active">😐 3</button><button type="button" data-f="4">🙂 4</button>
+                <button type="button" data-f="5">✨ 5</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-deeper lab-save" type="button" data-el="save">Log this night</button>
+        </div>
+
+        <div class="lab-results" data-el="results" hidden>
+          <div class="lab-cols">
+            <div class="lab-col c-normal"><h5>☕ Coffee as usual</h5>
+              <div class="row"><span>Nights logged</span><b data-el="nN">0</b></div>
+              <div class="row"><span>Fell asleep in</span><b data-el="nM">—</b></div>
+              <div class="row"><span>Morning score</span><b data-el="nF">—</b></div></div>
+            <div class="lab-col c-curfew"><h5>🚫 Caffeine curfew</h5>
+              <div class="row"><span>Nights logged</span><b data-el="cN">0</b></div>
+              <div class="row"><span>Fell asleep in</span><b data-el="cM">—</b></div>
+              <div class="row"><span>Morning score</span><b data-el="cF">—</b></div></div>
+          </div>
+          <div class="sim-verdict mid" data-el="verdict" hidden></div>
+          <div class="share-row" data-el="shareRow" hidden>
+            <button class="btn btn-deeper btn-mini" type="button" data-el="copy">Copy my results</button>
+            <button class="btn btn-stop btn-mini" type="button" data-el="native" hidden>Share…</button>
+            <a class="btn btn-stop btn-mini" data-el="tweet" target="_blank" rel="noopener">Post on X</a>
+            <a class="btn btn-stop btn-mini" data-el="thread" target="_blank" rel="noopener">Share in the community thread</a>
+          </div>
+          <div class="share-note" data-el="shareNote" hidden>Your results are copied as plain text — paste them anywhere. The community thread lives in this project's GitHub Discussions.</div>
+        </div>
+
+        <div class="lab-links">
+          <button type="button" data-el="undo">Undo last night</button> ·
+          <button type="button" data-el="restart">Restart the experiment</button>
+        </div>
+      </div>`,
+    init(root){
+      const $ = k => root.querySelector(`[data-el="${k}"]`);
+      const KEY = "rh-lab-" + CONFIG.slug;
+      let nights = [];
+      try{ nights = JSON.parse(localStorage.getItem(KEY) || "[]"); }catch(e){}
+      if(!Array.isArray(nights)) nights = [];
+      let feel = 3;
+
+      const avg = a => a.reduce((s,x)=>s+x,0)/a.length;
+      const phaseOf = i => i < 5 ? "normal" : "curfew";
+
+      function stats(){
+        const n = nights.filter((_,i)=>phaseOf(i)==="normal");
+        const c = nights.filter((_,i)=>phaseOf(i)==="curfew");
+        return {
+          n, c,
+          nM: n.length ? avg(n.map(x=>x.m)) : null,
+          nF: n.length ? avg(n.map(x=>x.f)) : null,
+          cM: c.length ? avg(c.map(x=>x.m)) : null,
+          cF: c.length ? avg(c.map(x=>x.f)) : null
+        };
+      }
+
+      function verdictText(s){
+        const dm = s.nM - s.cM;           // minutes saved by the curfew
+        const df = s.cF - s.nF;           // morning-score gain
+        if(dm >= 10 || df >= 0.8)
+          return "⚖️ Verdict: the curfew week won convincingly. Evening caffeine is costing you sleep — your genes have voted.";
+        if(dm <= 2 && Math.abs(df) <= 0.3)
+          return "⚖️ Verdict: barely any difference. You may genuinely be one of the fast-clearance lucky ones.";
+        return "⚖️ Verdict: a modest but real difference. Caffeine is nibbling at your nights rather than devouring them.";
+      }
+
+      function shareText(s){
+        const url = location.href.split("#")[0];
+        return "🧪 My 10-day caffeine curfew experiment\n" +
+          `☕ Coffee as usual — fell asleep in ~${Math.round(s.nM)} min, mornings ${s.nF.toFixed(1)}/5\n` +
+          `🚫 Caffeine curfew — fell asleep in ~${Math.round(s.cM)} min, mornings ${s.cF.toFixed(1)}/5\n` +
+          verdictText(s).replace("⚖️ Verdict: ","⚖️ ") + "\n" +
+          "Run your own descent: " + url;
+      }
+
+      function render(){
+        /* chips */
+        const chips = $("chips");
+        chips.innerHTML = "";
+        for(let i=0;i<10;i++){
+          const d = document.createElement("div");
+          d.className = "lab-chip " + phaseOf(i) + (i < nights.length ? " done" : "");
+          chips.appendChild(d);
+        }
+        /* entry vs finished */
+        const done = nights.length >= 10;
+        $("entry").hidden = done;
+        if(!done){
+          const n = nights.length + 1;
+          $("nightLabel").innerHTML = n <= 5
+            ? `Night ${n} of 10 · <span class="ph-normal">☕ coffee as usual</span>`
+            : `Night ${n} of 10 · <span class="ph-curfew">🚫 caffeine curfew — nothing after midday</span>`;
+        }
+        /* stats */
+        const s = stats();
+        const any = nights.length > 0;
+        $("results").hidden = !any;
+        if(any){
+          $("nN").textContent = s.n.length; $("cN").textContent = s.c.length;
+          $("nM").textContent = s.nM === null ? "—" : "~" + Math.round(s.nM) + " min";
+          $("nF").textContent = s.nF === null ? "—" : s.nF.toFixed(1) + " / 5";
+          $("cM").textContent = s.cM === null ? "—" : "~" + Math.round(s.cM) + " min";
+          $("cF").textContent = s.cF === null ? "—" : s.cF.toFixed(1) + " / 5";
+        }
+        /* verdict + sharing once complete */
+        $("verdict").hidden = !done;
+        $("shareRow").hidden = !done;
+        $("shareNote").hidden = !done;
+        if(done){
+          const v = verdictText(s);
+          const el = $("verdict");
+          el.textContent = v;
+          el.className = "sim-verdict " + (v.includes("won convincingly") ? "bad" : v.includes("lucky ones") ? "good" : "mid");
+          const text = shareText(s);
+          $("tweet").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+          $("thread").href = "https://github.com/" + CONFIG.githubRepo + "/discussions";
+          if(navigator.share){
+            $("native").hidden = false;
+            $("native").onclick = ()=>navigator.share({text}).catch(()=>{});
+          }
+          $("copy").onclick = ()=>{
+            const okMsg = ()=>{ $("copy").textContent = "Copied ✓"; setTimeout(()=>$("copy").textContent = "Copy my results", 1800); };
+            if(navigator.clipboard && navigator.clipboard.writeText){
+              navigator.clipboard.writeText(text).then(okMsg).catch(()=>fallbackCopy(text, okMsg));
+            } else fallbackCopy(text, okMsg);
+          };
+        }
+      }
+
+      function fallbackCopy(text, done){
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand("copy"); done(); }catch(e){}
+        document.body.removeChild(ta);
+      }
+
+      function save(){ try{ localStorage.setItem(KEY, JSON.stringify(nights)); }catch(e){} }
+
+      $("mins").addEventListener("input", ()=>{ $("minOut").textContent = $("mins").value + " min"; });
+      $("feel").addEventListener("click", e=>{
+        const b = e.target.closest("button[data-f]");
+        if(!b) return;
+        $("feel").querySelectorAll("button").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+        feel = parseInt(b.dataset.f,10);
+      });
+      $("save").addEventListener("click", ()=>{
+        if(nights.length >= 10) return;
+        nights.push({ m: parseInt($("mins").value,10), f: feel });
+        save(); render();
+      });
+      $("undo").addEventListener("click", ()=>{ nights.pop(); save(); render(); });
+      $("restart").addEventListener("click", ()=>{ nights = []; save(); render(); });
+
+      render();
+    }
+  }
+};
+
+/* ================================================================
+   ⚙️  ENGINE — shared across every rabbit hole. No need to edit.
+   ================================================================ */
+(function(){
+  "use strict";
+  const L = CONFIG.levels, N = L.length;
+  const KEY = "rh-progress-" + CONFIG.slug;
+  let current = 1;
+
+  /* theme */
+  const r = document.documentElement.style;
+  r.setProperty("--accent", CONFIG.theme.accent);
+  r.setProperty("--accent-hot", CONFIG.theme.accentHot);
+  r.setProperty("--accent-deep", CONFIG.theme.accentDeep);
+  r.setProperty("--line", CONFIG.theme.line);
+
+  /* HUD */
+  const home = document.getElementById("hudHome");
+  home.textContent = CONFIG.siteTitle;
+  home.href = CONFIG.homeHref;
+  const depthBar = document.getElementById("depthBar");
+  for(let i=0;i<N;i++){ const s=document.createElement("div"); s.className="depth-seg"; depthBar.appendChild(s); }
+  function updateHud(){
+    depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
+    depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    document.getElementById("hudDepth").innerHTML =
+      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}`;
+  }
+
+  /* hero */
+  const main = document.getElementById("main");
+  const hero = document.createElement("section");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <div class="eyebrow">${CONFIG.hero.eyebrow}</div>
+    <h1>${CONFIG.hero.titleHTML}</h1>
+    <div class="hero-lede">${CONFIG.hero.icon}<p class="hero-note">${CONFIG.hero.ledeHTML}</p></div>
+    <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
+  main.appendChild(hero);
+
+  /* level cards */
+  L.forEach((lv,i)=>{
+    const n = i+1;
+    const card = document.createElement("section");
+    card.className = "level" + (n===1 ? "" : " locked");
+    card.id = "lv"+n;
+    let inner = `
+      <div class="level-head">
+        <div class="lv-badge">${n}</div>
+        <div class="lv-meta"><div class="lv-kicker">${lv.kicker}</div><h2>${lv.title}</h2></div>
+      </div>
+      <div class="level-body">${lv.bodyHTML}
+        ${lv.widget && WIDGETS[lv.widget] ? WIDGETS[lv.widget].html : ""}
+        ${lv.afterWidgetHTML || ""}
+      </div>`;
+    if(n < N){
+      inner += `
+      <div class="checkpoint">
+        <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
+        <div class="cp-sum">${lv.sum}</div>
+        <div class="cp-actions">
+          <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
+          <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
+        </div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth.</div>
+      </div>`;
+    } else {
+      inner += `
+      <div class="finale">
+        <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
+        <h2>${CONFIG.finale.title}</h2>
+        <p>${CONFIG.finale.text}</p>
+      </div>`;
+    }
+    card.innerHTML = inner;
+    main.appendChild(card);
+    if(lv.widget && WIDGETS[lv.widget]) WIDGETS[lv.widget].init(card);
+  });
+
+  /* footer */
+  document.getElementById("pageFooter").innerHTML =
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">Reset my progress</button>`;
+  document.getElementById("resetProg").addEventListener("click", ()=>{
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+
+  /* progress persistence */
+  function save(){ try{ localStorage.setItem(KEY, String(current)); }catch(e){} }
+  function restore(){
+    let saved = 1;
+    try{ saved = parseInt(localStorage.getItem(KEY)||"1",10)||1; }catch(e){}
+    saved = Math.min(Math.max(saved,1), N);
+    for(let n=2;n<=saved;n++) document.getElementById("lv"+n).classList.remove("locked");
+    current = saved;
+  }
+
+  /* toast */
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
+  }
+
+  /* unlock */
+  function unlock(n){
+    const card = document.getElementById("lv"+n);
+    if(!card.classList.contains("locked")){
+      card.scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+    card.classList.remove("locked");
+    card.classList.add("unlocking");
+    current = Math.max(current, n);
+    save();
+    updateHud();
+    showToast(`⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+    requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
+    card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
+  }
+
+  /* surface modal */
+  const scrim = document.getElementById("modalScrim");
+  const modalList = document.getElementById("modalList");
+  let stoppedAt = 1;
+  function openModal(n){
+    stoppedAt = n;
+    document.getElementById("modalLevel").textContent = n;
+    modalList.innerHTML = "";
+    for(let i=0;i<n;i++){
+      const li = document.createElement("li");
+      li.textContent = L[i].take;
+      modalList.appendChild(li);
+    }
+    scrim.classList.add("open");
+    document.getElementById("modalResume").focus();
+  }
+  function closeModal(){ scrim.classList.remove("open"); }
+  document.getElementById("modalHome").href = CONFIG.homeHref;
+  document.getElementById("modalResume").addEventListener("click", ()=>{ closeModal(); unlock(Math.min(stoppedAt+1, N)); });
+  scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  /* clicks */
+  document.body.addEventListener("click", e=>{
+    const deeper = e.target.closest("[data-next]");
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    const stop = e.target.closest("[data-stop]");
+    if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
+  });
+
+  restore();
+  updateHud();
+})();
+</script>
+</body>
+</html>

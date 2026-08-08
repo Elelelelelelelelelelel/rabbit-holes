@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUR QUESTION HERE — The Rabbit Holes</title>
+<meta name="description" content="ONE-SENTENCE DESCRIPTION OF THIS RABBIT HOLE — appears in search results and link previews.">
+<meta property="og:title" content="YOUR QUESTION HERE">
+<meta property="og:description" content="ONE-SENTENCE HOOK for social media link previews.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#070B14;
+    --ink:#0D1424;
+    --ink-raise:#16203A;
+    --accent:#E8A44C;       /* set per rabbit hole via CONFIG.theme */
+    --accent-hot:#FFC46B;
+    --accent-deep:#8A5A1E;
+    --crema:#F2E7D5;
+    --dim:#8FA3C4;
+    --line:rgba(232,164,76,.16);
+    --danger:#E86A5C;
+    --ok:#7BC68F;
+    --display:'Chakra Petch',sans-serif;
+    --body:'Karla',sans-serif;
+    --radius:14px;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink-deep);color:var(--crema);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--accent);color:var(--ink-deep)}
+  a{color:var(--accent-hot)}
+
+  .backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 500px at 80% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(30,43,77,.55), transparent 65%),
+      var(--ink-deep);}
+  .backdrop::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(242,231,213,.35), transparent 100%),
+      radial-gradient(1px 1px at 34% 64%, rgba(242,231,213,.22), transparent 100%),
+      radial-gradient(1.4px 1.4px at 58% 18%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(242,231,213,.20), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 76%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 22% 86%, rgba(242,231,213,.18), transparent 100%);}
+
+  .hud{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(7,11,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .hud-inner{max-width:var(--maxw);margin:0 auto;padding:10px 20px 12px}
+  .hud-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .hud-title{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  .hud-title a{color:inherit;text-decoration:none}
+  .hud-depth{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hud-depth strong{color:var(--crema)}
+  .depth-bar{margin-top:8px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+  .depth-seg{height:6px;border-radius:3px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15);transition:background .5s ease, box-shadow .5s ease}
+  .depth-seg.filled{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent;box-shadow:0 0 10px color-mix(in srgb, var(--accent) 45%, transparent)}
+
+  main{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:120px 20px 80px}
+
+  .hero{padding:40px 0 24px}
+  .hero .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5.6vw,46px);line-height:1.14;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero-lede{display:flex;align-items:flex-end;gap:14px;margin:26px 0 8px}
+  .hero-lede svg{flex:none}
+  .steam path{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:.55;animation:steam 4s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:1.3s;opacity:.35}
+  .steam path:nth-child(3){animation-delay:2.4s;opacity:.45}
+  @keyframes steam{0%{transform:translateY(4px);opacity:0}35%{opacity:.55}100%{transform:translateY(-10px);opacity:0}}
+  .hero-note{font-size:14px;color:var(--dim)}
+  .hero-note b{color:var(--crema);font-weight:700}
+
+  .level{margin:34px 0;border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(22,32,58,.55), rgba(13,20,36,.9));
+    box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+  .level.locked{display:none}
+  .level.unlocking{animation:unlock .8s cubic-bezier(.2,.9,.25,1) both}
+  @keyframes unlock{
+    0%{opacity:0;transform:translateY(46px) scale(.97);filter:brightness(2) saturate(0)}
+    60%{filter:brightness(1.25)}
+    100%{opacity:1;transform:none;filter:none}}
+  .level-head{display:flex;align-items:center;gap:14px;padding:18px 26px;border-bottom:1px solid var(--line);background:rgba(7,11,20,.35)}
+  .lv-badge{flex:none;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;
+    font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink-deep);
+    background:linear-gradient(135deg,var(--accent-hot),var(--accent-deep));
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .lv-meta .lv-kicker{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+  .lv-meta h2{font-family:var(--display);font-weight:600;font-size:clamp(19px,3.4vw,24px);line-height:1.2}
+  .level-body{padding:26px}
+  .level-body p{margin-bottom:16px}
+  .level-body p:last-child{margin-bottom:0}
+  .level-body .dim{color:var(--dim)}
+  .callout{margin:20px 0;padding:16px 18px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 6%, transparent);font-size:15.5px}
+  .callout .tag{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+  .stat{flex:1 1 140px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--dim);line-height:1.4;margin-top:2px}
+
+  .checkpoint{padding:20px 26px 24px;border-top:1px dashed rgba(143,163,196,.25);background:rgba(7,11,20,.3)}
+  .checkpoint .cp-label{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .checkpoint .cp-sum{font-size:15.5px;margin-bottom:16px}
+  .cp-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{font-family:var(--display);font-weight:700;letter-spacing:.08em;border-radius:10px;cursor:pointer;border:none;
+    padding:13px 22px;font-size:14.5px;transition:transform .15s ease, box-shadow .2s ease}
+  .btn:focus-visible{outline:2px solid var(--accent-hot);outline-offset:3px}
+  a.btn{text-decoration:none;display:inline-block;text-align:center}
+  .btn-deeper{color:var(--ink-deep);background:linear-gradient(135deg,var(--accent-hot),var(--accent));
+    box-shadow:0 6px 22px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .btn-deeper:hover{transform:translateY(-2px);box-shadow:0 10px 28px color-mix(in srgb, var(--accent) 50%, transparent)}
+  .btn-deeper:active{transform:translateY(0)}
+  .btn-stop{color:var(--dim);background:transparent;border:1px solid rgba(143,163,196,.3);font-weight:600}
+  .btn-stop:hover{color:var(--crema);border-color:var(--dim)}
+  .cp-hint{font-size:13px;color:var(--dim);flex-basis:100%}
+
+  .toast{position:fixed;top:76px;right:18px;z-index:60;background:var(--ink-raise);border:1px solid var(--accent);
+    border-radius:10px;padding:12px 18px;font-family:var(--display);font-size:13px;letter-spacing:.1em;color:var(--accent-hot);
+    box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+    opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;max-width:min(86vw,360px)}
+  .toast.show{opacity:1;transform:none}
+
+  .modal-scrim{position:fixed;inset:0;z-index:70;background:rgba(7,11,20,.7);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-scrim.open{display:flex}
+  .modal{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--ink);border:1px solid var(--line);
+    border-radius:var(--radius);padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal h3{font-family:var(--display);font-size:20px;margin-bottom:4px}
+  .modal .sub{color:var(--dim);font-size:14px;margin-bottom:18px}
+  .modal ul{list-style:none;margin-bottom:20px}
+  .modal li{padding:9px 0 9px 26px;position:relative;font-size:15px;border-bottom:1px solid rgba(143,163,196,.1)}
+  .modal li::before{content:"";position:absolute;left:4px;top:16px;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+  .modal .cp-actions{margin-top:4px}
+
+  .sim{margin:22px 0;padding:20px;border-radius:12px;background:rgba(7,11,20,.55);border:1px solid rgba(143,163,196,.16)}
+  .sim h4{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .sim-grid{display:grid;gap:16px}
+  .sim label{font-size:13.5px;color:var(--dim);display:block;margin-bottom:6px}
+  .sim label output{color:var(--crema);font-weight:700}
+  input[type=range]{width:100%;appearance:none;height:6px;border-radius:3px;background:var(--ink-raise);outline:none}
+  input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);
+    border:3px solid var(--ink-deep);box-shadow:0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--ink-deep);cursor:pointer}
+  .metab-toggle{display:flex;gap:8px;flex-wrap:wrap}
+  .metab-toggle button{flex:1 1 90px;padding:9px 10px;border-radius:8px;cursor:pointer;font-family:var(--display);font-size:12.5px;
+    letter-spacing:.05em;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .metab-toggle button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .sim-result{margin-top:6px;padding:16px;border-radius:10px;text-align:center;background:color-mix(in srgb, var(--accent) 7%, transparent);border:1px solid var(--line)}
+  .sim-result .big{font-family:var(--display);font-weight:700;font-size:32px;color:var(--accent-hot)}
+  .sim-result .cap{font-size:13.5px;color:var(--dim);margin-top:4px}
+  .sim-verdict{font-size:14px;margin-top:10px;font-weight:700}
+  .sim-verdict.bad{color:var(--danger)}
+  .sim-verdict.mid{color:var(--accent)}
+  .sim-verdict.good{color:var(--ok)}
+
+  /* ten-day curfew lab */
+  .lab-chips{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:6px}
+  .lab-chip{height:9px;border-radius:4px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15)}
+  .lab-chip.done.normal{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent}
+  .lab-chip.done.curfew{background:linear-gradient(90deg,#2E6B4A,var(--ok));border-color:transparent}
+  .lab-legend{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);
+    font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+  .lab-night{font-family:var(--display);font-size:14px;letter-spacing:.06em;margin-bottom:14px}
+  .lab-night .ph-normal{color:var(--accent-hot)}
+  .lab-night .ph-curfew{color:var(--ok)}
+  .feel-row{display:flex;gap:8px;flex-wrap:wrap}
+  .feel-row button{flex:1 1 44px;padding:9px 6px;border-radius:8px;cursor:pointer;font-family:var(--display);
+    font-size:14px;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .feel-row button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .lab-save{margin-top:16px}
+  .lab-links{margin-top:10px;font-size:12.5px;color:var(--dim)}
+  .lab-links button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+  .lab-results{margin-top:18px}
+  .lab-cols{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .lab-col{flex:1 1 180px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .lab-col h5{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+  .lab-col.c-normal h5{color:var(--accent-hot)}
+  .lab-col.c-curfew h5{color:var(--ok)}
+  .lab-col .row{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;color:var(--dim)}
+  .lab-col .row b{color:var(--crema)}
+  .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .btn-mini{padding:10px 16px;font-size:13px}
+  .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+  .finale{text-align:center;padding:40px 26px 44px}
+  .finale .medal{width:92px;height:92px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 35% 30%, var(--accent-hot), var(--accent-deep));
+    box-shadow:0 0 40px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 0 20px rgba(0,0,0,.25);
+    animation:medal 3.2s ease-in-out infinite}
+  @keyframes medal{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .finale h2{font-family:var(--display);font-size:26px;margin-bottom:8px}
+  .finale p{color:var(--dim);max-width:52ch;margin:0 auto 10px}
+
+  footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px 46px;max-width:var(--maxw);margin:0 auto}
+  footer button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit}
+
+  @media (max-width:560px){
+    .level-head{padding:16px 18px}.level-body{padding:20px 18px}.checkpoint{padding:18px}
+    .hud-depth span.hide-s{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<header class="hud"><div class="hud-inner">
+  <div class="hud-row">
+    <div class="hud-title"><a href="../index.html" id="hudHome"></a></div>
+    <div class="hud-depth" id="hudDepth"></div>
+  </div>
+  <div class="depth-bar" id="depthBar"></div>
+</div></header>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<main id="main"></main>
+<footer id="pageFooter"></footer>
+<div class="modal-scrim" id="modalScrim" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h3 id="modalTitle">You surfaced at Level <span id="modalLevel">1</span></h3>
+    <div class="sub">A complete answer, at the depth you chose. Here's what you're taking with you:</div>
+    <ul id="modalList"></ul>
+    <div class="cp-actions">
+      <button class="btn btn-deeper" id="modalResume" type="button">Actually… go deeper ↓</button>
+      <a class="btn btn-stop" id="modalHome" href="../index.html">I'm done — back to the surface</a>
+      <div class="cp-hint">Your depth is saved — you can climb back down any time.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ✏️  EDIT THIS SECTION ONLY — everything below "ENGINE" is shared
+   ================================================================ */
+const CONFIG = {
+  /* ── 1. IDENTITY ─────────────────────────────────────────────
+     slug: unique, lowercase, no spaces. Used to save the reader's
+     progress in their browser, so never reuse one between holes. */
+  slug: "my-new-hole",
+  siteTitle: "🕳️ NAME OF THIS RABBIT HOLE",
+  homeHref: "../index.html",
+
+  /* Your GitHub repository, as "username/repo". Used by any
+     widget that links to your Discussions or Issues.            */
+  githubRepo: "yourusername/rabbit-holes",
+
+  /* ── 2. THEME ────────────────────────────────────────────────
+     Pick one accent colour per hole and derive three shades:
+     accent (main), accentHot (lighter, glows and hovers),
+     accentDeep (darker, gradients). Keep the midnight backgrounds
+     as they are — that base is what unifies the whole site.
+     Coffee used amber; try violet for dreams, teal for the sea… */
+  theme: {
+    accent: "#9B7BE8",
+    accentHot: "#C0A8FF",
+    accentDeep: "#4E3A8A",
+    line: "rgba(155,123,232,.16)"
+  },
+
+  /* ── 3. DEPTH NAMES ──────────────────────────────────────────
+     One evocative name per level, shown in the top HUD.
+     Themed to the subject: coffee went Surface → Bedrock. */
+  depthNames: ["Surface","Level 2 name","Level 3 name","Level 4 name","Level 5 name",
+               "Level 6 name","Level 7 name","Level 8 name","Level 9 name","Bottom"],
+
+  /* ── 4. HERO ─────────────────────────────────────────────────
+     icon: any small inline SVG (or an emoji in a <div style="font-size:56px">).
+     ledeHTML: a two-or-three-sentence scene that makes the reader
+     feel the mystery personally before any science appears. */
+  hero: {
+    eyebrow: "An interactive descent · 10 levels deep",
+    titleHTML: 'Your big question, with the key phrase <em>in accent colour?</em>',
+    icon: `<div style="font-size:56px" aria-hidden="true">🕳️</div>`,
+    ledeHTML: `A vivid, concrete scene the reader recognises from their own life. <b>Bold</b> the one detail that makes them say “yes — why IS that?”`,
+    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or go deeper.`
+  },
+
+  footerHTML: `Built as an interactive explainer · Note any caveats about your figures or sources here.`,
+
+  /* ── 5. FINALE ───────────────────────────────────────────────
+     Shown at the bottom of the last level instead of a checkpoint. */
+  finale: {
+    emoji: "🕳️",
+    title: "Depth 10 / 10 — Bottom reached",
+    text: "A closing paragraph that looks back up the shaft: remind the reader how far they came, from the simple answer to the strange one."
+  },
+
+  /* ── 6. THE LEVELS ───────────────────────────────────────────
+     The heart of the format. Ten entries (the engine copes with
+     more or fewer, but ten is the house style). Each level needs:
+
+       kicker    — "Level N · Two-word theme"
+       title     — the level heading (a claim, not a topic:
+                   "Caffeine hides tiredness", not "About caffeine")
+       bodyHTML  — the content. Building blocks you can use:
+                     <p>…</p>                         paragraphs
+                     <p class="dim">…</p>             quieter aside
+                     <div class="callout">
+                       <span class="tag">LABEL</span> …</div>
+                     <div class="stat-row">
+                       <div class="stat"><div class="n">95%</div>
+                       <div class="l">caption</div></div> …</div>
+       widget    — (optional) key into WIDGETS below; injected
+                   after bodyHTML. One signature interactive per
+                   hole is the house style. The coffee hole has
+                   two worth borrowing from: a simulator (level 4)
+                   and a full experiment tracker with shareable
+                   results (level 10).
+       afterWidgetHTML — (optional) content shown after the widget
+       sum       — checkpoint text: one sentence beginning with a
+                   phrase like "A good stopping point:" that makes
+                   stopping feel legitimate, not like quitting
+       take      — one-line takeaway, listed cumulatively in the
+                   "You surfaced" recap. Must stand alone.
+
+     WRITING THE DEPTH CURVE (the format's real craft):
+       Levels 1–2   the honest short answer, zero jargon
+       Levels 3–4   the core mechanism, one new term per level
+       Levels 5–6   the machinery underneath (name the real
+                    enzymes / genes / equations — readers this
+                    deep have earned the precision)
+       Levels 7–8   complications and real-world modifiers
+       Level 9      the plot twist — the thing that reframes
+                    everything above it
+       Level 10     the synthesis, plus something the reader can
+                    DO — ideally an experiment they log and share. */
+  levels: [
+    {
+      kicker:"Level 1 · The Surface",
+      title:"The honest short answer, stated as a claim",
+      bodyHTML:`
+        <p>The short answer in bold strokes: <strong>the one-sentence truth</strong> a curious person could walk away with.</p>
+        <p class="dim">Everything below this level explains <em>how</em> — piece by piece.</p>`,
+      sum:"A good stopping point: restate the level's claim in one plain sentence.",
+      take:"The one-line version of this level for the recap list."
+    },
+    {
+      kicker:"Level 2 · The Myth",
+      title:"Bury the most common misconception",
+      bodyHTML:`
+        <p>Level 2 is a great place to clear the ground: name the thing everyone believes, and replace it.</p>
+        <div class="callout"><span class="tag">Key idea</span>
+        The reframe that the rest of the descent will build on.</div>`,
+      sum:"A good stopping point: the misconception is dead; the reframe stands.",
+      take:"One line: the myth, corrected."
+    },
+    {
+      kicker:"Level 3 · The Mechanism",
+      title:"Introduce the core moving part",
+      bodyHTML:`
+        <p>Name the first real piece of machinery and give it one strong analogy. Coffee used the impostor-in-the-parking-space.</p>`,
+      widget:"exampleWidget",
+      afterWidgetHTML:`<p class="dim">Optional aside after the interactive.</p>`,
+      sum:"A good stopping point: the reader now owns the core mechanism.",
+      take:"One line: the mechanism."
+    }
+    /* …continue to level 10, following the depth curve above.
+       Give every level except the last a sum + take, and give
+       the last level neither sum nor checkpoint (the finale
+       replaces it) — just a take for the recap. */
+  ]
+};
+
+/* ── 7. WIDGETS (optional) ─────────────────────────────────────
+   One signature interactive per hole. html is injected into the
+   level; init(root) receives the level card element and wires it
+   up. Scope every querySelector to root so widgets never clash.
+   For a richer example — an experiment tracker that saves nights
+   to localStorage and produces shareable results — see the
+   curfewLab widget in coffee/index.html.                        */
+const WIDGETS = {
+  exampleWidget: {
+    html: `
+      <div class="sim">
+        <h4>Name of your interactive</h4>
+        <div class="sim-grid">
+          <div>
+            <label>A slider the reader can drag · <output data-out="v">50</output></label>
+            <input type="range" data-in="v" min="0" max="100" value="50">
+          </div>
+        </div>
+        <div class="sim-result">
+          <div class="big" data-out="big">50</div>
+          <div class="cap">what the number means</div>
+        </div>
+      </div>`,
+    init(root){
+      const slider = root.querySelector('[data-in="v"]');
+      const out = k => root.querySelector(`[data-out="${k}"]`);
+      function run(){
+        out("v").textContent = slider.value;
+        out("big").textContent = slider.value;
+      }
+      slider.addEventListener("input", run);
+      run();
+    }
+  }
+};
+
+/* ================================================================
+   ⚙️  ENGINE — shared across every rabbit hole. No need to edit.
+   ================================================================ */
+(function(){
+  "use strict";
+  const L = CONFIG.levels, N = L.length;
+  const KEY = "rh-progress-" + CONFIG.slug;
+  let current = 1;
+
+  /* theme */
+  const r = document.documentElement.style;
+  r.setProperty("--accent", CONFIG.theme.accent);
+  r.setProperty("--accent-hot", CONFIG.theme.accentHot);
+  r.setProperty("--accent-deep", CONFIG.theme.accentDeep);
+  r.setProperty("--line", CONFIG.theme.line);
+
+  /* HUD */
+  const home = document.getElementById("hudHome");
+  home.textContent = CONFIG.siteTitle;
+  home.href = CONFIG.homeHref;
+  const depthBar = document.getElementById("depthBar");
+  for(let i=0;i<N;i++){ const s=document.createElement("div"); s.className="depth-seg"; depthBar.appendChild(s); }
+  function updateHud(){
+    depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
+    depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    document.getElementById("hudDepth").innerHTML =
+      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}`;
+  }
+
+  /* hero */
+  const main = document.getElementById("main");
+  const hero = document.createElement("section");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <div class="eyebrow">${CONFIG.hero.eyebrow}</div>
+    <h1>${CONFIG.hero.titleHTML}</h1>
+    <div class="hero-lede">${CONFIG.hero.icon}<p class="hero-note">${CONFIG.hero.ledeHTML}</p></div>
+    <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
+  main.appendChild(hero);
+
+  /* level cards */
+  L.forEach((lv,i)=>{
+    const n = i+1;
+    const card = document.createElement("section");
+    card.className = "level" + (n===1 ? "" : " locked");
+    card.id = "lv"+n;
+    let inner = `
+      <div class="level-head">
+        <div class="lv-badge">${n}</div>
+        <div class="lv-meta"><div class="lv-kicker">${lv.kicker}</div><h2>${lv.title}</h2></div>
+      </div>
+      <div class="level-body">${lv.bodyHTML}
+        ${lv.widget && WIDGETS[lv.widget] ? WIDGETS[lv.widget].html : ""}
+        ${lv.afterWidgetHTML || ""}
+      </div>`;
+    if(n < N){
+      inner += `
+      <div class="checkpoint">
+        <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
+        <div class="cp-sum">${lv.sum}</div>
+        <div class="cp-actions">
+          <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
+          <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
+        </div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth.</div>
+      </div>`;
+    } else {
+      inner += `
+      <div class="finale">
+        <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
+        <h2>${CONFIG.finale.title}</h2>
+        <p>${CONFIG.finale.text}</p>
+      </div>`;
+    }
+    card.innerHTML = inner;
+    main.appendChild(card);
+    if(lv.widget && WIDGETS[lv.widget]) WIDGETS[lv.widget].init(card);
+  });
+
+  /* footer */
+  document.getElementById("pageFooter").innerHTML =
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">Reset my progress</button>`;
+  document.getElementById("resetProg").addEventListener("click", ()=>{
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+
+  /* progress persistence */
+  function save(){ try{ localStorage.setItem(KEY, String(current)); }catch(e){} }
+  function restore(){
+    let saved = 1;
+    try{ saved = parseInt(localStorage.getItem(KEY)||"1",10)||1; }catch(e){}
+    saved = Math.min(Math.max(saved,1), N);
+    for(let n=2;n<=saved;n++) document.getElementById("lv"+n).classList.remove("locked");
+    current = saved;
+  }
+
+  /* toast */
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
+  }
+
+  /* unlock */
+  function unlock(n){
+    const card = document.getElementById("lv"+n);
+    if(!card.classList.contains("locked")){
+      card.scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+    card.classList.remove("locked");
+    card.classList.add("unlocking");
+    current = Math.max(current, n);
+    save();
+    updateHud();
+    showToast(`⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+    requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
+    card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
+  }
+
+  /* surface modal */
+  const scrim = document.getElementById("modalScrim");
+  const modalList = document.getElementById("modalList");
+  let stoppedAt = 1;
+  function openModal(n){
+    stoppedAt = n;
+    document.getElementById("modalLevel").textContent = n;
+    modalList.innerHTML = "";
+    for(let i=0;i<n;i++){
+      const li = document.createElement("li");
+      li.textContent = L[i].take;
+      modalList.appendChild(li);
+    }
+    scrim.classList.add("open");
+    document.getElementById("modalResume").focus();
+  }
+  function closeModal(){ scrim.classList.remove("open"); }
+  document.getElementById("modalHome").href = CONFIG.homeHref;
+  document.getElementById("modalResume").addEventListener("click", ()=>{ closeModal(); unlock(Math.min(stoppedAt+1, N)); });
+  scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  /* clicks */
+  document.body.addEventListener("click", e=>{
+    const deeper = e.target.closest("[data-next]");
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    const stop = e.target.closest("[data-stop]");
+    if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
+  });
+
+  restore();
+  updateHud();
+})();
+</script>
+</body>
+</html>
