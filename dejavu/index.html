@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YOUR QUESTION HERE — The Rabbit Holes</title>
-<meta name="description" content="ONE-SENTENCE DESCRIPTION OF THIS RABBIT HOLE — appears in search results and link previews.">
-<meta property="og:title" content="YOUR QUESTION HERE">
-<meta property="og:description" content="ONE-SENTENCE HOOK for social media link previews.">
+<title>Why do we get déjà vu? — The Rabbit Holes</title>
+<meta name="description" content="An interactive ten-level descent into the science of déjà vu: dual-process memory, the rhinal cortex, epilepsy, jamais vu, and the theory that it might be your brain checking its own work.">
+<meta property="og:title" content="Why do we get déjà vu?">
+<meta property="og:description" content="Descend ten levels into the science of déjà vu. Stop whenever you're satisfied — or go all the way to the bottom of the hole.">
 <meta property="og:type" content="article">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -245,25 +245,12 @@
    ✏️  EDIT THIS SECTION ONLY — everything below "ENGINE" is shared
    ================================================================ */
 const CONFIG = {
-  /* ── 1. IDENTITY ─────────────────────────────────────────────
-     slug: unique, lowercase, no spaces. Used to save the reader's
-     progress in their browser, so never reuse one between holes. */
-  slug: "my-new-hole",
-  siteTitle: "🕳️ NAME OF THIS RABBIT HOLE",
+  slug: "dejavu",
+  siteTitle: "🌀 The Déjà Vu Rabbit Hole",
   homeHref: "../index.html",
 
-  /* Your GitHub repository, as "username/repo". Used by the
-     discussion-panel widget and anything else linking to your
-     Issues or Discussions.                                      */
   githubRepo: "yourusername/rabbit-holes",
 
-  /* ── 2. THEME ────────────────────────────────────────────────
-     Pick one accent colour per hole and derive three shades:
-     accent (main), accentHot (lighter, glows and hovers),
-     accentDeep (darker, gradients). Keep the midnight backgrounds
-     as they are — that base is what unifies the whole site.
-     Coffee used amber, déjà vu used violet; try teal for the sea,
-     or something colder for a hole about winter. */
   theme: {
     accent: "#9B7BE8",
     accentHot: "#C0A8FF",
@@ -271,206 +258,254 @@ const CONFIG = {
     line: "rgba(155,123,232,.16)"
   },
 
-  /* ── 3. DEPTH NAMES ──────────────────────────────────────────
-     One evocative name per level, shown in the top HUD.
-     Themed to the subject: coffee went Surface → Bedrock,
-     déjà vu went Surface → The Myth → … → Bedrock. */
-  depthNames: ["Surface","Level 2 name","Level 3 name","Level 4 name","Level 5 name",
-               "Level 6 name","Level 7 name","Level 8 name","Level 9 name","Bottom"],
+  depthNames: ["Surface","The Myth","Two Systems","The Overlap","Rhinal Cortex",
+               "The Double Signal","The Frequency Curve","Jamais Vu","The Alarm","Bedrock"],
 
-  /* ── 4. HERO ─────────────────────────────────────────────────
-     icon: any small inline SVG (or an emoji in a <div style="font-size:56px">).
-     ledeHTML: a two-or-three-sentence scene that makes the reader
-     feel the mystery personally before any science appears. */
   hero: {
     eyebrow: "An interactive descent · 10 levels deep",
-    titleHTML: 'Your big question, with the key phrase <em>in accent colour?</em>',
-    icon: `<div style="font-size:56px" aria-hidden="true">🕳️</div>`,
-    ledeHTML: `A vivid, concrete scene the reader recognises from their own life. <b>Bold</b> the one detail that makes them say “yes — why IS that?”`,
+    titleHTML: 'Why do we get <em>déjà vu?</em>',
+    icon: `<svg width="72" height="70" viewBox="0 0 72 70" fill="none" aria-hidden="true">
+      <circle cx="24" cy="34" r="17" stroke="var(--accent)" stroke-width="2" opacity=".9"/>
+      <circle cx="24" cy="34" r="17" stroke="var(--accent)" stroke-width="2" opacity=".35" transform="translate(9 -6)"/>
+      <path d="M46 20c6 2 10 8 10 14s-4 12-10 14" stroke="var(--accent)" stroke-width="2" fill="none" opacity=".6"/>
+    </svg>`,
+    ledeHTML: `You turn a corner in a city you've never visited, and for two seconds you know exactly what's about to happen. It passes before you can even describe it. <b>Nearly two-thirds of people</b> report this at some point — and it isn't a glitch in the universe.`,
     noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or answer the depth riddle and go deeper.`
   },
 
-  footerHTML: `Built as an interactive explainer · Note any caveats about your figures or sources here.`,
+  footerHTML: `Built as an interactive explainer · Figures (prevalence, brain regions, study findings) reflect published memory & neuroscience research and are approximate for individuals.`,
 
-  /* ── 5. FINALE ───────────────────────────────────────────────
-     Shown at the bottom of the last level instead of a checkpoint. */
   finale: {
-    emoji: "🕳️",
+    emoji: "🌀",
     title: "Depth 10 / 10 — Bottom reached",
-    text: "A closing paragraph that looks back up the shaft: remind the reader how far they came, from the simple answer to the strange one."
+    text: "You descended from “maybe I've lived this before” to two competing memory systems, a mistimed neural signal, and a brain that may be quietly checking its own work. That's the whole hole. Next time it happens, you'll know exactly what just misfired."
   },
 
-  /* ── 6. THE LEVELS ───────────────────────────────────────────
-     The heart of the format. Ten entries (the engine copes with
-     more or fewer, but ten is the house style). Each level needs:
-
-       kicker    — "Level N · Two-word theme"
-       title     — the level heading (a claim, not a topic:
-                   "Caffeine hides tiredness", not "About caffeine")
-       bodyHTML  — the content. Building blocks you can use:
-                     <p>…</p>                         paragraphs
-                     <p class="dim">…</p>             quieter aside
-                     <div class="callout">
-                       <span class="tag">LABEL</span> …</div>
-                     <div class="stat-row">
-                       <div class="stat"><div class="n">95%</div>
-                       <div class="l">caption</div></div> …</div>
-       widget    — (optional) key into WIDGETS below; injected
-                   after bodyHTML. One signature interactive per
-                   hole is the house style. Coffee has a bedtime
-                   simulator (level 4); déjà vu has a two-scenes
-                   "spot the single overlap" demo (level 4). Both
-                   are worth reading as examples. Level 10 of both
-                   uses the ready-made discussPanel widget.
-       afterWidgetHTML — (optional) content shown after the widget
-       sum       — checkpoint text: one sentence beginning with a
-                   phrase like "A good stopping point:" that makes
-                   stopping feel legitimate, not like quitting
-       take      — one-line takeaway, listed cumulatively in the
-                   "You surfaced" recap. Must stand alone.
-
-       puzzle    — (levels 1–9) the DEPTH RIDDLE that guards "Go
-                   deeper". Three types keep it from feeling like
-                   the same trivia quiz nine times running:
-
-                   type:"mcq"        { q, options:[4 strings],
-                                        answer:index (0-based) }
-                   type:"truefalse"  { q, answer:true|false }
-                   type:"slider"     { q, min, max, step, unit,
-                                        target, tolerance }
-                     — reader drags to a number; correct if within
-                       `tolerance` of `target`. Great for anything
-                       with a real figure attached (a half-life,
-                       a percentage, a year, an hour count).
-
-                   All three also take:
-                     hint   — shown after a second wrong attempt;
-                              point at where the answer lives,
-                              don't restate it
-                     wrong  — (optional) a first-miss remark with
-                              some personality, e.g. "That's the
-                              marketing version, not the biology."
-                              Falls back to a generic line if omitted
-                     fact   — (optional) a bonus nugget shown once
-                              solved, one layer deeper than the
-                              level itself — genuinely obscure is
-                              better than merely true
-
-                   Mix the three types across your ten levels
-                   rather than defaulting to mcq every time — it's
-                   the easiest way to keep the descent playful.
-                   Options for mcq are shuffled automatically, so
-                   don't rely on position when writing hints.
-
-                   Solving a riddle is automatically paired with a
-                   small reward card — one of a shared cast of
-                   animal characters holding coffee, saying
-                   something kind — handled entirely by the
-                   engine's REWARDS pool. Nothing to configure here;
-                   it's the same warm little moment on every hole.
-
-     WRITING THE DEPTH CURVE (the format's real craft):
-       Levels 1–2   the honest short answer, zero jargon
-       Levels 3–4   the core mechanism, one new term per level
-       Levels 5–6   the machinery underneath (name the real
-                    enzymes / genes / equations / researchers —
-                    readers this deep have earned the precision)
-       Levels 7–8   complications and real-world modifiers
-       Level 9      the plot twist — the thing that reframes
-                    everything above it
-       Level 10     the synthesis, plus something the reader can
-                    DO, and the discussion panel so they can talk
-                    about it. */
   levels: [
     {
       kicker:"Level 1 · The Surface",
-      title:"The honest short answer, stated as a claim",
+      title:"It's a memory system briefly confusing itself",
       bodyHTML:`
-        <p>The short answer in bold strokes: <strong>the one-sentence truth</strong> a curious person could walk away with.</p>
-        <p class="dim">Everything below this level explains <em>how</em> — piece by piece.</p>`,
-      sum:"A good stopping point: restate the level's claim in one plain sentence.",
-      take:"The one-line version of this level for the recap list.",
+        <p>The short answer: déjà vu happens when your brain's <strong>sense of familiarity</strong> fires without any real memory to back it up. For a second or two, something brand new feels unmistakably familiar — and then the feeling passes, because there's genuinely nothing behind it.</p>
+        <p>It's remarkably common and, on its own, entirely benign: surveys put lifetime prevalence at roughly <strong>60–70% of people</strong>, most often in their teens and twenties. Nothing paranormal is required, and nothing is wrong with you.</p>
+        <p class="dim">Everything below this level explains <em>why</em> a healthy brain does this to itself.</p>`,
+      sum:"A good stopping point: déjà vu is familiarity firing without a real memory behind it — common, benign, and not a glitch in reality.",
+      take:"Déjà vu is your brain's familiarity signal firing with nothing real behind it. It's common and harmless.",
       puzzle:{
         type:"mcq",
-        q:"A question whose answer sits in the level above?",
-        options:["A plausible wrong answer","The right answer","Another plausible wrong answer","A tempting misconception"],
-        answer:1,
-        wrong:"A first-miss remark with some character.",
-        hint:"A nudge towards where in the level the answer lives — without giving it away.",
-        fact:"An optional, ideally obscure, bonus nugget revealed once they get it right."
+        q:"Roughly what share of people report experiencing déjà vu at some point in their life?",
+        options:["Under 5%","About 25%","Roughly 60–70%","Nearly everyone, 99%"],
+        answer:2,
+        wrong:"Rarer than that, actually try again — this is one of the most common odd experiences people have.",
+        hint:"The level calls it out directly: most people, most often when young.",
+        fact:"Déjà vu is reported less often in children under 8 — the feeling seems to need a mature enough memory system to misfire in the first place."
       }
     },
     {
       kicker:"Level 2 · The Myth",
-      title:"Bury the most common misconception",
+      title:"It isn't a memory of a past life, a simulation glitch, or ESP",
       bodyHTML:`
-        <p>Level 2 is a great place to clear the ground: name the thing everyone believes, and replace it.</p>
+        <p>Déjà vu has picked up a lot of mystical baggage: past-life memories, glimpses of parallel universes, proof we're inside a simulation that just skipped a frame. None of it holds up, and none of it is needed — the mundane explanation is stranger and better evidenced than the exciting ones.</p>
+        <p>The real clue was hiding in the name the phenomenon almost never gets right: people describe déjà vu as remembering the <em>exact same event</em>, but what they can actually detect is only ever a feeling of familiarity — never a specific memory of when, where, or how they supposedly experienced it before. That gap is the whole mystery, and it points straight at memory machinery, not metaphysics.</p>
         <div class="callout"><span class="tag">Key idea</span>
-        The reframe that the rest of the descent will build on.</div>`,
-      sum:"A good stopping point: the misconception is dead; the reframe stands.",
-      take:"One line: the myth, corrected.",
+        If it were a genuine memory, you could describe the earlier occasion. You never can. That missing detail is the fingerprint of a familiarity signal firing alone.</div>`,
+      sum:"A good stopping point: déjà vu isn't a real memory of a past event — if it were, you could describe it. You never can, which points at a memory-system quirk, not the paranormal.",
+      take:"You can never actually describe the “earlier” event in déjà vu — because there isn't one. That missing detail rules out a real memory and points at a system quirk.",
       puzzle:{
         type:"truefalse",
-        q:"A true/false claim testing whether the myth actually landed?",
+        q:"True or false: people who experience déjà vu can usually describe roughly when the earlier, similar event happened.",
         answer:false,
-        wrong:"A short, in-voice remark for a first miss.",
-        hint:"Point at the callout without repeating it verbatim."
+        wrong:"That's the detail that would make it a real memory — and it's exactly what's missing.",
+        hint:"The callout says it plainly: you can never actually describe the earlier occasion.",
+        fact:"Some memory researchers call this the “deceptive familiarity” — the sense of having lived a moment before, entirely detached from any actual prior moment."
       }
     },
     {
-      kicker:"Level 3 · The Mechanism",
-      title:"Introduce the core moving part",
+      kicker:"Level 3 · Two Systems",
+      title:"Familiarity and recollection are separate brain systems",
       bodyHTML:`
-        <p>Name the first real piece of machinery and give it one strong analogy. Coffee used the impostor-in-the-parking-space; déjà vu used two separate memory systems.</p>`,
-      widget:"exampleWidget",
-      afterWidgetHTML:`<p class="dim">Optional aside after the interactive.</p>`,
-      sum:"A good stopping point: the reader now owns the core mechanism.",
-      take:"One line: the mechanism.",
+        <p>Memory scientists split recognition into two distinct processes that usually work together so smoothly you never notice the seam. <strong>Familiarity</strong> is fast and vague — a gut-level “I've encountered this” with no attached details. <strong>Recollection</strong> is slower and specific — you can say when, where, and how you know something.</p>
+        <p>Normally, familiarity is confirmed almost instantly by recollection: you feel you know a face, and half a second later you remember it's your neighbour. <strong>Déjà vu is familiarity firing on its own</strong>, with recollection unable to back it up — because there genuinely isn't a matching memory to retrieve.</p>
+        <p class="dim">This dual-process idea isn't a guess built to explain déjà vu after the fact — it was established independently in memory research decades earlier, from studies of ordinary recognition and of patients with selective memory damage.</p>`,
+      sum:"A good stopping point: recognition runs on two separate systems, familiarity and recollection — déjà vu is familiarity firing without recollection to back it up.",
+      take:"Recognition has two separate channels — fast, vague familiarity and slow, specific recollection. Déjà vu is familiarity firing alone.",
+      puzzle:{
+        type:"mcq",
+        q:"Which memory process is fast, vague, and gives déjà vu its “I know this” feeling with no attached detail?",
+        options:["Recollection","Familiarity","Consolidation","Encoding"],
+        answer:1,
+        wrong:"That's the slower, detail-rich one — the other half of the pair fires alone in déjà vu.",
+        hint:"It's the one this level's title puts first.",
+        fact:"Familiarity and recollection can be dissociated in the lab: some amnesia patients retain a working familiarity system whilst almost entirely losing the ability to recollect specific past events."
+      }
+    },
+    {
+      kicker:"Level 4 · The Overlap",
+      title:"You only need one matching detail, not a matching scene",
+      bodyHTML:`
+        <p>You don't need to have actually been in a similar room before for it to feel eerily familiar — you just need your current surroundings to share <strong>one structural feature</strong> with somewhere you have been, even if you never consciously notice the overlap.</p>
+        <p>Psychologist <strong>Anne Cleary</strong> tested this directly using virtual-reality scenes built in The Sims: she showed people a scene, then later a completely different scene that secretly shared the same spatial layout — a lamp in the same corner, a doorway in the same place. Participants reported déjà vu at significantly higher rates for the spatially matched scenes, despite never spotting the shared layout consciously.</p>
+        <p>Try it below: two rooms, only one thing in common.</p>`,
+      widget:"overlapGame",
+      afterWidgetHTML:`<p class="dim">Your familiarity system picked up on the gestalt of the earlier room — the shape of the space — without ever telling your conscious mind what it noticed.</p>`,
+      sum:"A good stopping point: a single shared structural feature between two otherwise different scenes is enough to trigger unconscious familiarity — this is Anne Cleary's spatial-layout research.",
+      take:"You don't need a matching scene, just one matching structural detail — Anne Cleary's Sims-scene experiments proved this directly.",
+      puzzle:{
+        type:"truefalse",
+        q:"True or false: in Anne Cleary's experiments, participants had to consciously spot the shared layout for déjà vu rates to rise.",
+        answer:false,
+        wrong:"The opposite, actually — the effect showed up even when nobody noticed the overlap.",
+        hint:"The whole point of the finding is that it works below conscious awareness.",
+        fact:"Cleary's team later found that déjà vu in these experiments often came with a specific companion feeling: a false sense of being able to predict what would happen next in the scene — a thread that comes back at level 9."
+      }
+    },
+    {
+      kicker:"Level 5 · The Machinery",
+      title:"One brain region seems to run familiarity on its own",
+      bodyHTML:`
+        <p>Familiarity and recollection don't just behave differently — they appear to live in different neighbourhoods of the brain's memory system. The <strong>hippocampus</strong> is central to recollection, binding events to their time, place, and context. Nearby, the <strong>rhinal cortex</strong> (specifically the perirhinal cortex) appears able to generate a bare familiarity signal largely on its own.</p>
+        <p>Neurologist <strong>Chris Moulin</strong> and colleagues proposed that déjà vu results from the rhinal cortex firing its familiarity signal in isolation — misfiring, essentially — whilst the hippocampus stays quiet because there's no actual matching memory to retrieve.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">2</div><div class="l">separate memory regions involved: hippocampus and rhinal cortex</div></div>
+          <div class="stat"><div class="n">60–70%</div><div class="l">of people report déjà vu at least once</div></div>
+          <div class="stat"><div class="n">1</div><div class="l">of the two regions needs to misfire to produce it</div></div>
+        </div>`,
+      sum:"A good stopping point: familiarity and recollection map onto different brain regions — the rhinal cortex and the hippocampus — and déjà vu looks like the rhinal cortex firing alone.",
+      take:"The rhinal cortex seems to generate raw familiarity by itself; déjà vu may be that signal firing without the hippocampus's recollection to back it up.",
+      puzzle:{
+        type:"mcq",
+        q:"Which brain region is thought to generate familiarity largely on its own, without needing recollection?",
+        options:["The cerebellum","The hippocampus","The rhinal cortex","The visual cortex"],
+        answer:2,
+        wrong:"That one's central to full, detailed recollection — the isolated familiarity signal comes from its neighbour.",
+        hint:"It shares its name with this level's title.",
+        fact:"The rhinal cortex sits directly next to the hippocampus in the brain's temporal lobe — two adjacent regions with two very different jobs in memory."
+      }
+    },
+    {
+      kicker:"Level 6 · The Double Signal",
+      title:"A classic theory: your brain processes the moment twice",
+      bodyHTML:`
+        <p>One of the oldest scientific explanations for déjà vu, proposed by neuroscientist <strong>Robert Efron</strong> in 1963, suggests a timing glitch rather than a content error. Efron argued the brain processes incoming sensory information <strong>twice in quick succession</strong> — a rapid double-check that normally happens seamlessly.</p>
+        <p>If the second pass arrives at the recognition centre with an unusually long delay, the theory goes, the brain may misinterpret the second copy as a <em>separate, older</em> experience rather than a duplicate of the one happening right now — producing the sensation that this exact moment already happened once before.</p>
+        <p class="dim">This idea has since been supplemented, not replaced, by the rhinal-cortex account above — the two explanations describe the same event at different levels: one about which brain region misfires, the other about timing between processing passes.</p>`,
+      sum:"A good stopping point: one classic theory holds that déjà vu comes from a tiny processing delay — the brain double-checking a moment and mistaking the second pass for an older memory.",
+      take:"Robert Efron's 1963 theory: the brain processes each moment twice, and a slight delay between passes can make the second copy feel like an older memory.",
       puzzle:{
         type:"slider",
-        q:"A number worth guessing — a real figure the level just gave?",
-        min:0, max:10, step:1, unit:"", target:5, tolerance:1,
-        wrong:"A short remark for an out-of-range guess.",
-        hint:"Point at the exact sentence that names this number."
+        q:"In what year did Robert Efron first propose the double-processing theory of déjà vu?",
+        min:1940, max:2000, step:1, unit:"", target:1963, tolerance:5,
+        wrong:"Drag closer — the real year is named directly in this level.",
+        hint:"It's stated as part of the theory's introduction, right at the start of the level.",
+        fact:"Efron developed the idea whilst studying epileptic patients — a population that, as the next level shows, experiences déjà vu unusually often."
       }
+    },
+    {
+      kicker:"Level 7 · The Frequency Curve",
+      title:"Younger, more travelled, more tired — the pattern isn't what you'd expect",
+      bodyHTML:`
+        <p>If déjà vu were simply “your brain wearing out,” you'd expect it to rise with age. It does the opposite: reported frequency <strong>peaks in the late teens and twenties</strong> and then steadily declines, even though older adults have had far more time to accumulate overlapping memories to draw on.</p>
+        <p>Other reliable correlates: people who <strong>travel more</strong>, who <strong>remember their dreams</strong> more often, and who have <strong>higher levels of education</strong> report more déjà vu. Fatigue and stress raise the rate too. One leading theory ties several of these together: novel environments and higher cognitive engagement simply give the familiarity system more raw material — more scenes with partial overlaps — to misfire on.</p>
+        <div class="callout"><span class="tag">Counter-intuitive</span>
+        Déjà vu falling with age is one of the strongest arguments against it being a sign of memory decline. If anything, the data points the other way.</div>`,
+      sum:"A good stopping point: déjà vu peaks in young adulthood and declines with age, and correlates with travel, dream recall, and education — the opposite pattern you'd expect from memory decline.",
+      take:"Déjà vu frequency peaks in the late teens and twenties, then declines — the opposite of what memory decline would predict.",
+      puzzle:{
+        type:"truefalse",
+        q:"True or false: people report déjà vu more often as they get older, consistent with general memory decline.",
+        answer:false,
+        wrong:"The data runs the other way — this is the counter-intuitive part of the level.",
+        hint:"The callout box states the actual direction plainly.",
+        fact:"Some researchers estimate déjà vu prevalence drops to under 40% in people over 60, roughly half the rate seen in people in their twenties."
+      }
+    },
+    {
+      kicker:"Level 8 · Jamais Vu",
+      title:"The mirror-image glitch: when the familiar suddenly isn't",
+      bodyHTML:`
+        <p>If déjà vu is false familiarity, its opposite exists too: <strong>jamais vu</strong> — a genuinely familiar thing suddenly, briefly, feeling completely unfamiliar. You've likely triggered a mild version yourself: stare at an ordinary word, or write it out repeatedly, and within a couple of dozen repetitions it can start to look like nonsense, as if the word has never meant anything at all.</p>
+        <p>Researchers <strong>Akira O'Connor and Chris Moulin</strong> tested this directly in a 2021 study: volunteers wrote a common word, such as “door,” by hand up to 30 times in a row. A majority — around <strong>68%</strong> — reported the word starting to feel strange, foreign, or as if it had lost its meaning, a lab-inducible taste of jamais vu.</p>
+        <p class="dim">Jamais vu is thought to be the same familiarity system misfiring in the opposite direction — reporting “new” when it should report “known,” rather than the other way around.</p>`,
+      sum:"A good stopping point: jamais vu is déjà vu's mirror image — familiar things suddenly feeling unfamiliar — and it can be triggered in the lab simply by writing a word repeatedly.",
+      take:"Jamais vu is the opposite glitch: something familiar suddenly feels foreign. Repeating a word by hand ~30 times reliably triggers it in most people.",
+      puzzle:{
+        type:"slider",
+        q:"In O'Connor and Moulin's word-repetition study, roughly what percentage of participants reported the word starting to feel strange?",
+        min:0, max:100, step:5, unit:"%", target:68, tolerance:10,
+        wrong:"Drag again — the real figure was a clear majority of participants.",
+        hint:"The level states it as a specific percentage, describing “a majority.”",
+        fact:"The effect has a name of its own in psycholinguistics — semantic satiation — first documented decades before anyone connected it to jamais vu specifically."
+      }
+    },
+    {
+      kicker:"Level 9 · The Alarm",
+      title:"The plot twist: déjà vu might be a feature, not a bug",
+      bodyHTML:`
+        <p>Here's the level most people never reach. Rather than treating déjà vu purely as noise, some researchers argue it's the visible output of a <strong>working error-checking system</strong> — your brain quietly flagging a mismatch between what it expects to remember and what it can actually retrieve.</p>
+        <p>Anne Cleary's later work found something striking: déjà vu often arrives paired with a false sense of being able to <strong>predict what happens next</strong> — a feeling of “I know what's coming” that, when tested, turns out to be no more accurate than chance. That pairing suggests déjà vu isn't just a familiarity glitch in isolation; it may be the conscious signature of a monitoring system checking memory retrieval for conflicts, similar to error-detection circuits documented elsewhere in the frontal brain.</p>
+        <p class="dim">On this view, déjà vu is your memory system's version of a spell-checker flagging a word it isn't sure about — not proof that something is wrong, but evidence that the checking process is working exactly as intended.</p>`,
+      sum:"A good stopping point: déjà vu may be the visible sign of a memory-monitoring system catching a retrieval conflict — evidence the system works, not that it's broken.",
+      take:"Déjà vu may function as a memory-conflict alarm rather than an error — your brain flagging a mismatch, similar to a spell-checker catching a word it isn't sure about.",
+      puzzle:{
+        type:"mcq",
+        q:"In Cleary's research, what feeling often accompanies déjà vu, despite being no more accurate than chance?",
+        options:["A feeling of danger","A false sense of being able to predict what happens next","A sudden craving for coffee","An urge to leave the room"],
+        answer:1,
+        wrong:"That's not the companion feeling this level describes — look for the one about anticipating what's coming.",
+        hint:"It's the same effect first mentioned back in the level about Cleary's Sims-scene experiments.",
+        fact:"When researchers actually tested people's “predictions” during déjà vu moments, accuracy was statistically no better than random guessing — the feeling of foresight is itself an illusion layered on top of the first one."
+      }
+    },
+    {
+      kicker:"Level 10 · Bedrock",
+      title:"The full picture — and a jamais vu experiment of your own",
+      bodyHTML:`
+        <p>Put the layers together and déjà vu stops looking mysterious and starts looking like an interesting, well-documented seam in ordinary memory: a <strong>rhinal cortex</strong> familiarity signal fires — perhaps triggered by a single shared structural detail with somewhere you've genuinely been — without the <strong>hippocampus</strong> providing a matching recollection. A frontal <strong>monitoring system</strong> notices the mismatch and flags it, and that flag is what you consciously feel as déjà vu, sometimes with a false companion sense of foresight riding along.</p>
+        <div class="callout"><span class="tag">The déjà vu equation</span>
+        <strong>Rhinal familiarity fires alone</strong> → <strong>hippocampal recollection stays silent</strong> (no real matching memory exists) → a <strong>conflict-monitoring system</strong> flags the mismatch → you consciously feel “I've been here before,” occasionally paired with a false sense of predicting what's next.</div>
+        <p><strong>Want to feel the mirror-image effect yourself?</strong> Pick any short, ordinary word — “door,” “grass,” “window” — and write it out by hand, slowly, about 25–30 times. Most people notice the word starting to look foreign or lose its meaning partway through: a small, safe, self-inducible taste of jamais vu, and a neat demonstration that your familiarity system can be nudged in either direction.</p>
+        <p class="dim">One caveat worth keeping: occasional déjà vu in a healthy adult is entirely normal. Very frequent déjà vu, especially alongside other unusual sensations, can occasionally be an early symptom of temporal lobe epilepsy and is worth mentioning to a doctor — but for the vast majority of people, it's simply a memory system doing its ordinary, slightly imperfect job.</p>`,
+      widget:"discussPanel",
+      sum:"",
+      take:"The full picture: rhinal familiarity fires without hippocampal recollection, a monitoring system flags the mismatch, and you feel déjà vu — sometimes with a false sense of foresight riding along. Try the word-repetition jamais vu experiment yourself."
     }
-    /* …continue to level 10, following the depth curve above.
-       Give every level except the last a sum + take + puzzle,
-       and give the last level only a take (the finale replaces
-       its checkpoint, so no sum and no puzzle). Put the
-       discussPanel widget on level 10 so readers can comment. */
   ]
 };
 
-/* ── 7. WIDGETS (optional) ─────────────────────────────────────
-   One signature interactive per hole. html is injected into the
-   level; init(root) receives the level card element and wires it
-   up. Scope every querySelector to root so widgets never clash. */
 const WIDGETS = {
-  exampleWidget: {
+  /* Level 4: two "rooms" that share exactly one structural detail —
+     illustrating that a single overlap, not a whole matching scene,
+     is enough to trigger a false sense of familiarity. */
+  overlapGame: {
     html: `
       <div class="sim">
-        <h4>Name of your interactive</h4>
-        <div class="sim-grid">
-          <div>
-            <label>A slider the reader can drag · <output data-out="v">50</output></label>
-            <input type="range" data-in="v" min="0" max="100" value="50">
+        <h4>Spot the single overlap</h4>
+        <p style="font-size:14.5px;color:var(--dim);margin-bottom:14px">Two completely different rooms. Before you reveal it, notice how neither one, on its own, feels like anything special.</p>
+        <div class="sim-grid" style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <div style="padding:14px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.15)">
+            <div style="font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Room A · a friend's kitchen</div>
+            <div style="font-size:14px;line-height:1.5">Yellow walls. A round table by the window. A cat asleep on a stool. <span data-el="tagA" style="color:var(--accent-hot);font-weight:700">A lamp in the far left corner.</span></div>
+          </div>
+          <div style="padding:14px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.15)">
+            <div style="font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Room B · a hotel lobby, another country</div>
+            <div style="font-size:14px;line-height:1.5">Marble floor. A tall plant by the door. Piano music playing softly. <span data-el="tagB" style="color:var(--accent-hot);font-weight:700">A lamp in the far left corner.</span></div>
           </div>
         </div>
-        <div class="sim-result">
-          <div class="big" data-out="big">50</div>
-          <div class="cap">what the number means</div>
+        <button class="btn btn-deeper" type="button" data-el="reveal" style="margin-top:16px;width:100%">Reveal the overlap</button>
+        <div class="sim-result" data-el="result" hidden style="margin-top:14px">
+          <div class="cap">One shared detail — the lamp's position — is structurally enough for your familiarity system to flag Room B as “known,” even though nothing else matches and you've never set foot in either place.</div>
         </div>
       </div>`,
     init(root){
-      const slider = root.querySelector('[data-in="v"]');
-      const out = k => root.querySelector(`[data-out="${k}"]`);
-      function run(){
-        out("v").textContent = slider.value;
-        out("big").textContent = slider.value;
-      }
-      slider.addEventListener("input", run);
-      run();
+      root.querySelector('[data-el="tagA"]').style.display = "inline";
+      root.querySelector('[data-el="tagB"]').style.opacity = "0";
+      root.querySelector('[data-el="tagB"]').style.transition = "opacity .6s ease";
+      root.querySelector('[data-el="reveal"]').addEventListener("click", e=>{
+        root.querySelector('[data-el="tagB"]').style.opacity = "1";
+        root.querySelector('[data-el="result"]').hidden = false;
+        e.target.disabled = true;
+        e.target.textContent = "Overlap revealed ↑";
+      });
     }
   },
 
@@ -481,7 +516,7 @@ const WIDGETS = {
     html: `
       <div class="sim">
         <h4>The discussion panel</h4>
-        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub — public and free to join. This page stores nothing and logs nothing about you.</p>
+        <p style="font-size:14.5px;color:var(--dim)">Tried the word-repetition experiment? Have your own déjà vu story or theory? The conversation for this rabbit hole lives on GitHub — public and free to join. This page stores nothing and logs nothing about you.</p>
         <div class="share-row">
           <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
           <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>

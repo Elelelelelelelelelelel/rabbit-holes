@@ -159,7 +159,9 @@
 
   /* depth-lock puzzles */
   .puzzle{margin-top:16px;padding:18px;border-radius:10px;border:1px solid var(--line);background:rgba(7,11,20,.5)}
-  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px}
+  .pz-lock{display:inline-block;transition:transform .5s cubic-bezier(.2,.9,.25,1)}
+  .puzzle.solved .pz-lock{transform:rotate(-14deg) scale(1.15)}
   .pz-q{font-size:15.5px;font-weight:700;margin:10px 0 14px}
   .pz-opts{display:grid;gap:8px}
   .pz-opts button{text-align:left;padding:11px 14px;border-radius:8px;background:var(--ink-raise);
@@ -167,9 +169,24 @@
     transition:border-color .2s ease, background .2s ease}
   .pz-opts button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
   .pz-opts button:focus-visible{outline:2px solid var(--accent-hot);outline-offset:2px}
+  .pz-tf{display:flex;gap:10px}
+  .pz-tf button{flex:1;padding:16px;border-radius:8px;font-family:var(--display);font-weight:700;letter-spacing:.05em;
+    background:var(--ink-raise);border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;transition:all .2s ease}
+  .pz-tf button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
+  .pz-slider{padding:2px 2px 4px}
+  .pz-slider .pz-sval{text-align:center;font-family:var(--display);font-weight:700;font-size:26px;color:var(--accent-hot);margin-bottom:10px}
+  .pz-slider button{margin-top:14px;width:100%}
   .pz-feed{margin-top:12px;font-size:13.5px;font-weight:700;color:var(--danger)}
   .puzzle.shake{animation:pzshake .4s ease}
   @keyframes pzshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+  .puzzle.solved{border-color:var(--ok);background:color-mix(in srgb, var(--ok) 8%, rgba(7,11,20,.5))}
+  .pz-solved-msg{font-size:14.5px}
+  .pz-solved-msg .pz-fact{display:block;margin-top:8px;color:var(--dim);font-weight:400}
+  .pz-solved-msg b{color:var(--ok)}
+  .pz-reward{display:flex;align-items:center;gap:14px;margin:12px 0;padding:12px 14px;border-radius:10px;
+    background:rgba(7,11,20,.4);border:1px solid rgba(143,163,196,.15)}
+  .pz-animal{font-size:34px;line-height:1;flex:none}
+  .pz-reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
 
   /* discussion panel + shared button row */
   .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
@@ -184,6 +201,7 @@
   @keyframes medal{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
   .finale h2{font-family:var(--display);font-size:26px;margin-bottom:8px}
   .finale p{color:var(--dim);max-width:52ch;margin:0 auto 10px}
+  .finale .finale-home{margin-top:20px}
 
   footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px 46px;max-width:var(--maxw);margin:0 auto}
   footer button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit}
@@ -286,10 +304,13 @@ const CONFIG = {
       sum:"A good stopping point: people differ hugely in how fast they clear caffeine and how strongly their brain reacts to it — and that's biology, not habit.",
       take:"Night-coffee sleepers aren't tougher — their bodies clear caffeine faster and/or their brains react to it less. It's biology.",
       puzzle:{
+        type:"mcq",
         q:"What mainly separates the night-espresso sleeper from everyone else?",
         options:["Stronger willpower and better habits","Biology: how fast they clear caffeine and how their brain responds","They secretly drink decaf","They've simply trained themselves not to notice tiredness"],
         answer:1,
-        hint:"The level's title says it plainly: it's real, and it's not willpower."
+        wrong:"Nice theory — but this level just spent three paragraphs ruling that out.",
+        hint:"The level's title says it plainly: it's real, and it's not willpower.",
+        fact:"Twin studies estimate caffeine sensitivity is roughly 40–50% heritable — a real slice of “it's just how you're built”."
       }
     },
     {
@@ -303,10 +324,12 @@ const CONFIG = {
       sum:"A good stopping point: caffeine adds no energy — it temporarily mutes your brain's sleepiness signal.",
       take:"Caffeine is a masking agent: it blocks the sleepiness signal instead of adding energy.",
       puzzle:{
-        q:"What does caffeine actually do?",
-        options:["Adds a small amount of energy to the body","Speeds the heart up enough to keep you awake","Blocks a signal so your brain can't hear its own tiredness","Burns adenosine as fuel"],
-        answer:2,
-        hint:"It's a masking agent — it hides something rather than adding anything."
+        type:"truefalse",
+        q:"True or false: caffeine gives your body a genuine burst of extra energy.",
+        answer:false,
+        wrong:"That's the marketing version, not the biology.",
+        hint:"Re-read the first line of the level — it names caffeine's actual job in four words.",
+        fact:"Caffeine's energy content is zero calories from the molecule itself — any “lift” is entirely borrowed from unmasked alertness, not fuel."
       }
     },
     {
@@ -319,10 +342,13 @@ const CONFIG = {
       sum:"A good stopping point: caffeine impersonates adenosine and blocks the receptors that make you feel sleepy — whilst real sleep pressure keeps building behind it.",
       take:"It works by impersonating adenosine, parking in sleep receptors (A1/A2A) without activating them — sleep pressure keeps building behind the blockade.",
       puzzle:{
+        type:"mcq",
         q:"Caffeine parks in receptors that were built for which molecule?",
         options:["Melatonin","Dopamine","Cortisol","Adenosine"],
         answer:3,
-        hint:"It's the byproduct that builds up like sand in an hourglass whilst you're awake."
+        wrong:"Close, but that's a different chemical entirely — try the one this level names twice.",
+        hint:"It's the byproduct that builds up like sand in an hourglass whilst you're awake.",
+        fact:"Adenosine wasn't just a sleep signal first — it's also a building block of ATP and DNA, moonlighting as your brain's fatigue gauge."
       }
     },
     {
@@ -336,10 +362,12 @@ const CONFIG = {
       sum:"A good stopping point: caffeine's half-life averages ~5 hours but ranges from ~2 to 10+ between people — that alone can decide the night.",
       take:"Half-life varies from ~2 to 10+ hours between people, so the same evening cup can be a trace or nearly a full dose at bedtime.",
       puzzle:{
-        q:"What's the average half-life of caffeine?",
-        options:["About 30 minutes","About 5 hours","About 24 hours","About 3 days"],
-        answer:1,
-        hint:"Long enough that a 3pm coffee can still matter at bedtime for slow metabolisers."
+        type:"slider",
+        q:"Drag to your best guess: what's the average half-life of caffeine, in hours?",
+        min:1, max:12, step:0.5, unit:"h", target:5, tolerance:1,
+        wrong:"Not quite in range — nudge the slider and try again.",
+        hint:"You just played with this exact number in the simulator above.",
+        fact:"At two half-lives (~10 hours for an average metaboliser), roughly a quarter of your evening dose is still circulating."
       }
     },
     {
@@ -357,10 +385,13 @@ const CONFIG = {
       sum:"A good stopping point: one liver enzyme, CYP1A2, clears ~95% of caffeine, and its activity varies up to ~40-fold between people.",
       take:"One enzyme — CYP1A2 — clears ~95% of caffeine, and its speed varies up to ~40× between people.",
       puzzle:{
+        type:"mcq",
         q:"Which enzyme dismantles about 95% of the caffeine you drink?",
         options:["ADORA2A","Lactase","CYP1A2","Melatonin synthase"],
         answer:2,
-        hint:"It's the liver's speed dial — this level is named after it."
+        wrong:"That one's busy elsewhere — the enzyme you want is this level's namesake.",
+        hint:"It's the liver's speed dial — this level is named after it.",
+        fact:"CYP1A2 also processes several common medications, which is exactly why some drugs and caffeine interact — see level 8."
       }
     },
     {
@@ -375,10 +406,12 @@ const CONFIG = {
       sum:"A good stopping point: variants in CYP1A2 set your clearance speed, and variants in ADORA2A set how sensitive your brain is to what remains.",
       take:"Two genes run the show: CYP1A2 variants set clearance speed; ADORA2A variants set how hard the brain reacts to a blocked receptor.",
       puzzle:{
-        q:"What does the ADORA2A gene decide?",
-        options:["How fast the liver clears caffeine","How strongly the brain reacts to a blocked receptor","How bitter coffee tastes to you","How much adenosine you produce per hour"],
-        answer:1,
-        hint:"CYP1A2 is the clearance gene; ADORA2A is the sensitivity gene."
+        type:"truefalse",
+        q:"True or false: two people with identical caffeine levels in their blood always feel the same effect.",
+        answer:false,
+        wrong:"That's the assumption this whole level exists to demolish.",
+        hint:"Same dose, different ADORA2A — same fuel, different-sized engine reaction.",
+        fact:"Some ADORA2A variants are linked to caffeine-triggered anxiety or panic-like symptoms at doses others shrug off entirely."
       }
     },
     {
@@ -391,10 +424,13 @@ const CONFIG = {
       sum:"A good stopping point: daily use makes the brain grow extra adenosine receptors, dulling caffeine's kick — but tolerance to its sleep disruption is only partial.",
       take:"Daily use builds tolerance — the brain adds adenosine receptors — but tolerance to caffeine's sleep disruption is only partial.",
       puzzle:{
+        type:"mcq",
         q:"How does the brain adapt to daily caffeine?",
         options:["It builds more adenosine receptors","It stops producing adenosine altogether","It shrinks its adenosine receptors","It learns to break caffeine down itself"],
         answer:0,
-        hint:"Think of a besieged system adding more seats than the impostor can occupy."
+        wrong:"Backwards — the brain adds seats, it doesn't remove them.",
+        hint:"Think of a besieged system adding more seats than the impostor can occupy.",
+        fact:"This same receptor upregulation is why the caffeine-withdrawal headache is so reliable — remove the caffeine and normal adenosine suddenly has far more seats to fill."
       }
     },
     {
@@ -409,10 +445,12 @@ const CONFIG = {
       sum:"A good stopping point: smoking speeds caffeine clearance; contraceptives, pregnancy and some medications slow it dramatically. Your tolerance is a moving target.",
       take:"Life modifies the dial: smoking doubles clearance; contraceptives, pregnancy (15 h+ half-life) and some medications slow it drastically.",
       puzzle:{
-        q:"Which of these dramatically SLOWS caffeine clearance?",
-        options:["Smoking","Char-grilled meat","Pregnancy","Cruciferous vegetables"],
-        answer:2,
-        hint:"By the third trimester the half-life can stretch to 15 hours or more."
+        type:"slider",
+        q:"By the third trimester, how many hours can pregnancy stretch caffeine's half-life to, at its most extreme?",
+        min:4, max:20, step:1, unit:"h", target:15, tolerance:2,
+        wrong:"Drag further — pregnancy's effect is more dramatic than that.",
+        hint:"The level names this exact number as its most extreme example.",
+        fact:"That's roughly triple the average half-life — a single third-trimester coffee can still be working the following afternoon."
       }
     },
     {
@@ -426,10 +464,13 @@ const CONFIG = {
       sum:"A good stopping point: many people who “sleep fine” after coffee are losing deep sleep without noticing — falling asleep isn't the whole story.",
       take:"“Still sleeps” ≠ “sleeps well”: evening caffeine cuts deep slow-wave sleep even in people who notice nothing. Some are unaffected; more are simply unaware.",
       puzzle:{
-        q:"In the study that gave people 400 mg of caffeine six hours before bed, what happened?",
+        type:"mcq",
+        q:"In the study that gave people 400\u00A0mg of caffeine six hours before bed, what happened?",
         options:["They slept better than the control group","They lost over an hour of sleep but barely noticed","They couldn't fall asleep at all","Nothing — six hours is plenty of clearance time"],
         answer:1,
-        hint:"The uncomfortable phrase from this level: not unaffected — unaware."
+        wrong:"That's the version most people would guess — but it's not what the monitors recorded.",
+        hint:"The uncomfortable phrase from this level: not unaffected — unaware.",
+        fact:"400 mg is roughly four cups of brewed coffee — a perfectly ordinary daily total, not an extreme dose."
       }
     },
     {
@@ -577,6 +618,37 @@ const WIDGETS = {
     <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
   main.appendChild(hero);
 
+  /* build a depth-lock puzzle panel. mcq options are shuffled per page-load
+     so the answer position isn't memorable between attempts. */
+  function renderPuzzle(n, pz){
+    let body = "";
+    if(pz.type === "truefalse"){
+      body = `<div class="pz-tf">
+        <button type="button" data-tf="true">✅ True</button>
+        <button type="button" data-tf="false">❌ False</button>
+      </div>`;
+    } else if(pz.type === "slider"){
+      const step = pz.step || 1;
+      const mid = pz.min + Math.round(((pz.min + pz.max) / 2 - pz.min) / step) * step;
+      body = `<div class="pz-slider">
+        <div class="pz-sval" data-el="sval">${mid}${pz.unit||""}</div>
+        <input type="range" data-el="sinput" min="${pz.min}" max="${pz.max}" step="${pz.step||1}" value="${mid}">
+        <button class="btn btn-deeper" type="button" data-el="sguess">Lock in this guess</button>
+      </div>`;
+    } else { // mcq — shuffle option order, remember the real answer index
+      const idxs = pz.options.map((_,i)=>i);
+      for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; }
+      body = `<div class="pz-opts">${idxs.map(i=>`<button type="button" data-opt="${i}">${pz.options[i]}</button>`).join("")}</div>`;
+    }
+    return `
+      <div class="puzzle" data-puzzle="${n}" data-type="${pz.type}" hidden>
+        <div class="pz-label"><span class="pz-lock">🔐</span> Depth riddle — answer to descend</div>
+        <div class="pz-q">${pz.q}</div>
+        ${body}
+        <div class="pz-feed" hidden></div>
+      </div>`;
+  }
+
   /* level cards */
   L.forEach((lv,i)=>{
     const n = i+1;
@@ -593,13 +665,7 @@ const WIDGETS = {
         ${lv.afterWidgetHTML || ""}
       </div>`;
     if(n < N){
-      const pzHTML = lv.puzzle ? `
-        <div class="puzzle" data-puzzle="${n}" hidden>
-          <div class="pz-label">🔐 Depth lock — one question to descend</div>
-          <div class="pz-q">${lv.puzzle.q}</div>
-          <div class="pz-opts">${lv.puzzle.options.map((o,j)=>`<button type="button" data-opt="${j}">${o}</button>`).join("")}</div>
-          <div class="pz-feed" hidden></div>
-        </div>` : "";
+      const pzHTML = lv.puzzle ? renderPuzzle(n, lv.puzzle) : "";
       inner += `
       <div class="checkpoint">
         <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
@@ -608,7 +674,7 @@ const WIDGETS = {
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
         </div>${pzHTML}
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means picking the depth lock: one question, answered from the level you've just read, worth one bean.</div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means answering the depth riddle: one question from what you've just read, worth a bean and a small reward.</div>
       </div>`;
     } else {
       inner += `
@@ -616,6 +682,7 @@ const WIDGETS = {
         <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
         <h2>${CONFIG.finale.title}</h2>
         <p>${CONFIG.finale.text}</p>
+        <a class="btn btn-deeper finale-home" href="${CONFIG.homeHref}">⌂ Surface — back to all rabbit holes</a>
       </div>`;
     }
     card.innerHTML = inner;
@@ -668,6 +735,64 @@ const WIDGETS = {
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
 
+  /* the single gate every "go deeper" path must pass through — whether
+     clicked from a checkpoint or resumed from the surface modal. This is
+     what stops the depth lock being skipped. */
+  function attemptAdvance(n){
+    const card = document.getElementById("lv"+n);
+    if(!card.classList.contains("locked")){ unlock(n); return; }
+    const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
+    if(pzPanel && !pzPanel.classList.contains("solved")){
+      pzPanel.hidden = false;
+      pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
+    } else {
+      unlock(n); // no puzzle configured for this level — unlocks freely
+    }
+  }
+
+  /* a little cast of characters shown when a reader answers a depth riddle
+     correctly — always holding coffee, always saying something genuinely
+     nice. Picked at random, never the same one twice in a row. */
+  const REWARDS = [
+    {emoji:"🦥☕", line:"Slow and thorough — just like a proper brew. Nicely reasoned."},
+    {emoji:"🦉☕", line:"Sharp eyes catch sharp details. Well spotted."},
+    {emoji:"🦊☕", line:"Cunning and correct — a rare combination."},
+    {emoji:"🐧☕", line:"Cool-headed under pressure. That's the way."},
+    {emoji:"🐨☕", line:"Unbothered and unbeaten. Lovely work."},
+    {emoji:"🐿️☕", line:"You squirrelled that fact away perfectly."},
+    {emoji:"🦔☕", line:"A prickly question, handled with care. Well done."},
+    {emoji:"🐢☕", line:"Steady wins it. That was well earned."},
+    {emoji:"🦦☕", line:"Playful mind, precise answer. Brilliant."},
+    {emoji:"🐼☕", line:"Calm, considered, correct. Exactly right."}
+  ];
+  let lastReward = -1;
+  function pickReward(){
+    let i;
+    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
+    lastReward = i;
+    return REWARDS[i];
+  }
+
+  /* mark a riddle solved: swap its body for a reward card, then unlock */
+  function solvePuzzle(panel, lvN, pz){
+    panel.classList.add("solved");
+    const r = pickReward();
+    panel.innerHTML = `
+      <div class="pz-label"><span class="pz-lock">🔓</span> Riddle solved</div>
+      <div class="pz-reward"><div class="pz-animal" aria-hidden="true">${r.emoji}</div><div class="pz-reward-line">${r.line}</div></div>
+      <div class="pz-solved-msg"><b>+1 bean</b>${pz.fact ? `<span class="pz-fact">${pz.fact}</span>` : ""}</div>`;
+    unlock(lvN+1, `⬢ RIDDLE SOLVED — LEVEL ${lvN+1} UNLOCKED · ☕ +1 BEAN`);
+  }
+
+  function failPuzzle(panel, pz){
+    const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
+    panel.dataset.wrong = String(wrong);
+    const feed = panel.querySelector(".pz-feed");
+    feed.hidden = false;
+    feed.textContent = (wrong > 1 && pz.hint) ? "Hint: " + pz.hint : (pz.wrong || "Not quite — try again.");
+    panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
+  }
+
   /* surface modal */
   const scrim = document.getElementById("modalScrim");
   const modalList = document.getElementById("modalList");
@@ -686,49 +811,63 @@ const WIDGETS = {
   }
   function closeModal(){ scrim.classList.remove("open"); }
   document.getElementById("modalHome").href = CONFIG.homeHref;
-  document.getElementById("modalResume").addEventListener("click", ()=>{ closeModal(); unlock(Math.min(stoppedAt+1, N)); });
+  document.getElementById("modalResume").addEventListener("click", ()=>{
+    const n = Math.min(stoppedAt+1, N);
+    closeModal();
+    attemptAdvance(n);   // ← goes through the same gate as every other path
+  });
   scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
   document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
 
   /* clicks */
   document.body.addEventListener("click", e=>{
     const deeper = e.target.closest("[data-next]");
-    if(deeper){
-      const n = parseInt(deeper.dataset.next,10);           // level to open
-      const card = document.getElementById("lv"+n);
-      const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
-      if(card.classList.contains("locked") && pzPanel){
-        pzPanel.hidden = false;                             // present the depth lock
-        pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
-      } else {
-        unlock(n);                                          // already unlocked, or no puzzle set
-      }
-      return;
-    }
+    if(deeper){ attemptAdvance(parseInt(deeper.dataset.next,10)); return; }
+
+    /* mcq */
     const opt = e.target.closest(".pz-opts button");
     if(opt){
       const panel = opt.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);        // level the puzzle sits in
+      const lvN = parseInt(panel.dataset.puzzle,10);
       const pz = L[lvN-1].puzzle;
-      if(parseInt(opt.dataset.opt,10) === pz.answer){
-        panel.hidden = true;
-        panel.querySelector(".pz-feed").hidden = true;
-        panel.dataset.wrong = "0";
-        unlock(lvN+1, `⬢ LOCK PICKED — LEVEL ${lvN+1} UNLOCKED · ☕ +1 BEAN`);
-      } else {
-        const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
-        panel.dataset.wrong = String(wrong);
-        const feed = panel.querySelector(".pz-feed");
-        feed.hidden = false;
-        feed.textContent = (wrong > 1 && pz.hint)
-          ? "Hint: " + pz.hint
-          : "Not quite — the answer is hiding in the level you've just read.";
-        panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
-      }
+      if(parseInt(opt.dataset.opt,10) === pz.answer) solvePuzzle(panel, lvN, pz);
+      else failPuzzle(panel, pz);
+      return;
+    }
+    /* true/false */
+    const tf = e.target.closest(".pz-tf button");
+    if(tf){
+      const panel = tf.closest(".puzzle");
+      const lvN = parseInt(panel.dataset.puzzle,10);
+      const pz = L[lvN-1].puzzle;
+      const chosen = tf.dataset.tf === "true";
+      if(chosen === pz.answer) solvePuzzle(panel, lvN, pz);
+      else failPuzzle(panel, pz);
+      return;
+    }
+    /* slider guess */
+    const sguess = e.target.closest('[data-el="sguess"]');
+    if(sguess){
+      const panel = sguess.closest(".puzzle");
+      const lvN = parseInt(panel.dataset.puzzle,10);
+      const pz = L[lvN-1].puzzle;
+      const val = parseFloat(panel.querySelector('[data-el="sinput"]').value);
+      if(Math.abs(val - pz.target) <= pz.tolerance) solvePuzzle(panel, lvN, pz);
+      else failPuzzle(panel, pz);
       return;
     }
     const stop = e.target.closest("[data-stop]");
     if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
+  });
+
+  /* live-update slider-guess readouts */
+  document.body.addEventListener("input", e=>{
+    if(e.target.matches('.puzzle [data-el="sinput"]')){
+      const panel = e.target.closest(".puzzle");
+      const lvN = parseInt(panel.dataset.puzzle,10);
+      const pz = L[lvN-1].puzzle;
+      panel.querySelector('[data-el="sval"]').textContent = e.target.value + (pz.unit||"");
+    }
   });
 
   restore();
