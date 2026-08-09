@@ -257,6 +257,14 @@ const CONFIG = {
      Issues or Discussions.                                      */
   githubRepo: "yourusername/rabbit-holes",
 
+  /* ── TOKEN ────────────────────────────────────────────────────
+     What readers collect for solving depth riddles. The reward
+     characters hold this emoji, the HUD counts it, and the unlock
+     toast names it. Theme it to the hole — coffee earns "beans"
+     (☕), déjà vu earns "echoes" (🌀). Keep the name a single
+     lowercase noun; the engine capitalises it where needed.      */
+  token: { emoji: "🕳️", name: "shard" },
+
   /* ── 2. THEME ────────────────────────────────────────────────
      Pick one accent colour per hole and derive three shades:
      accent (main), accentHot (lighter, glows and hovers),
@@ -481,12 +489,12 @@ const WIDGETS = {
     html: `
       <div class="sim">
         <h4>The discussion panel</h4>
-        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub — public and free to join. This page stores nothing and logs nothing about you.</p>
+        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub, open to everyone. This page stores nothing and logs nothing about you.</p>
         <div class="share-row">
           <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
           <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>
         </div>
-        <div class="share-note">Opens this project's GitHub Discussions in a new tab. A free GitHub account is all you need to post.</div>
+        <div class="share-note">Opens this project's GitHub Discussions in a new tab. You'll need a GitHub account to post.</div>
       </div>`,
     init(root){
       const url = "https://github.com/" + CONFIG.githubRepo + "/discussions";
@@ -521,10 +529,10 @@ const WIDGETS = {
   function updateHud(){
     depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
     depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
-    const beans = current - 1;
+    const earned = current - 1;
     document.getElementById("hudDepth").innerHTML =
       `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
-      (beans > 0 ? ` · ☕ ×${beans}` : "");
+      (earned > 0 ? ` · ${CONFIG.token.emoji} ×${earned}` : "");
   }
 
   /* hero */
@@ -594,7 +602,7 @@ const WIDGETS = {
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
         </div>${pzHTML}
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means answering the depth riddle: one question from what you've just read, worth a bean and a small reward.</div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means answering the depth riddle: one question from what you've just read, worth a ${CONFIG.token.name} and a small reward.</div>
       </div>`;
     } else {
       inner += `
@@ -671,19 +679,21 @@ const WIDGETS = {
   }
 
   /* a little cast of characters shown when a reader answers a depth riddle
-     correctly — always holding coffee, always saying something genuinely
-     nice. Picked at random, never the same one twice in a row. */
+     correctly — each holding this hole's own token (CONFIG.token.emoji),
+     always saying something genuinely nice. Picked at random, never the
+     same one twice in a row. Lines stay subject-neutral so the cast works
+     on every hole in the series. */
   const REWARDS = [
-    {emoji:"🦥☕", line:"Slow and thorough — just like a proper brew. Nicely reasoned."},
-    {emoji:"🦉☕", line:"Sharp eyes catch sharp details. Well spotted."},
-    {emoji:"🦊☕", line:"Cunning and correct — a rare combination."},
-    {emoji:"🐧☕", line:"Cool-headed under pressure. That's the way."},
-    {emoji:"🐨☕", line:"Unbothered and unbeaten. Lovely work."},
-    {emoji:"🐿️☕", line:"You squirrelled that fact away perfectly."},
-    {emoji:"🦔☕", line:"A prickly question, handled with care. Well done."},
-    {emoji:"🐢☕", line:"Steady wins it. That was well earned."},
-    {emoji:"🦦☕", line:"Playful mind, precise answer. Brilliant."},
-    {emoji:"🐼☕", line:"Calm, considered, correct. Exactly right."}
+    {animal:"🦥", line:"Slow and thorough. Nicely reasoned."},
+    {animal:"🦉", line:"Sharp eyes catch sharp details. Well spotted."},
+    {animal:"🦊", line:"Cunning and correct — a rare combination."},
+    {animal:"🐧", line:"Cool-headed under pressure. That's the way."},
+    {animal:"🐨", line:"Unbothered and unbeaten. Lovely work."},
+    {animal:"🐿️", line:"You squirrelled that detail away perfectly."},
+    {animal:"🦔", line:"A prickly question, handled with care. Well done."},
+    {animal:"🐢", line:"Steady wins it. That was well earned."},
+    {animal:"🦦", line:"Playful mind, precise answer. Brilliant."},
+    {animal:"🐼", line:"Calm, considered, correct. Exactly right."}
   ];
   let lastReward = -1;
   function pickReward(){
@@ -697,11 +707,12 @@ const WIDGETS = {
   function solvePuzzle(panel, lvN, pz){
     panel.classList.add("solved");
     const r = pickReward();
+    const tok = CONFIG.token;
     panel.innerHTML = `
       <div class="pz-label"><span class="pz-lock">🔓</span> Riddle solved</div>
-      <div class="pz-reward"><div class="pz-animal" aria-hidden="true">${r.emoji}</div><div class="pz-reward-line">${r.line}</div></div>
-      <div class="pz-solved-msg"><b>+1 bean</b>${pz.fact ? `<span class="pz-fact">${pz.fact}</span>` : ""}</div>`;
-    unlock(lvN+1, `⬢ RIDDLE SOLVED — LEVEL ${lvN+1} UNLOCKED · ☕ +1 BEAN`);
+      <div class="pz-reward"><div class="pz-animal" aria-hidden="true">${r.animal}${tok.emoji}</div><div class="pz-reward-line">${r.line}</div></div>
+      <div class="pz-solved-msg"><b>+1 ${tok.name}</b>${pz.fact ? `<span class="pz-fact">${pz.fact}</span>` : ""}</div>`;
+    unlock(lvN+1, `⬢ RIDDLE SOLVED — LEVEL ${lvN+1} UNLOCKED · ${tok.emoji} +1 ${tok.name.toUpperCase()}`);
   }
 
   function failPuzzle(panel, pz){

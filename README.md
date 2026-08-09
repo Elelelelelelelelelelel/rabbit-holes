@@ -15,7 +15,7 @@ Every rabbit hole runs ten levels deep, dark and coffee-warm, styled like a game
 - **Levels 7–9** cover the complications, and the plot twist that reframes everything above it.
 - **Level 10** ties it all together, usually with something you can try yourself.
 
-Every level ends at a **checkpoint**. You can stop there — that's a complete answer, not a cop-out — or answer the **depth riddle**: a quick question drawn from what you just read (multiple choice, true/false, or drag-a-slider-to-guess-the-number) that unlocks the next level. Get it right and you'll meet one of a small cast of animal characters — always holding coffee, always with something kind to say — plus a bean ☕ and, often, an obscure bonus fact one layer deeper than the level itself.
+Every level ends at a **checkpoint**. You can stop there — that's a complete answer, not a cop-out — or answer the **depth riddle**: a quick question drawn from what you just read (multiple choice, true/false, or drag-a-slider-to-guess-the-number) that unlocks the next level. Get it right and you'll meet one of a small cast of animal characters, holding whatever that hole hands out for a correct answer — coffee beans ☕ down the coffee hole, echoes 🌀 down the déjà vu one — with something kind to say and, often, an obscure bonus fact one layer deeper than the level itself.
 
 Your progress is saved privately in your own browser — nothing is sent anywhere, and there's a "Reset my progress" link if you want a clean run.
 
@@ -25,7 +25,11 @@ You spot the hole, I do the digging. Head to the homepage and use **"Dig your ow
 
 ## Talk about a hole
 
-Each rabbit hole ends with a discussion panel linking to this repository's **[Discussions](../../discussions)** tab — a place to compare notes, share results if you ran an experiment, or just say what you found. Nothing about you is tracked on the site itself.
+Each rabbit hole ends with a discussion panel linking to this repository's **[Discussions](../../discussions)** tab — a place to compare notes, share results if you ran an experiment, or just say what you found. There are links on the homepage too. Nothing about you is tracked on the site itself.
+
+- 💬 **[All discussions](../../discussions)**
+- ☕ [The coffee hole — comments & ten-day experiment results](../../discussions)
+- 🌀 [The déjà vu hole — comments & jamais vu results](../../discussions)
 
 ## Currently open
 
