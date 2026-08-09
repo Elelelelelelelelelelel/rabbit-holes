@@ -1,0 +1,33 @@
+name: 💬 Send a note
+description: Comments, corrections, results from an experiment, or just what you thought.
+title: "[Note] "
+labels: ["reader-note"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Anything you like — what you found, where you stopped, a correction, or the results if you tried an experiment from a level 10. I read every one.
+  - type: dropdown
+    id: hole
+    attributes:
+      label: Which rabbit hole?
+      options:
+        - The coffee hole — drinking coffee at night
+        - The déjà vu hole
+        - The site in general
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Your note
+      placeholder: "I got to level 7 and… / I think level 4 has an error… / I ran the ten-day experiment and…"
+    validations:
+      required: true
+  - type: input
+    id: credit
+    attributes:
+      label: How should we credit you? (optional)
+      placeholder: "Name, @handle, or leave blank to stay anonymous"
+    validations:
+      required: false

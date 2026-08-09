@@ -157,38 +157,20 @@
   .sim-verdict.mid{color:var(--accent)}
   .sim-verdict.good{color:var(--ok)}
 
-  /* depth-lock puzzles */
-  .puzzle{margin-top:16px;padding:18px;border-radius:10px;border:1px solid var(--line);background:rgba(7,11,20,.5)}
-  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px}
-  .pz-lock{display:inline-block;transition:transform .5s cubic-bezier(.2,.9,.25,1)}
-  .puzzle.solved .pz-lock{transform:rotate(-14deg) scale(1.15)}
-  .pz-q{font-size:15.5px;font-weight:700;margin:10px 0 14px}
-  .pz-opts{display:grid;gap:8px}
-  .pz-opts button{text-align:left;padding:11px 14px;border-radius:8px;background:var(--ink-raise);
-    border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;font:inherit;font-size:14.5px;
-    transition:border-color .2s ease, background .2s ease}
-  .pz-opts button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
-  .pz-opts button:focus-visible{outline:2px solid var(--accent-hot);outline-offset:2px}
-  .pz-tf{display:flex;gap:10px}
-  .pz-tf button{flex:1;padding:16px;border-radius:8px;font-family:var(--display);font-weight:700;letter-spacing:.05em;
-    background:var(--ink-raise);border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;transition:all .2s ease}
-  .pz-tf button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
-  .pz-slider{padding:2px 2px 4px}
-  .pz-slider .pz-sval{text-align:center;font-family:var(--display);font-weight:700;font-size:26px;color:var(--accent-hot);margin-bottom:10px}
-  .pz-slider button{margin-top:14px;width:100%}
-  .pz-feed{margin-top:12px;font-size:13.5px;font-weight:700;color:var(--danger)}
-  .puzzle.shake{animation:pzshake .4s ease}
-  @keyframes pzshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
-  .puzzle.solved{border-color:var(--ok);background:color-mix(in srgb, var(--ok) 8%, rgba(7,11,20,.5))}
-  .pz-solved-msg{font-size:14.5px}
-  .pz-solved-msg .pz-fact{display:block;margin-top:8px;color:var(--dim);font-weight:400}
-  .pz-solved-msg b{color:var(--ok)}
-  .pz-reward{display:flex;align-items:center;gap:14px;margin:12px 0;padding:12px 14px;border-radius:10px;
-    background:rgba(7,11,20,.4);border:1px solid rgba(143,163,196,.15)}
-  .pz-animal{font-size:34px;line-height:1;flex:none}
-  .pz-reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  /* descent reward card — shown at the top of each newly opened level */
+  .reward{margin:0 0 20px;padding:15px 17px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 7%, rgba(7,11,20,.5));animation:rewardIn .6s ease both}
+  @keyframes rewardIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+  .reward-top{display:flex;align-items:center;gap:14px}
+  .reward-animal{font-size:34px;line-height:1;flex:none}
+  .reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  .reward-token{font-family:var(--display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-top:12px}
+  .reward-fact{display:block;margin-top:7px;font-size:14px;font-style:normal;letter-spacing:0;
+    text-transform:none;color:var(--dim);font-family:var(--body)}
 
-  /* discussion panel + shared button row */
+  /* contact + shared button row */
+  /* contact panel + shared button row */
   .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
   .btn-mini{padding:10px 16px;font-size:13px}
   .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
@@ -251,7 +233,8 @@ const CONFIG = {
 
   githubRepo: "yourusername/rabbit-holes",
 
-  /* What readers collect for solving depth riddles. The reward
+
+  /* What readers collect each time they choose to go deeper. The reward
      characters hold this, the HUD counts it, and the toast names it. */
   token: { emoji: "🌀", name: "echo" },
 
@@ -274,7 +257,7 @@ const CONFIG = {
       <path d="M46 20c6 2 10 8 10 14s-4 12-10 14" stroke="var(--accent)" stroke-width="2" fill="none" opacity=".6"/>
     </svg>`,
     ledeHTML: `You turn a corner in a city you've never visited, and for two seconds you know exactly what's about to happen. It passes before you can even describe it. <b>Nearly two-thirds of people</b> report this at some point — and it isn't a glitch in the universe.`,
-    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or answer the depth riddle and go deeper.`
+    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or take one more step down.`
   },
 
   footerHTML: `Built as an interactive explainer · Figures (prevalence, brain regions, study findings) reflect published memory & neuroscience research and are approximate for individuals.`,
@@ -295,15 +278,7 @@ const CONFIG = {
         <p class="dim">Everything below this level explains <em>why</em> a healthy brain does this to itself.</p>`,
       sum:"A good stopping point: déjà vu is familiarity firing without a real memory behind it — common, benign, and not a glitch in reality.",
       take:"Déjà vu is your brain's familiarity signal firing with nothing real behind it. It's common and harmless.",
-      puzzle:{
-        type:"mcq",
-        q:"Roughly what share of people report experiencing déjà vu at some point in their life?",
-        options:["Under 5%","About 25%","Roughly 60–70%","Nearly everyone, 99%"],
-        answer:2,
-        wrong:"Rarer than that, actually try again — this is one of the most common odd experiences people have.",
-        hint:"The level calls it out directly: most people, most often when young.",
-        fact:"Déjà vu is reported less often in children under 8 — the feeling seems to need a mature enough memory system to misfire in the first place."
-      }
+      fact:"Déjà vu is reported less often in children under 8 — the feeling seems to need a mature enough memory system to misfire in the first place."
     },
     {
       kicker:"Level 2 · The Myth",
@@ -315,14 +290,7 @@ const CONFIG = {
         If it were a genuine memory, you could describe the earlier occasion. You never can. That missing detail is the fingerprint of a familiarity signal firing alone.</div>`,
       sum:"A good stopping point: déjà vu isn't a real memory of a past event — if it were, you could describe it. You never can, which points at a memory-system quirk, not the paranormal.",
       take:"You can never actually describe the “earlier” event in déjà vu — because there isn't one. That missing detail rules out a real memory and points at a system quirk.",
-      puzzle:{
-        type:"truefalse",
-        q:"True or false: people who experience déjà vu can usually describe roughly when the earlier, similar event happened.",
-        answer:false,
-        wrong:"That's the detail that would make it a real memory — and it's exactly what's missing.",
-        hint:"The callout says it plainly: you can never actually describe the earlier occasion.",
-        fact:"Some memory researchers call this the “deceptive familiarity” — the sense of having lived a moment before, entirely detached from any actual prior moment."
-      }
+      fact:"Some memory researchers call this the “deceptive familiarity” — the sense of having lived a moment before, entirely detached from any actual prior moment."
     },
     {
       kicker:"Level 3 · Two Systems",
@@ -333,15 +301,7 @@ const CONFIG = {
         <p class="dim">This dual-process idea isn't a guess built to explain déjà vu after the fact — it was established independently in memory research decades earlier, from studies of ordinary recognition and of patients with selective memory damage.</p>`,
       sum:"A good stopping point: recognition runs on two separate systems, familiarity and recollection — déjà vu is familiarity firing without recollection to back it up.",
       take:"Recognition has two separate channels — fast, vague familiarity and slow, specific recollection. Déjà vu is familiarity firing alone.",
-      puzzle:{
-        type:"mcq",
-        q:"Which memory process is fast, vague, and gives déjà vu its “I know this” feeling with no attached detail?",
-        options:["Recollection","Familiarity","Consolidation","Encoding"],
-        answer:1,
-        wrong:"That's the slower, detail-rich one — the other half of the pair fires alone in déjà vu.",
-        hint:"It's the one this level's title puts first.",
-        fact:"Familiarity and recollection can be dissociated in the lab: some amnesia patients retain a working familiarity system whilst almost entirely losing the ability to recollect specific past events."
-      }
+      fact:"Familiarity and recollection can be dissociated in the lab: some amnesia patients retain a working familiarity system whilst almost entirely losing the ability to recollect specific past events."
     },
     {
       kicker:"Level 4 · The Overlap",
@@ -354,14 +314,7 @@ const CONFIG = {
       afterWidgetHTML:`<p class="dim">Your familiarity system picked up on the gestalt of the earlier room — the shape of the space — without ever telling your conscious mind what it noticed.</p>`,
       sum:"A good stopping point: a single shared structural feature between two otherwise different scenes is enough to trigger unconscious familiarity — this is Anne Cleary's spatial-layout research.",
       take:"You don't need a matching scene, just one matching structural detail — Anne Cleary's Sims-scene experiments proved this directly.",
-      puzzle:{
-        type:"truefalse",
-        q:"True or false: in Anne Cleary's experiments, participants had to consciously spot the shared layout for déjà vu rates to rise.",
-        answer:false,
-        wrong:"The opposite, actually — the effect showed up even when nobody noticed the overlap.",
-        hint:"The whole point of the finding is that it works below conscious awareness.",
-        fact:"Cleary's team later found that déjà vu in these experiments often came with a specific companion feeling: a false sense of being able to predict what would happen next in the scene — a thread that comes back at level 9."
-      }
+      fact:"Cleary's team later found that déjà vu in these experiments often came with a specific companion feeling: a false sense of being able to predict what would happen next in the scene — a thread that comes back at level 9."
     },
     {
       kicker:"Level 5 · The Machinery",
@@ -376,15 +329,7 @@ const CONFIG = {
         </div>`,
       sum:"A good stopping point: familiarity and recollection map onto different brain regions — the rhinal cortex and the hippocampus — and déjà vu looks like the rhinal cortex firing alone.",
       take:"The rhinal cortex seems to generate raw familiarity by itself; déjà vu may be that signal firing without the hippocampus's recollection to back it up.",
-      puzzle:{
-        type:"mcq",
-        q:"Which brain region is thought to generate familiarity largely on its own, without needing recollection?",
-        options:["The cerebellum","The hippocampus","The rhinal cortex","The visual cortex"],
-        answer:2,
-        wrong:"That one's central to full, detailed recollection — the isolated familiarity signal comes from its neighbour.",
-        hint:"It shares its name with this level's title.",
-        fact:"The rhinal cortex sits directly next to the hippocampus in the brain's temporal lobe — two adjacent regions with two very different jobs in memory."
-      }
+      fact:"The rhinal cortex sits directly next to the hippocampus in the brain's temporal lobe — two adjacent regions with two very different jobs in memory."
     },
     {
       kicker:"Level 6 · The Double Signal",
@@ -395,14 +340,7 @@ const CONFIG = {
         <p class="dim">This idea has since been supplemented, not replaced, by the rhinal-cortex account above — the two explanations describe the same event at different levels: one about which brain region misfires, the other about timing between processing passes.</p>`,
       sum:"A good stopping point: one classic theory holds that déjà vu comes from a tiny processing delay — the brain double-checking a moment and mistaking the second pass for an older memory.",
       take:"Robert Efron's 1963 theory: the brain processes each moment twice, and a slight delay between passes can make the second copy feel like an older memory.",
-      puzzle:{
-        type:"slider",
-        q:"In what year did Robert Efron first propose the double-processing theory of déjà vu?",
-        min:1940, max:2000, step:1, unit:"", target:1963, tolerance:5,
-        wrong:"Drag closer — the real year is named directly in this level.",
-        hint:"It's stated as part of the theory's introduction, right at the start of the level.",
-        fact:"Efron developed the idea whilst studying epileptic patients — a population that, as the next level shows, experiences déjà vu unusually often."
-      }
+      fact:"Efron developed the idea whilst studying epileptic patients — a population that, as the next level shows, experiences déjà vu unusually often."
     },
     {
       kicker:"Level 7 · The Frequency Curve",
@@ -414,14 +352,7 @@ const CONFIG = {
         Déjà vu falling with age is one of the strongest arguments against it being a sign of memory decline. If anything, the data points the other way.</div>`,
       sum:"A good stopping point: déjà vu peaks in young adulthood and declines with age, and correlates with travel, dream recall, and education — the opposite pattern you'd expect from memory decline.",
       take:"Déjà vu frequency peaks in the late teens and twenties, then declines — the opposite of what memory decline would predict.",
-      puzzle:{
-        type:"truefalse",
-        q:"True or false: people report déjà vu more often as they get older, consistent with general memory decline.",
-        answer:false,
-        wrong:"The data runs the other way — this is the counter-intuitive part of the level.",
-        hint:"The callout box states the actual direction plainly.",
-        fact:"Some researchers estimate déjà vu prevalence drops to under 40% in people over 60, roughly half the rate seen in people in their twenties."
-      }
+      fact:"Some researchers estimate déjà vu prevalence drops to under 40% in people over 60, roughly half the rate seen in people in their twenties."
     },
     {
       kicker:"Level 8 · Jamais Vu",
@@ -432,14 +363,7 @@ const CONFIG = {
         <p class="dim">Jamais vu is thought to be the same familiarity system misfiring in the opposite direction — reporting “new” when it should report “known,” rather than the other way around.</p>`,
       sum:"A good stopping point: jamais vu is déjà vu's mirror image — familiar things suddenly feeling unfamiliar — and it can be triggered in the lab simply by writing a word repeatedly.",
       take:"Jamais vu is the opposite glitch: something familiar suddenly feels foreign. Repeating a word by hand ~30 times reliably triggers it in most people.",
-      puzzle:{
-        type:"slider",
-        q:"In O'Connor and Moulin's word-repetition study, roughly what percentage of participants reported the word starting to feel strange?",
-        min:0, max:100, step:5, unit:"%", target:68, tolerance:10,
-        wrong:"Drag again — the real figure was a clear majority of participants.",
-        hint:"The level states it as a specific percentage, describing “a majority.”",
-        fact:"The effect has a name of its own in psycholinguistics — semantic satiation — first documented decades before anyone connected it to jamais vu specifically."
-      }
+      fact:"The effect has a name of its own in psycholinguistics — semantic satiation — first documented decades before anyone connected it to jamais vu specifically."
     },
     {
       kicker:"Level 9 · The Alarm",
@@ -450,15 +374,7 @@ const CONFIG = {
         <p class="dim">On this view, déjà vu is your memory system's version of a spell-checker flagging a word it isn't sure about — not proof that something is wrong, but evidence that the checking process is working exactly as intended.</p>`,
       sum:"A good stopping point: déjà vu may be the visible sign of a memory-monitoring system catching a retrieval conflict — evidence the system works, not that it's broken.",
       take:"Déjà vu may function as a memory-conflict alarm rather than an error — your brain flagging a mismatch, similar to a spell-checker catching a word it isn't sure about.",
-      puzzle:{
-        type:"mcq",
-        q:"In Cleary's research, what feeling often accompanies déjà vu, despite being no more accurate than chance?",
-        options:["A feeling of danger","A false sense of being able to predict what happens next","A sudden craving for coffee","An urge to leave the room"],
-        answer:1,
-        wrong:"That's not the companion feeling this level describes — look for the one about anticipating what's coming.",
-        hint:"It's the same effect first mentioned back in the level about Cleary's Sims-scene experiments.",
-        fact:"When researchers actually tested people's “predictions” during déjà vu moments, accuracy was statistically no better than random guessing — the feeling of foresight is itself an illusion layered on top of the first one."
-      }
+      fact:"When researchers actually tested people's “predictions” during déjà vu moments, accuracy was statistically no better than random guessing — the feeling of foresight is itself an illusion layered on top of the first one."
     },
     {
       kicker:"Level 10 · Bedrock",
@@ -469,7 +385,7 @@ const CONFIG = {
         <strong>Rhinal familiarity fires alone</strong> → <strong>hippocampal recollection stays silent</strong> (no real matching memory exists) → a <strong>conflict-monitoring system</strong> flags the mismatch → you consciously feel “I've been here before,” occasionally paired with a false sense of predicting what's next.</div>
         <p><strong>Want to feel the mirror-image effect yourself?</strong> Pick any short, ordinary word — “door,” “grass,” “window” — and write it out by hand, slowly, about 25–30 times. Most people notice the word starting to look foreign or lose its meaning partway through: a small, safe, self-inducible taste of jamais vu, and a neat demonstration that your familiarity system can be nudged in either direction.</p>
         <p class="dim">One caveat worth keeping: occasional déjà vu in a healthy adult is entirely normal. Very frequent déjà vu, especially alongside other unusual sensations, can occasionally be an early symptom of temporal lobe epilepsy and is worth mentioning to a doctor — but for the vast majority of people, it's simply a memory system doing its ordinary, slightly imperfect job.</p>`,
-      widget:"discussPanel",
+      widget:"notePanel",
       sum:"",
       take:"The full picture: rhinal familiarity fires without hippocampal recollection, a monitoring system flags the mismatch, and you feel déjà vu — sometimes with a false sense of foresight riding along. Try the word-repetition jamais vu experiment yourself."
     }
@@ -513,24 +429,26 @@ const WIDGETS = {
     }
   },
 
-  /* Copy-paste ready: the discussion panel for level 10.
-     Links readers to your GitHub Discussions — this page itself
-     stores and logs nothing about them. */
-  discussPanel: {
+  notePanel: {
     html: `
       <div class="sim">
-        <h4>The discussion panel</h4>
-        <p style="font-size:14.5px;color:var(--dim)">Tried the word-repetition experiment? Have your own déjà vu story or theory? The conversation for this rabbit hole lives on GitHub, open to everyone. This page stores nothing and logs nothing about you.</p>
+        <h4>Send a note</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own, or a question that deserves its own ten levels? Post it on GitHub — no email needed, and I read every one.</p>
         <div class="share-row">
-          <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
-          <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>
+          <a class="btn btn-deeper btn-mini" data-el="note" target="_blank" rel="noopener">✍️ Send a note about this hole</a>
+          <a class="btn btn-stop btn-mini" data-el="all" target="_blank" rel="noopener">Read what others sent</a>
         </div>
-        <div class="share-note">Opens this project's GitHub Discussions in a new tab. You'll need a GitHub account to post.</div>
+        <div class="share-note">Opens a ready-filled form on GitHub. You'll need a GitHub account to post.</div>
       </div>`,
     init(root){
-      const url = "https://github.com/" + CONFIG.githubRepo + "/discussions";
-      root.querySelector('[data-el="discuss"]').href = url;
-      root.querySelector('[data-el="read"]').href = url;
+      const repo = CONFIG.githubRepo;
+      const params = new URLSearchParams({
+        template: "reader-note.yml",
+        title: "[Note] " + CONFIG.siteTitle,
+        labels: "reader-note"
+      });
+      root.querySelector('[data-el="note"]').href = `https://github.com/${repo}/issues/new?${params.toString()}`;
+      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues?q=is%3Aissue+label%3Areader-note`;
     }
   }
 };
@@ -577,37 +495,6 @@ const WIDGETS = {
     <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
   main.appendChild(hero);
 
-  /* build a depth-lock puzzle panel. mcq options are shuffled per page-load
-     so the answer position isn't memorable between attempts. */
-  function renderPuzzle(n, pz){
-    let body = "";
-    if(pz.type === "truefalse"){
-      body = `<div class="pz-tf">
-        <button type="button" data-tf="true">✅ True</button>
-        <button type="button" data-tf="false">❌ False</button>
-      </div>`;
-    } else if(pz.type === "slider"){
-      const step = pz.step || 1;
-      const mid = pz.min + Math.round(((pz.min + pz.max) / 2 - pz.min) / step) * step;
-      body = `<div class="pz-slider">
-        <div class="pz-sval" data-el="sval">${mid}${pz.unit||""}</div>
-        <input type="range" data-el="sinput" min="${pz.min}" max="${pz.max}" step="${pz.step||1}" value="${mid}">
-        <button class="btn btn-deeper" type="button" data-el="sguess">Lock in this guess</button>
-      </div>`;
-    } else { // mcq — shuffle option order, remember the real answer index
-      const idxs = pz.options.map((_,i)=>i);
-      for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; }
-      body = `<div class="pz-opts">${idxs.map(i=>`<button type="button" data-opt="${i}">${pz.options[i]}</button>`).join("")}</div>`;
-    }
-    return `
-      <div class="puzzle" data-puzzle="${n}" data-type="${pz.type}" hidden>
-        <div class="pz-label"><span class="pz-lock">🔐</span> Depth riddle — answer to descend</div>
-        <div class="pz-q">${pz.q}</div>
-        ${body}
-        <div class="pz-feed" hidden></div>
-      </div>`;
-  }
-
   /* level cards */
   L.forEach((lv,i)=>{
     const n = i+1;
@@ -624,7 +511,6 @@ const WIDGETS = {
         ${lv.afterWidgetHTML || ""}
       </div>`;
     if(n < N){
-      const pzHTML = lv.puzzle ? renderPuzzle(n, lv.puzzle) : "";
       inner += `
       <div class="checkpoint">
         <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
@@ -632,8 +518,8 @@ const WIDGETS = {
         <div class="cp-actions">
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
-        </div>${pzHTML}
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means answering the depth riddle: one question from what you've just read, worth a ${CONFIG.token.name} and a small reward.</div>
+        </div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a ${CONFIG.token.name} for the descent.</div>
       </div>`;
     } else {
       inner += `
@@ -677,8 +563,47 @@ const WIDGETS = {
     toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
   }
 
+  /* a little cast of characters who greet the reader each time they choose
+     to descend — each holding this hole's own token (CONFIG.token.emoji).
+     Picked at random, never the same one twice in a row. Lines stay
+     subject-neutral so the cast works on every hole in the series. */
+  const REWARDS = [
+    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
+    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
+    {animal:"🦊", line:"Most people stop before this one. You didn't."},
+    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
+    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
+    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
+    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
+    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
+    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
+    {animal:"🐼", line:"A fine decision. Settle in."}
+  ];
+  let lastReward = -1;
+  function pickReward(){
+    let i;
+    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
+    lastReward = i;
+    return REWARDS[i];
+  }
+
+  /* build the reward card shown at the top of a newly opened level.
+     `fact` comes from the level just left behind — a bonus nugget one
+     layer deeper than what they've read. */
+  function rewardCard(fromLevel){
+    const r = pickReward(), tok = CONFIG.token;
+    const fact = (L[fromLevel-1] || {}).fact;
+    return `<div class="reward">
+      <div class="reward-top">
+        <div class="reward-animal" aria-hidden="true">${r.animal}${tok.emoji}</div>
+        <div class="reward-line">${r.line}</div>
+      </div>
+      <div class="reward-token">${tok.emoji} +1 ${tok.name}${fact ? `<span class="reward-fact">${fact}</span>` : ""}</div>
+    </div>`;
+  }
+
   /* unlock */
-  function unlock(n, msg){
+  function unlock(n){
     const card = document.getElementById("lv"+n);
     if(!card.classList.contains("locked")){
       card.scrollIntoView({behavior:"smooth", block:"start"});
@@ -689,72 +614,20 @@ const WIDGETS = {
     current = Math.max(current, n);
     save();
     updateHud();
-    showToast(msg || `⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+
+    /* place the descent reward at the top of the level they just opened */
+    const body = card.querySelector(".level-body");
+    if(body && !card.dataset.rewarded){
+      body.insertAdjacentHTML("afterbegin", rewardCard(n-1));
+      card.dataset.rewarded = "1";
+    }
+
+    showToast(`⬢ LEVEL ${n} UNLOCKED · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
     requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
 
-  /* the single gate every "go deeper" path must pass through — whether
-     clicked from a checkpoint or resumed from the surface modal. This is
-     what stops the depth lock being skipped. */
-  function attemptAdvance(n){
-    const card = document.getElementById("lv"+n);
-    if(!card.classList.contains("locked")){ unlock(n); return; }
-    const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
-    if(pzPanel && !pzPanel.classList.contains("solved")){
-      pzPanel.hidden = false;
-      pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
-    } else {
-      unlock(n); // no puzzle configured for this level — unlocks freely
-    }
-  }
-
-  /* a little cast of characters shown when a reader answers a depth riddle
-     correctly — each holding this hole's own token (CONFIG.token.emoji),
-     always saying something genuinely nice. Picked at random, never the
-     same one twice in a row. Lines stay subject-neutral so the cast works
-     on every hole in the series. */
-  const REWARDS = [
-    {animal:"🦥", line:"Slow and thorough. Nicely reasoned."},
-    {animal:"🦉", line:"Sharp eyes catch sharp details. Well spotted."},
-    {animal:"🦊", line:"Cunning and correct — a rare combination."},
-    {animal:"🐧", line:"Cool-headed under pressure. That's the way."},
-    {animal:"🐨", line:"Unbothered and unbeaten. Lovely work."},
-    {animal:"🐿️", line:"You squirrelled that detail away perfectly."},
-    {animal:"🦔", line:"A prickly question, handled with care. Well done."},
-    {animal:"🐢", line:"Steady wins it. That was well earned."},
-    {animal:"🦦", line:"Playful mind, precise answer. Brilliant."},
-    {animal:"🐼", line:"Calm, considered, correct. Exactly right."}
-  ];
-  let lastReward = -1;
-  function pickReward(){
-    let i;
-    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
-    lastReward = i;
-    return REWARDS[i];
-  }
-
-  /* mark a riddle solved: swap its body for a reward card, then unlock */
-  function solvePuzzle(panel, lvN, pz){
-    panel.classList.add("solved");
-    const r = pickReward();
-    const tok = CONFIG.token;
-    panel.innerHTML = `
-      <div class="pz-label"><span class="pz-lock">🔓</span> Riddle solved</div>
-      <div class="pz-reward"><div class="pz-animal" aria-hidden="true">${r.animal}${tok.emoji}</div><div class="pz-reward-line">${r.line}</div></div>
-      <div class="pz-solved-msg"><b>+1 ${tok.name}</b>${pz.fact ? `<span class="pz-fact">${pz.fact}</span>` : ""}</div>`;
-    unlock(lvN+1, `⬢ RIDDLE SOLVED — LEVEL ${lvN+1} UNLOCKED · ${tok.emoji} +1 ${tok.name.toUpperCase()}`);
-  }
-
-  function failPuzzle(panel, pz){
-    const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
-    panel.dataset.wrong = String(wrong);
-    const feed = panel.querySelector(".pz-feed");
-    feed.hidden = false;
-    feed.textContent = (wrong > 1 && pz.hint) ? "Hint: " + pz.hint : (pz.wrong || "Not quite — try again.");
-    panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
-  }
-
+  /* surface modal */
   /* surface modal */
   const scrim = document.getElementById("modalScrim");
   const modalList = document.getElementById("modalList");
@@ -776,7 +649,7 @@ const WIDGETS = {
   document.getElementById("modalResume").addEventListener("click", ()=>{
     const n = Math.min(stoppedAt+1, N);
     closeModal();
-    attemptAdvance(n);   // ← goes through the same gate as every other path
+    unlock(n);
   });
   scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
   document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
@@ -784,54 +657,12 @@ const WIDGETS = {
   /* clicks */
   document.body.addEventListener("click", e=>{
     const deeper = e.target.closest("[data-next]");
-    if(deeper){ attemptAdvance(parseInt(deeper.dataset.next,10)); return; }
-
-    /* mcq */
-    const opt = e.target.closest(".pz-opts button");
-    if(opt){
-      const panel = opt.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      if(parseInt(opt.dataset.opt,10) === pz.answer) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
-    /* true/false */
-    const tf = e.target.closest(".pz-tf button");
-    if(tf){
-      const panel = tf.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      const chosen = tf.dataset.tf === "true";
-      if(chosen === pz.answer) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
-    /* slider guess */
-    const sguess = e.target.closest('[data-el="sguess"]');
-    if(sguess){
-      const panel = sguess.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      const val = parseFloat(panel.querySelector('[data-el="sinput"]').value);
-      if(Math.abs(val - pz.target) <= pz.tolerance) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
     const stop = e.target.closest("[data-stop]");
     if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
   });
 
-  /* live-update slider-guess readouts */
-  document.body.addEventListener("input", e=>{
-    if(e.target.matches('.puzzle [data-el="sinput"]')){
-      const panel = e.target.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      panel.querySelector('[data-el="sval"]').textContent = e.target.value + (pz.unit||"");
-    }
-  });
-
+  restore();
   restore();
   updateHud();
 })();

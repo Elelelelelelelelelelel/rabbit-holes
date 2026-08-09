@@ -149,11 +149,11 @@
       <a class="dig-btn" id="digBtn" href="#" target="_blank" rel="noopener">Suggest it on GitHub →</a>
     </div>
     <p class="dig-small">Opens a ready-filled suggestion in this project's GitHub issues — you'll need a <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a> to post it.</p>
-    <p class="dig-small">Already descended one? <a id="digDiscuss" href="#" target="_blank" rel="noopener">Join the discussion</a> — compare notes, share what you found, or argue with a level.</p>
+    <p class="dig-small">Already descended one and want to compare notes, flag an error, or argue with a level? <a id="digNote" href="#" target="_blank" rel="noopener">Send a note</a> — or <a id="digRead" href="#" target="_blank" rel="noopener">read what others sent</a>.</p>
   </section>
 </main>
 
-<footer>The Rabbit Holes · a series of ten-level descents · progress is saved privately in your own browser · <a id="footDiscuss" href="#" target="_blank" rel="noopener">Discussions</a></footer>
+<footer>The Rabbit Holes · a series of ten-level descents · progress is saved privately in your own browser · <a id="footNote" href="#" target="_blank" rel="noopener">Send a note</a></footer>
 
 <script>
 /* ================================================================
@@ -161,6 +161,8 @@
    "username/repo". Powers the "Dig your own hole" suggestion box.
    ================================================================ */
 const GITHUB_REPO = "yourusername/rabbit-holes";
+
+
 
 /* ================================================================
    ✏️  ADD NEW RABBIT HOLES HERE
@@ -264,12 +266,20 @@ const HOLES = [
   digQ.addEventListener("input", ()=>{ digBtn.href = digHref(); });
   digQ.addEventListener("keydown", e=>{ if(e.key === "Enter") digBtn.click(); });
 
-  /* discussion links — same repository, set in one place */
-  const discussURL = `https://github.com/${GITHUB_REPO}/discussions`;
-  ["digDiscuss","footDiscuss"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.href = discussURL;
+  /* note links — everything routes through GitHub issues, no email exposed */
+  const noteParams = new URLSearchParams({
+    template: "reader-note.yml",
+    title: "[Note] ",
+    labels: "reader-note"
   });
+  const noteHref = `https://github.com/${GITHUB_REPO}/issues/new?${noteParams.toString()}`;
+  const readHref = `https://github.com/${GITHUB_REPO}/issues?q=is%3Aissue+label%3Areader-note`;
+  ["digNote","footNote"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.href = noteHref;
+  });
+  const readEl = document.getElementById("digRead");
+  if(readEl) readEl.href = readHref;
 
   /* total meter — only shown once the reader has actually descended somewhere */
   if(totalDepth > 0){

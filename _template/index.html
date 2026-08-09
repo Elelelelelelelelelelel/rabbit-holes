@@ -157,38 +157,20 @@
   .sim-verdict.mid{color:var(--accent)}
   .sim-verdict.good{color:var(--ok)}
 
-  /* depth-lock puzzles */
-  .puzzle{margin-top:16px;padding:18px;border-radius:10px;border:1px solid var(--line);background:rgba(7,11,20,.5)}
-  .pz-label{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px}
-  .pz-lock{display:inline-block;transition:transform .5s cubic-bezier(.2,.9,.25,1)}
-  .puzzle.solved .pz-lock{transform:rotate(-14deg) scale(1.15)}
-  .pz-q{font-size:15.5px;font-weight:700;margin:10px 0 14px}
-  .pz-opts{display:grid;gap:8px}
-  .pz-opts button{text-align:left;padding:11px 14px;border-radius:8px;background:var(--ink-raise);
-    border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;font:inherit;font-size:14.5px;
-    transition:border-color .2s ease, background .2s ease}
-  .pz-opts button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
-  .pz-opts button:focus-visible{outline:2px solid var(--accent-hot);outline-offset:2px}
-  .pz-tf{display:flex;gap:10px}
-  .pz-tf button{flex:1;padding:16px;border-radius:8px;font-family:var(--display);font-weight:700;letter-spacing:.05em;
-    background:var(--ink-raise);border:1px solid rgba(143,163,196,.2);color:var(--crema);cursor:pointer;transition:all .2s ease}
-  .pz-tf button:hover{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 8%, var(--ink-raise))}
-  .pz-slider{padding:2px 2px 4px}
-  .pz-slider .pz-sval{text-align:center;font-family:var(--display);font-weight:700;font-size:26px;color:var(--accent-hot);margin-bottom:10px}
-  .pz-slider button{margin-top:14px;width:100%}
-  .pz-feed{margin-top:12px;font-size:13.5px;font-weight:700;color:var(--danger)}
-  .puzzle.shake{animation:pzshake .4s ease}
-  @keyframes pzshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
-  .puzzle.solved{border-color:var(--ok);background:color-mix(in srgb, var(--ok) 8%, rgba(7,11,20,.5))}
-  .pz-solved-msg{font-size:14.5px}
-  .pz-solved-msg .pz-fact{display:block;margin-top:8px;color:var(--dim);font-weight:400}
-  .pz-solved-msg b{color:var(--ok)}
-  .pz-reward{display:flex;align-items:center;gap:14px;margin:12px 0;padding:12px 14px;border-radius:10px;
-    background:rgba(7,11,20,.4);border:1px solid rgba(143,163,196,.15)}
-  .pz-animal{font-size:34px;line-height:1;flex:none}
-  .pz-reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  /* descent reward card — shown at the top of each newly opened level */
+  .reward{margin:0 0 20px;padding:15px 17px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 7%, rgba(7,11,20,.5));animation:rewardIn .6s ease both}
+  @keyframes rewardIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+  .reward-top{display:flex;align-items:center;gap:14px}
+  .reward-animal{font-size:34px;line-height:1;flex:none}
+  .reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  .reward-token{font-family:var(--display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-top:12px}
+  .reward-fact{display:block;margin-top:7px;font-size:14px;font-style:normal;letter-spacing:0;
+    text-transform:none;color:var(--dim);font-family:var(--body)}
 
-  /* discussion panel + shared button row */
+  /* contact + shared button row */
+  /* contact panel + shared button row */
   .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
   .btn-mini{padding:10px 16px;font-size:13px}
   .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
@@ -253,16 +235,16 @@ const CONFIG = {
   homeHref: "../index.html",
 
   /* Your GitHub repository, as "username/repo". Used by the
-     discussion-panel widget and anything else linking to your
-     Issues or Discussions.                                      */
+     "Dig your own hole" suggestion form on the homepage.        */
   githubRepo: "yourusername/rabbit-holes",
 
+
   /* ── TOKEN ────────────────────────────────────────────────────
-     What readers collect for solving depth riddles. The reward
-     characters hold this emoji, the HUD counts it, and the unlock
-     toast names it. Theme it to the hole — coffee earns "beans"
-     (☕), déjà vu earns "echoes" (🌀). Keep the name a single
-     lowercase noun; the engine capitalises it where needed.      */
+     What readers earn each time they choose to go deeper. The
+     reward characters hold this emoji, the HUD counts it, and the
+     unlock toast names it. Theme it to the hole — coffee earns
+     "beans" (☕), déjà vu earns "echoes" (🌀). Keep the name a
+     single lowercase noun; the engine capitalises it where needed. */
   token: { emoji: "🕳️", name: "shard" },
 
   /* ── 2. THEME ────────────────────────────────────────────────
@@ -295,7 +277,7 @@ const CONFIG = {
     titleHTML: 'Your big question, with the key phrase <em>in accent colour?</em>',
     icon: `<div style="font-size:56px" aria-hidden="true">🕳️</div>`,
     ledeHTML: `A vivid, concrete scene the reader recognises from their own life. <b>Bold</b> the one detail that makes them say “yes — why IS that?”`,
-    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or answer the depth riddle and go deeper.`
+    noteHTML: `Descend as far as you like. Every level ends with a <b>checkpoint</b>: stop and surface with a complete answer, or take one more step down.`
   },
 
   footerHTML: `Built as an interactive explainer · Note any caveats about your figures or sources here.`,
@@ -337,45 +319,17 @@ const CONFIG = {
        take      — one-line takeaway, listed cumulatively in the
                    "You surfaced" recap. Must stand alone.
 
-       puzzle    — (levels 1–9) the DEPTH RIDDLE that guards "Go
-                   deeper". Three types keep it from feeling like
-                   the same trivia quiz nine times running:
+       fact      — (optional, levels 1–9) a bonus nugget shown on
+                   the reward card when the reader chooses to open
+                   the NEXT level. It should sit one layer deeper
+                   than the level it belongs to — genuinely obscure
+                   beats merely true. The last level needs none.
 
-                   type:"mcq"        { q, options:[4 strings],
-                                        answer:index (0-based) }
-                   type:"truefalse"  { q, answer:true|false }
-                   type:"slider"     { q, min, max, step, unit,
-                                        target, tolerance }
-                     — reader drags to a number; correct if within
-                       `tolerance` of `target`. Great for anything
-                       with a real figure attached (a half-life,
-                       a percentage, a year, an hour count).
-
-                   All three also take:
-                     hint   — shown after a second wrong attempt;
-                              point at where the answer lives,
-                              don't restate it
-                     wrong  — (optional) a first-miss remark with
-                              some personality, e.g. "That's the
-                              marketing version, not the biology."
-                              Falls back to a generic line if omitted
-                     fact   — (optional) a bonus nugget shown once
-                              solved, one layer deeper than the
-                              level itself — genuinely obscure is
-                              better than merely true
-
-                   Mix the three types across your ten levels
-                   rather than defaulting to mcq every time — it's
-                   the easiest way to keep the descent playful.
-                   Options for mcq are shuffled automatically, so
-                   don't rely on position when writing hints.
-
-                   Solving a riddle is automatically paired with a
-                   small reward card — one of a shared cast of
-                   animal characters holding coffee, saying
-                   something kind — handled entirely by the
-                   engine's REWARDS pool. Nothing to configure here;
-                   it's the same warm little moment on every hole.
+                   Choosing to descend is itself the reward moment:
+                   the engine greets the reader with one of a shared
+                   cast of animal characters holding this hole's
+                   token, says something warm, and adds the fact.
+                   Nothing to configure beyond `token` and `fact`.
 
      WRITING THE DEPTH CURVE (the format's real craft):
        Levels 1–2   the honest short answer, zero jargon
@@ -387,8 +341,7 @@ const CONFIG = {
        Level 9      the plot twist — the thing that reframes
                     everything above it
        Level 10     the synthesis, plus something the reader can
-                    DO, and the discussion panel so they can talk
-                    about it. */
+                    DO, and the contact panel so they can write in. */
   levels: [
     {
       kicker:"Level 1 · The Surface",
@@ -398,15 +351,7 @@ const CONFIG = {
         <p class="dim">Everything below this level explains <em>how</em> — piece by piece.</p>`,
       sum:"A good stopping point: restate the level's claim in one plain sentence.",
       take:"The one-line version of this level for the recap list.",
-      puzzle:{
-        type:"mcq",
-        q:"A question whose answer sits in the level above?",
-        options:["A plausible wrong answer","The right answer","Another plausible wrong answer","A tempting misconception"],
-        answer:1,
-        wrong:"A first-miss remark with some character.",
-        hint:"A nudge towards where in the level the answer lives — without giving it away.",
-        fact:"An optional, ideally obscure, bonus nugget revealed once they get it right."
-      }
+      fact:"An optional, ideally obscure, bonus nugget revealed once they get it right."
     },
     {
       kicker:"Level 2 · The Myth",
@@ -416,14 +361,7 @@ const CONFIG = {
         <div class="callout"><span class="tag">Key idea</span>
         The reframe that the rest of the descent will build on.</div>`,
       sum:"A good stopping point: the misconception is dead; the reframe stands.",
-      take:"One line: the myth, corrected.",
-      puzzle:{
-        type:"truefalse",
-        q:"A true/false claim testing whether the myth actually landed?",
-        answer:false,
-        wrong:"A short, in-voice remark for a first miss.",
-        hint:"Point at the callout without repeating it verbatim."
-      }
+      take:"One line: the myth, corrected."
     },
     {
       kicker:"Level 3 · The Mechanism",
@@ -433,20 +371,13 @@ const CONFIG = {
       widget:"exampleWidget",
       afterWidgetHTML:`<p class="dim">Optional aside after the interactive.</p>`,
       sum:"A good stopping point: the reader now owns the core mechanism.",
-      take:"One line: the mechanism.",
-      puzzle:{
-        type:"slider",
-        q:"A number worth guessing — a real figure the level just gave?",
-        min:0, max:10, step:1, unit:"", target:5, tolerance:1,
-        wrong:"A short remark for an out-of-range guess.",
-        hint:"Point at the exact sentence that names this number."
-      }
+      take:"One line: the mechanism."
     }
     /* …continue to level 10, following the depth curve above.
-       Give every level except the last a sum + take + puzzle,
-       and give the last level only a take (the finale replaces
-       its checkpoint, so no sum and no puzzle). Put the
-       discussPanel widget on level 10 so readers can comment. */
+       Give every level except the last a sum + take + fact, and
+       give the last level only a take (the finale replaces its
+       checkpoint, so no sum and no fact). Put the notePanel
+       widget on level 10 so readers can write in. */
   ]
 };
 
@@ -482,24 +413,28 @@ const WIDGETS = {
     }
   },
 
-  /* Copy-paste ready: the discussion panel for level 10.
-     Links readers to your GitHub Discussions — this page itself
-     stores and logs nothing about them. */
-  discussPanel: {
+  /* Copy-paste ready: the note panel for level 10. Sends readers to a
+     ready-filled GitHub issue — no email address is exposed. */
+  notePanel: {
     html: `
       <div class="sim">
-        <h4>The discussion panel</h4>
-        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own? The conversation for this rabbit hole lives on GitHub, open to everyone. This page stores nothing and logs nothing about you.</p>
+        <h4>Send a note</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Tried it yourself? Spotted an error? Have a theory of your own, or a question that deserves its own ten levels? Post it on GitHub — no email needed, and I read every one.</p>
         <div class="share-row">
-          <a class="btn btn-deeper btn-mini" data-el="discuss" target="_blank" rel="noopener">💬 Share your results or comment</a>
-          <a class="btn btn-stop btn-mini" data-el="read" target="_blank" rel="noopener">Read what others found</a>
+          <a class="btn btn-deeper btn-mini" data-el="note" target="_blank" rel="noopener">✍️ Send a note about this hole</a>
+          <a class="btn btn-stop btn-mini" data-el="all" target="_blank" rel="noopener">Read what others sent</a>
         </div>
-        <div class="share-note">Opens this project's GitHub Discussions in a new tab. You'll need a GitHub account to post.</div>
+        <div class="share-note">Opens a ready-filled form on GitHub. You'll need a GitHub account to post.</div>
       </div>`,
     init(root){
-      const url = "https://github.com/" + CONFIG.githubRepo + "/discussions";
-      root.querySelector('[data-el="discuss"]').href = url;
-      root.querySelector('[data-el="read"]').href = url;
+      const repo = CONFIG.githubRepo;
+      const params = new URLSearchParams({
+        template: "reader-note.yml",
+        title: "[Note] " + CONFIG.siteTitle,
+        labels: "reader-note"
+      });
+      root.querySelector('[data-el="note"]').href = `https://github.com/${repo}/issues/new?${params.toString()}`;
+      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues?q=is%3Aissue+label%3Areader-note`;
     }
   }
 };
@@ -546,37 +481,6 @@ const WIDGETS = {
     <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
   main.appendChild(hero);
 
-  /* build a depth-lock puzzle panel. mcq options are shuffled per page-load
-     so the answer position isn't memorable between attempts. */
-  function renderPuzzle(n, pz){
-    let body = "";
-    if(pz.type === "truefalse"){
-      body = `<div class="pz-tf">
-        <button type="button" data-tf="true">✅ True</button>
-        <button type="button" data-tf="false">❌ False</button>
-      </div>`;
-    } else if(pz.type === "slider"){
-      const step = pz.step || 1;
-      const mid = pz.min + Math.round(((pz.min + pz.max) / 2 - pz.min) / step) * step;
-      body = `<div class="pz-slider">
-        <div class="pz-sval" data-el="sval">${mid}${pz.unit||""}</div>
-        <input type="range" data-el="sinput" min="${pz.min}" max="${pz.max}" step="${pz.step||1}" value="${mid}">
-        <button class="btn btn-deeper" type="button" data-el="sguess">Lock in this guess</button>
-      </div>`;
-    } else { // mcq — shuffle option order, remember the real answer index
-      const idxs = pz.options.map((_,i)=>i);
-      for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; }
-      body = `<div class="pz-opts">${idxs.map(i=>`<button type="button" data-opt="${i}">${pz.options[i]}</button>`).join("")}</div>`;
-    }
-    return `
-      <div class="puzzle" data-puzzle="${n}" data-type="${pz.type}" hidden>
-        <div class="pz-label"><span class="pz-lock">🔐</span> Depth riddle — answer to descend</div>
-        <div class="pz-q">${pz.q}</div>
-        ${body}
-        <div class="pz-feed" hidden></div>
-      </div>`;
-  }
-
   /* level cards */
   L.forEach((lv,i)=>{
     const n = i+1;
@@ -593,7 +497,6 @@ const WIDGETS = {
         ${lv.afterWidgetHTML || ""}
       </div>`;
     if(n < N){
-      const pzHTML = lv.puzzle ? renderPuzzle(n, lv.puzzle) : "";
       inner += `
       <div class="checkpoint">
         <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
@@ -601,8 +504,8 @@ const WIDGETS = {
         <div class="cp-actions">
           <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
           <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
-        </div>${pzHTML}
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Going deeper means answering the depth riddle: one question from what you've just read, worth a ${CONFIG.token.name} and a small reward.</div>
+        </div>
+        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a ${CONFIG.token.name} for the descent.</div>
       </div>`;
     } else {
       inner += `
@@ -646,8 +549,47 @@ const WIDGETS = {
     toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
   }
 
+  /* a little cast of characters who greet the reader each time they choose
+     to descend — each holding this hole's own token (CONFIG.token.emoji).
+     Picked at random, never the same one twice in a row. Lines stay
+     subject-neutral so the cast works on every hole in the series. */
+  const REWARDS = [
+    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
+    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
+    {animal:"🦊", line:"Most people stop before this one. You didn't."},
+    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
+    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
+    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
+    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
+    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
+    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
+    {animal:"🐼", line:"A fine decision. Settle in."}
+  ];
+  let lastReward = -1;
+  function pickReward(){
+    let i;
+    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
+    lastReward = i;
+    return REWARDS[i];
+  }
+
+  /* build the reward card shown at the top of a newly opened level.
+     `fact` comes from the level just left behind — a bonus nugget one
+     layer deeper than what they've read. */
+  function rewardCard(fromLevel){
+    const r = pickReward(), tok = CONFIG.token;
+    const fact = (L[fromLevel-1] || {}).fact;
+    return `<div class="reward">
+      <div class="reward-top">
+        <div class="reward-animal" aria-hidden="true">${r.animal}${tok.emoji}</div>
+        <div class="reward-line">${r.line}</div>
+      </div>
+      <div class="reward-token">${tok.emoji} +1 ${tok.name}${fact ? `<span class="reward-fact">${fact}</span>` : ""}</div>
+    </div>`;
+  }
+
   /* unlock */
-  function unlock(n, msg){
+  function unlock(n){
     const card = document.getElementById("lv"+n);
     if(!card.classList.contains("locked")){
       card.scrollIntoView({behavior:"smooth", block:"start"});
@@ -658,72 +600,20 @@ const WIDGETS = {
     current = Math.max(current, n);
     save();
     updateHud();
-    showToast(msg || `⬢ LEVEL ${n} UNLOCKED — ${L[n-1].title.toUpperCase()}`);
+
+    /* place the descent reward at the top of the level they just opened */
+    const body = card.querySelector(".level-body");
+    if(body && !card.dataset.rewarded){
+      body.insertAdjacentHTML("afterbegin", rewardCard(n-1));
+      card.dataset.rewarded = "1";
+    }
+
+    showToast(`⬢ LEVEL ${n} UNLOCKED · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
     requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
 
-  /* the single gate every "go deeper" path must pass through — whether
-     clicked from a checkpoint or resumed from the surface modal. This is
-     what stops the depth lock being skipped. */
-  function attemptAdvance(n){
-    const card = document.getElementById("lv"+n);
-    if(!card.classList.contains("locked")){ unlock(n); return; }
-    const pzPanel = document.querySelector(`[data-puzzle="${n-1}"]`);
-    if(pzPanel && !pzPanel.classList.contains("solved")){
-      pzPanel.hidden = false;
-      pzPanel.scrollIntoView({behavior:"smooth", block:"nearest"});
-    } else {
-      unlock(n); // no puzzle configured for this level — unlocks freely
-    }
-  }
-
-  /* a little cast of characters shown when a reader answers a depth riddle
-     correctly — each holding this hole's own token (CONFIG.token.emoji),
-     always saying something genuinely nice. Picked at random, never the
-     same one twice in a row. Lines stay subject-neutral so the cast works
-     on every hole in the series. */
-  const REWARDS = [
-    {animal:"🦥", line:"Slow and thorough. Nicely reasoned."},
-    {animal:"🦉", line:"Sharp eyes catch sharp details. Well spotted."},
-    {animal:"🦊", line:"Cunning and correct — a rare combination."},
-    {animal:"🐧", line:"Cool-headed under pressure. That's the way."},
-    {animal:"🐨", line:"Unbothered and unbeaten. Lovely work."},
-    {animal:"🐿️", line:"You squirrelled that detail away perfectly."},
-    {animal:"🦔", line:"A prickly question, handled with care. Well done."},
-    {animal:"🐢", line:"Steady wins it. That was well earned."},
-    {animal:"🦦", line:"Playful mind, precise answer. Brilliant."},
-    {animal:"🐼", line:"Calm, considered, correct. Exactly right."}
-  ];
-  let lastReward = -1;
-  function pickReward(){
-    let i;
-    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
-    lastReward = i;
-    return REWARDS[i];
-  }
-
-  /* mark a riddle solved: swap its body for a reward card, then unlock */
-  function solvePuzzle(panel, lvN, pz){
-    panel.classList.add("solved");
-    const r = pickReward();
-    const tok = CONFIG.token;
-    panel.innerHTML = `
-      <div class="pz-label"><span class="pz-lock">🔓</span> Riddle solved</div>
-      <div class="pz-reward"><div class="pz-animal" aria-hidden="true">${r.animal}${tok.emoji}</div><div class="pz-reward-line">${r.line}</div></div>
-      <div class="pz-solved-msg"><b>+1 ${tok.name}</b>${pz.fact ? `<span class="pz-fact">${pz.fact}</span>` : ""}</div>`;
-    unlock(lvN+1, `⬢ RIDDLE SOLVED — LEVEL ${lvN+1} UNLOCKED · ${tok.emoji} +1 ${tok.name.toUpperCase()}`);
-  }
-
-  function failPuzzle(panel, pz){
-    const wrong = (parseInt(panel.dataset.wrong||"0",10) + 1);
-    panel.dataset.wrong = String(wrong);
-    const feed = panel.querySelector(".pz-feed");
-    feed.hidden = false;
-    feed.textContent = (wrong > 1 && pz.hint) ? "Hint: " + pz.hint : (pz.wrong || "Not quite — try again.");
-    panel.classList.remove("shake"); void panel.offsetWidth; panel.classList.add("shake");
-  }
-
+  /* surface modal */
   /* surface modal */
   const scrim = document.getElementById("modalScrim");
   const modalList = document.getElementById("modalList");
@@ -745,7 +635,7 @@ const WIDGETS = {
   document.getElementById("modalResume").addEventListener("click", ()=>{
     const n = Math.min(stoppedAt+1, N);
     closeModal();
-    attemptAdvance(n);   // ← goes through the same gate as every other path
+    unlock(n);
   });
   scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
   document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
@@ -753,54 +643,12 @@ const WIDGETS = {
   /* clicks */
   document.body.addEventListener("click", e=>{
     const deeper = e.target.closest("[data-next]");
-    if(deeper){ attemptAdvance(parseInt(deeper.dataset.next,10)); return; }
-
-    /* mcq */
-    const opt = e.target.closest(".pz-opts button");
-    if(opt){
-      const panel = opt.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      if(parseInt(opt.dataset.opt,10) === pz.answer) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
-    /* true/false */
-    const tf = e.target.closest(".pz-tf button");
-    if(tf){
-      const panel = tf.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      const chosen = tf.dataset.tf === "true";
-      if(chosen === pz.answer) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
-    /* slider guess */
-    const sguess = e.target.closest('[data-el="sguess"]');
-    if(sguess){
-      const panel = sguess.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      const val = parseFloat(panel.querySelector('[data-el="sinput"]').value);
-      if(Math.abs(val - pz.target) <= pz.tolerance) solvePuzzle(panel, lvN, pz);
-      else failPuzzle(panel, pz);
-      return;
-    }
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
     const stop = e.target.closest("[data-stop]");
     if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
   });
 
-  /* live-update slider-guess readouts */
-  document.body.addEventListener("input", e=>{
-    if(e.target.matches('.puzzle [data-el="sinput"]')){
-      const panel = e.target.closest(".puzzle");
-      const lvN = parseInt(panel.dataset.puzzle,10);
-      const pz = L[lvN-1].puzzle;
-      panel.querySelector('[data-el="sval"]').textContent = e.target.value + (pz.unit||"");
-    }
-  });
-
+  restore();
   restore();
   updateHud();
 })();
