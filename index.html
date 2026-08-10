@@ -283,7 +283,7 @@ const HOLES = [
     labels: "reader-note"
   });
   const noteHref = `https://github.com/${GITHUB_REPO}/issues/new?${noteParams.toString()}`;
-  const readHref = `https://github.com/${GITHUB_REPO}/issues?q=is%3Aissue+label%3Areader-note`;
+  const readHref = `https://github.com/${GITHUB_REPO}/issues`;
   ["digNote","footNote"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.href = noteHref;

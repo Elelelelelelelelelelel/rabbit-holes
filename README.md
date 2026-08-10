@@ -25,7 +25,7 @@ You spot the hole, I do the digging. Head to the homepage and use **"Dig your ow
 
 ## Say hello
 
-Want to compare notes, flag an error, argue with a level, or share what happened when you tried an experiment? **[Send a note](../../issues/new?template=reader-note.yml&labels=reader-note)** — it's a short form on GitHub, and you can **[read what others sent](../../issues?q=is%3Aissue+label%3Areader-note)** too. There are links on the homepage and at the bottom of every rabbit hole.
+Want to compare notes, flag an error, argue with a level, or share what happened when you tried an experiment? **[Send a note](../../issues/new?template=reader-note.yml&labels=reader-note)** — it's a short form on GitHub, and you can **[read what others sent](../../issues)** too. There are links on the homepage and at the bottom of every rabbit hole.
 
 ## Currently open
 

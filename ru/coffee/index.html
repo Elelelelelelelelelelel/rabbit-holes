@@ -238,6 +238,13 @@ const CONFIG = {
 
   lang: { href: "../../coffee/", label: "EN" },
 
+  theme: {
+    accent: "#E8A44C",
+    accentHot: "#FFC46B",
+    accentDeep: "#8A5A1E",
+    line: "rgba(232,164,76,.16)"
+  },
+
   token: { emoji: "☕", name: "зерно" },
 
   ui: {
@@ -494,14 +501,14 @@ const WIDGETS = {
         <div class="share-note">Откроется заранее заполненная форма на GitHub. Для отправки нужен аккаунт GitHub.</div>
       </div>`,
     init(root){
-      const repo = REPO;
+      const repo = window.RH_REPO || CONFIG.githubRepo;
       const params = new URLSearchParams({
         template: "reader-note.yml",
         title: "[Заметка] " + CONFIG.siteTitle,
         labels: "reader-note"
       });
       root.querySelector('[data-el="note"]').href = `https://github.com/${repo}/issues/new?${params.toString()}`;
-      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues?q=is%3Aissue+label%3Areader-note`;
+      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues`;
     }
   }
 };
@@ -530,6 +537,8 @@ const WIDGETS = {
     }catch(e){}
     return fallback;
   })(CONFIG.githubRepo);
+  /* widgets are defined outside this closure, so expose it for them */
+  window.RH_REPO = REPO;
 
   /* interface strings — English defaults, overridable per page via CONFIG.ui
      so a translated edition can reuse this identical engine */
@@ -708,7 +717,8 @@ const WIDGETS = {
     }
 
     showToast(`⬢ ${T.unlocked.replace("{n}", n)} · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
-    requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
+    const raf = window.requestAnimationFrame || (fn => setTimeout(fn, 16));
+    raf(()=>setTimeout(()=>{ if(card.scrollIntoView) card.scrollIntoView({behavior:"smooth", block:"start"}); }, 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }
 
