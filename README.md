@@ -4,7 +4,7 @@
 
 Why can some people drink coffee at night and still sleep? Why does déjà vu happen? Why does time speed up as you get older? Each question here gets its own interactive descent — start with the honest short answer, and go as deep as you like.
 
-**→ [Visit the live site](https://yourusername.github.io/rabbit-holes/)**
+**→ [Visit the live site](https://yourusername.github.io/rabbit-holes/)** · **[Русская версия](https://yourusername.github.io/rabbit-holes/ru/)**
 
 ## How it works
 
@@ -29,10 +29,10 @@ Want to compare notes, flag an error, argue with a level, or share what happened
 
 ## Currently open
 
-| Hole | Question |
-|---|---|
-| ☕ | [Why can some people drink coffee at night and still sleep?](coffee/) |
-| 🌀 | [Why do we get déjà vu?](dejavu/) |
+| Hole | Question | Русский |
+|---|---|---|
+| ☕ | [Why can some people drink coffee at night and still sleep?](coffee/) | [Кофейная нора](ru/coffee/) |
+| 🌀 | [Why do we get déjà vu?](dejavu/) | [Нора дежавю](ru/dejavu/) |
 
 More are being dug — see the homepage for what's planned.
 

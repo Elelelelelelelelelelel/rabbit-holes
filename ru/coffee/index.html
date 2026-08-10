@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Почему одни пьют кофе на ночь и спокойно засыпают? — Кроличьи норы</title>
+<meta name="description" content="Интерактивный спуск на десять уровней в науку о кофеине и сне: аденозин, период полувыведения, фермент CYP1A2, генетика, толерантность и поворот сюжета, которого никто не замечает.">
+<meta property="og:title" content="Почему одни пьют кофе на ночь и спокойно засыпают?">
+<meta property="og:description" content="Спуститесь на десять уровней в науку о кофеине и сне. Остановитесь, когда захотите, — или дойдите до дна чашки.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#070B14;
+    --ink:#0D1424;
+    --ink-raise:#16203A;
+    --accent:#E8A44C;       /* set per rabbit hole via CONFIG.theme */
+    --accent-hot:#FFC46B;
+    --accent-deep:#8A5A1E;
+    --crema:#F2E7D5;
+    --dim:#8FA3C4;
+    --line:rgba(232,164,76,.16);
+    --danger:#E86A5C;
+    --ok:#7BC68F;
+    --display:'Chakra Petch',sans-serif;
+    --body:'Karla',sans-serif;
+    --radius:14px;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink-deep);color:var(--crema);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--accent);color:var(--ink-deep)}
+  a{color:var(--accent-hot)}
+
+  .backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 500px at 80% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(30,43,77,.55), transparent 65%),
+      var(--ink-deep);}
+  .backdrop::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(242,231,213,.35), transparent 100%),
+      radial-gradient(1px 1px at 34% 64%, rgba(242,231,213,.22), transparent 100%),
+      radial-gradient(1.4px 1.4px at 58% 18%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(242,231,213,.20), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 76%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 22% 86%, rgba(242,231,213,.18), transparent 100%);}
+
+  .hud{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(7,11,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .hud-inner{max-width:var(--maxw);margin:0 auto;padding:10px 20px 12px}
+  .hud-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .hud-title{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  .hud-title a{color:inherit;text-decoration:none}
+  .lang-switch{margin-left:10px;padding:2px 7px;border-radius:5px;font-size:10.5px;letter-spacing:.14em;
+    border:1px solid var(--line);color:var(--dim)!important;transition:color .2s ease,border-color .2s ease}
+  .lang-switch:hover{color:var(--accent)!important;border-color:var(--accent)}
+  .hud-depth{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hud-depth strong{color:var(--crema)}
+  .depth-bar{margin-top:8px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+  .depth-seg{height:6px;border-radius:3px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15);transition:background .5s ease, box-shadow .5s ease}
+  .depth-seg.filled{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent;box-shadow:0 0 10px color-mix(in srgb, var(--accent) 45%, transparent)}
+
+  main{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:120px 20px 80px}
+
+  .hero{padding:40px 0 24px}
+  .hero .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5.6vw,46px);line-height:1.14;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero-lede{display:flex;align-items:flex-end;gap:14px;margin:26px 0 8px}
+  .hero-lede svg{flex:none}
+  .steam path{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:.55;animation:steam 4s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:1.3s;opacity:.35}
+  .steam path:nth-child(3){animation-delay:2.4s;opacity:.45}
+  @keyframes steam{0%{transform:translateY(4px);opacity:0}35%{opacity:.55}100%{transform:translateY(-10px);opacity:0}}
+  .hero-note{font-size:14px;color:var(--dim)}
+  .hero-note b{color:var(--crema);font-weight:700}
+
+  .level{margin:34px 0;border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(22,32,58,.55), rgba(13,20,36,.9));
+    box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+  .level.locked{display:none}
+  .level.unlocking{animation:unlock .8s cubic-bezier(.2,.9,.25,1) both}
+  @keyframes unlock{
+    0%{opacity:0;transform:translateY(46px) scale(.97);filter:brightness(2) saturate(0)}
+    60%{filter:brightness(1.25)}
+    100%{opacity:1;transform:none;filter:none}}
+  .level-head{display:flex;align-items:center;gap:14px;padding:18px 26px;border-bottom:1px solid var(--line);background:rgba(7,11,20,.35)}
+  .lv-badge{flex:none;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;
+    font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink-deep);
+    background:linear-gradient(135deg,var(--accent-hot),var(--accent-deep));
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .lv-meta .lv-kicker{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+  .lv-meta h2{font-family:var(--display);font-weight:600;font-size:clamp(19px,3.4vw,24px);line-height:1.2}
+  .level-body{padding:26px}
+  .level-body p{margin-bottom:16px}
+  .level-body p:last-child{margin-bottom:0}
+  .level-body .dim{color:var(--dim)}
+  .callout{margin:20px 0;padding:16px 18px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 6%, transparent);font-size:15.5px}
+  .callout .tag{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+  .stat{flex:1 1 140px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--dim);line-height:1.4;margin-top:2px}
+
+  .checkpoint{padding:20px 26px 24px;border-top:1px dashed rgba(143,163,196,.25);background:rgba(7,11,20,.3)}
+  .checkpoint .cp-label{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .checkpoint .cp-sum{font-size:15.5px;margin-bottom:16px}
+  .cp-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{font-family:var(--display);font-weight:700;letter-spacing:.08em;border-radius:10px;cursor:pointer;border:none;
+    padding:13px 22px;font-size:14.5px;transition:transform .15s ease, box-shadow .2s ease}
+  .btn:focus-visible{outline:2px solid var(--accent-hot);outline-offset:3px}
+  a.btn{text-decoration:none;display:inline-block;text-align:center}
+  .btn-deeper{color:var(--ink-deep);background:linear-gradient(135deg,var(--accent-hot),var(--accent));
+    box-shadow:0 6px 22px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .btn-deeper:hover{transform:translateY(-2px);box-shadow:0 10px 28px color-mix(in srgb, var(--accent) 50%, transparent)}
+  .btn-deeper:active{transform:translateY(0)}
+  .btn-stop{color:var(--dim);background:transparent;border:1px solid rgba(143,163,196,.3);font-weight:600}
+  .btn-stop:hover{color:var(--crema);border-color:var(--dim)}
+  .cp-hint{font-size:13px;color:var(--dim);flex-basis:100%}
+
+  .toast{position:fixed;top:76px;right:18px;z-index:60;background:var(--ink-raise);border:1px solid var(--accent);
+    border-radius:10px;padding:12px 18px;font-family:var(--display);font-size:13px;letter-spacing:.1em;color:var(--accent-hot);
+    box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+    opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;max-width:min(86vw,360px)}
+  .toast.show{opacity:1;transform:none}
+
+  .modal-scrim{position:fixed;inset:0;z-index:70;background:rgba(7,11,20,.7);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-scrim.open{display:flex}
+  .modal{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--ink);border:1px solid var(--line);
+    border-radius:var(--radius);padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal h3{font-family:var(--display);font-size:20px;margin-bottom:4px}
+  .modal .sub{color:var(--dim);font-size:14px;margin-bottom:18px}
+  .modal ul{list-style:none;margin-bottom:20px}
+  .modal li{padding:9px 0 9px 26px;position:relative;font-size:15px;border-bottom:1px solid rgba(143,163,196,.1)}
+  .modal li::before{content:"";position:absolute;left:4px;top:16px;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+  .modal .cp-actions{margin-top:4px}
+
+  .sim{margin:22px 0;padding:20px;border-radius:12px;background:rgba(7,11,20,.55);border:1px solid rgba(143,163,196,.16)}
+  .sim h4{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .sim-grid{display:grid;gap:16px}
+  .sim label{font-size:13.5px;color:var(--dim);display:block;margin-bottom:6px}
+  .sim label output{color:var(--crema);font-weight:700}
+  input[type=range]{width:100%;appearance:none;height:6px;border-radius:3px;background:var(--ink-raise);outline:none}
+  input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);
+    border:3px solid var(--ink-deep);box-shadow:0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--ink-deep);cursor:pointer}
+  .metab-toggle{display:flex;gap:8px;flex-wrap:wrap}
+  .metab-toggle button{flex:1 1 90px;padding:9px 10px;border-radius:8px;cursor:pointer;font-family:var(--display);font-size:12.5px;
+    letter-spacing:.05em;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .metab-toggle button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .sim-result{margin-top:6px;padding:16px;border-radius:10px;text-align:center;background:color-mix(in srgb, var(--accent) 7%, transparent);border:1px solid var(--line)}
+  .sim-result .big{font-family:var(--display);font-weight:700;font-size:32px;color:var(--accent-hot)}
+  .sim-result .cap{font-size:13.5px;color:var(--dim);margin-top:4px}
+  .sim-verdict{font-size:14px;margin-top:10px;font-weight:700}
+  .sim-verdict.bad{color:var(--danger)}
+  .sim-verdict.mid{color:var(--accent)}
+  .sim-verdict.good{color:var(--ok)}
+
+  /* descent reward card — shown at the top of each newly opened level */
+  .reward{margin:0 0 20px;padding:15px 17px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 7%, rgba(7,11,20,.5));animation:rewardIn .6s ease both}
+  @keyframes rewardIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+  .reward-top{display:flex;align-items:center;gap:14px}
+  .reward-animal{font-size:34px;line-height:1;flex:none}
+  .reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  .reward-token{font-family:var(--display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-top:12px}
+  .reward-fact{display:block;margin-top:7px;font-size:14px;font-style:normal;letter-spacing:0;
+    text-transform:none;color:var(--dim);font-family:var(--body)}
+
+  /* contact + shared button row */
+  /* contact panel + shared button row */
+  .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .btn-mini{padding:10px 16px;font-size:13px}
+  .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+  .finale{text-align:center;padding:40px 26px 44px}
+  .finale .medal{width:92px;height:92px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 35% 30%, var(--accent-hot), var(--accent-deep));
+    box-shadow:0 0 40px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 0 20px rgba(0,0,0,.25);
+    animation:medal 3.2s ease-in-out infinite}
+  @keyframes medal{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .finale h2{font-family:var(--display);font-size:26px;margin-bottom:8px}
+  .finale p{color:var(--dim);max-width:52ch;margin:0 auto 10px}
+  .finale .finale-home{margin-top:20px}
+
+  footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px 46px;max-width:var(--maxw);margin:0 auto}
+  footer button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit}
+
+  @media (max-width:560px){
+    .level-head{padding:16px 18px}.level-body{padding:20px 18px}.checkpoint{padding:18px}
+    .hud-depth span.hide-s{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<header class="hud"><div class="hud-inner">
+  <div class="hud-row">
+    <div class="hud-title"><a href="../index.html" id="hudHome"></a><a class="lang-switch" id="langSwitch" hidden></a></div>
+    <div class="hud-depth" id="hudDepth"></div>
+  </div>
+  <div class="depth-bar" id="depthBar"></div>
+</div></header>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<main id="main"></main>
+<footer id="pageFooter"></footer>
+<div class="modal-scrim" id="modalScrim" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h3 id="modalTitle">Вы всплыли на уровне <span id="modalLevel">1</span></h3>
+    <div class="sub">Полноценный ответ на выбранной вами глубине. Вот что вы забираете с собой:</div>
+    <ul id="modalList"></ul>
+    <div class="cp-actions">
+      <button class="btn btn-deeper" id="modalResume" type="button">Хотя нет… глубже ↓</button>
+      <a class="btn btn-stop" id="modalHome" href="../index.html">Достаточно — на поверхность</a>
+      <div class="cp-hint">Ваша глубина сохранена — вы можете спуститься обратно в любой момент.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ✏️  EDIT THIS SECTION ONLY — everything below "ENGINE" is shared
+   ================================================================ */
+const CONFIG = {
+  slug: "coffee-ru",
+  siteTitle: "☕ Кофейная нора",
+  homeHref: "../index.html",
+
+  githubRepo: "yourusername/rabbit-holes",
+
+  lang: { href: "../../coffee/", label: "EN" },
+
+  token: { emoji: "☕", name: "зерно" },
+
+  ui: {
+    depth:"Глубина", level:"Уровень", checkpoint:"Контрольная точка",
+    goDeeper:"Глубже ↓", nextLevel:"Уровень",
+    stopHere:"Остановиться — мне достаточно",
+    cpHint:"Остановиться здесь — полноценный финал: каждый уровень выше это законченный ответ на своей глубине. Решите спуститься глубже — и получите {token} за спуск.",
+    unlocked:"УРОВЕНЬ {n} ОТКРЫТ",
+    reset:"Сбросить прогресс",
+    finaleHome:"⌂ На поверхность — ко всем норам"
+  },
+
+  rewards: [
+    {animal:"🦥", line:"Здесь некуда спешить. Идите в своём темпе."},
+    {animal:"🦉", line:"Любопытство вам к лицу. Идём дальше."},
+    {animal:"🦊", line:"Большинство останавливается раньше. Но не вы."},
+    {animal:"🐧", line:"Спускаемся — на уровень холоднее и на уровень яснее."},
+    {animal:"🐨", line:"Удобно устроились? Дальше будет только страннее."},
+    {animal:"🐿️", line:"Ещё один слой, ещё одна вещь, которую стоит запомнить."},
+    {animal:"🦔", line:"Смело. Здесь внизу уютнее, чем кажется."},
+    {animal:"🐢", line:"Не торопитесь. Глубина никуда не денется."},
+    {animal:"🦦", line:"Рад, что вы всё ещё с нами. Вперёд."},
+    {animal:"🐼", line:"Отличное решение. Располагайтесь."}
+  ],
+
+  depthNames: ["Поверхность","Мелководье","Зона самозванца","Слой часов","Фермерский цех",
+               "Хранилище генов","Траншея адаптации","Поля модификаторов","Сумеречный слой","Скальное дно"],
+
+  hero: {
+    eyebrow: "Интерактивный спуск · 10 уровней вглубь",
+    titleHTML: 'Почему одни пьют кофе на ночь и <em>спокойно засыпают?</em>',
+    icon: `<svg width="74" height="70" viewBox="0 0 74 70" fill="none" aria-hidden="true">
+      <g class="steam">
+        <path d="M24 22c0-5 4-5 4-10s-4-5-4-9"/><path d="M36 20c0-5 4-5 4-10s-4-5-4-9"/><path d="M48 22c0-5 4-5 4-10s-4-5-4-9"/>
+      </g>
+      <path d="M14 30h44v14a22 22 0 0 1-44 0V30z" fill="#16203A" stroke="currentColor" stroke-width="2" style="color:var(--accent)"/>
+      <path d="M17 33h38v6c-6 4-32 4-38 0v-6z" fill="var(--accent)" opacity=".5"/>
+      <path d="M58 34h5a7 7 0 0 1 0 14h-6" stroke="var(--accent)" stroke-width="2" fill="none"/></svg>`,
+    ledeHTML: `Ваш двоюродный брат выпивает двойной эспрессо в девять вечера и уже в половине одиннадцатого мирно храпит. Вы <b>смотрите</b> на латте после обеда и до двух ночи разглядываете потолок. Никто из вас не выдумывает — и настоящий ответ уходит на десять уровней вглубь.`,
+    noteHTML: `Спускайтесь настолько глубоко, насколько захотите. Каждый уровень заканчивается <b>контрольной точкой</b>: остановитесь с полноценным ответом или сделайте ещё шаг вниз.`
+  },
+
+  footerHTML: `Интерактивное объяснение · Цифры (период полувыведения, разброс активности фермента, результаты исследований) отражают опубликованные работы по сну и фармакологии и приблизительны для конкретного человека.`,
+
+  finale: {
+    emoji: "☕",
+    title: "Глубина 10 / 10 — дно достигнуто",
+    text: "Вы спустились от «просто все люди разные» к генам, ферментам, войне рецепторов и границам собственного восприятия сна. Это вся нора целиком. Спите крепко — или хотя бы точно знайте почему нет."
+  },
+
+  levels: [
+    {
+      kicker:"Уровень 1 · Поверхность",
+      title:"Это правда, и дело не в силе воли",
+      bodyHTML:`
+        <p>Короткий ответ: <strong>люди перерабатывают кофеин и реагируют на него с колоссально разной скоростью</strong>, и то и другое во многом задано биологией — не привычкой, не дисциплиной и не тем, что кто-то «просто привык».</p>
+        <p>Два человека, выпивших один и тот же эспрессо в девять вечера, ставят вовсе не один и тот же эксперимент. К полуночи один организм уже уничтожил большую часть кофеина, а другой всё ещё несёт почти полную дозу. И даже при равном количестве кофеина в крови один мозг может едва его заметить.</p>
+        <p class="dim">Всё, что ниже, объясняет, <em>как именно</em> это происходит — молекула за молекулой.</p>`,
+      sum:"Хорошая точка остановки: люди сильно различаются по скорости выведения кофеина и по силе реакции мозга на него — и это биология, а не привычка.",
+      take:"Те, кто засыпает после вечернего кофе, не «крепче» — их организм быстрее выводит кофеин и/или их мозг слабее на него реагирует. Это биология.",
+      fact:"Исследования близнецов оценивают наследуемость чувствительности к кофеину примерно в 40–50% — весомая доля того самого «просто так устроен»."
+    },
+    {
+      kicker:"Уровень 2 · Молекула",
+      title:"Кофеин не даёт энергию — он прячет усталость",
+      bodyHTML:`
+        <p>Сначала похороним миф: кофеин это не топливо. Он не добавляет организму ни капли энергии. Это небольшая молекула растительного происхождения (растения выработали её отчасти как природный инсектицид), и работает она, <strong>блокируя сигнал</strong>, а не создавая его.</p>
+        <p>Считайте её маскирующим агентом. Ваша усталость никуда не делась и всё это время продолжает накапливаться в фоне. Кофеин просто мешает мозгу её <em>услышать</em>.</p>
+        <div class="callout"><span class="tag">Ключевая идея</span>
+        Если кофеин только заглушает сигнал, то ночь решают две вещи: <strong>насколько громок ваш сигнал сонливости</strong> и <strong>как долго удерживается кнопка «без звука»</strong>. И то и другое у людей разное.</div>`,
+      sum:"Хорошая точка остановки: кофеин не добавляет энергии — он временно приглушает сигнал сонливости в мозге.",
+      take:"Кофеин это маскирующий агент: он блокирует сигнал усталости, а не добавляет энергию.",
+      fact:"Собственная калорийность молекулы кофеина равна нулю — любой «подъём» это исключительно занятая взаймы бодрость, а не топливо."
+    },
+    {
+      kicker:"Уровень 3 · Самозванец",
+      title:"Аденозин, давление сна и молекула-двойник",
+      bodyHTML:`
+        <p>Каждый час бодрствования клетки мозга сжигают энергию и оставляют побочный продукт — <strong>аденозин</strong>. Он накапливается, как песок в песочных часах. Когда аденозин встаёт в свои рецепторы, нейроны затихают, и вы чувствуете тяжесть век и тягу ко сну. Учёные называют это <strong>давлением сна</strong>.</p>
+        <p>А теперь фокус: молекула кофеина по форме достаточно похожа на аденозин, чтобы <strong>занять те же парковочные места</strong> — главным образом рецепторы A1 и A2A, — но не включить их. Это самозванец, который занял кресло, чтобы настоящий гонец не смог сесть.</p>
+        <p class="dim">Важно: аденозин продолжает копиться за этой баррикадой. Когда кофеин наконец уходит, вся накопленная сонливость обрушивается разом — тот самый пресловутый откат.</p>`,
+      sum:"Хорошая точка остановки: кофеин выдаёт себя за аденозин и блокирует рецепторы, отвечающие за сонливость, — пока настоящее давление сна копится за баррикадой.",
+      take:"Кофеин выдаёт себя за аденозин и занимает рецепторы сна (A1/A2A), не включая их, — а давление сна продолжает копиться за баррикадой.",
+      fact:"Аденозин изначально вовсе не «сигнал сна»: он входит в состав АТФ и ДНК и лишь по совместительству служит мозгу датчиком усталости."
+    },
+    {
+      kicker:"Уровень 4 · Часы",
+      title:"Проблема периода полувыведения",
+      bodyHTML:`
+        <p>Кофеин покидает организм медленно. Его средний <strong>период полувыведения около пяти часов</strong>, но слово «средний» здесь делает очень много работы. У разных людей реальное значение колеблется примерно от <strong>2 до более чем 10 часов</strong>.</p>
+        <p>Одно это число переписывает всю ночь. Попробуйте сами:</p>`,
+      widget:"halfLife",
+      afterWidgetHTML:`<p class="dim">Эспрессо быстрого метаболизатора, выпитый в девять вечера, к полуночи почти исчез. А кофе медленного, выпитый в <em>три часа дня</em>, к часу ночи всё ещё может составлять четверть дозы. Один и тот же напиток — разные ночи.</p>`,
+      sum:"Хорошая точка остановки: период полувыведения кофеина в среднем около 5 часов, но у разных людей колеблется от 2 до 10+ — одного этого достаточно, чтобы решить исход ночи.",
+      take:"Период полувыведения различается у людей от 2 до 10+ часов, поэтому одна и та же вечерняя чашка к отбою может быть следом или почти полной дозой.",
+      fact:"Через два периода полувыведения (около 10 часов у среднего метаболизатора) в крови всё ещё циркулирует примерно четверть вечерней дозы."
+    },
+    {
+      kicker:"Уровень 5 · Завод",
+      title:"Регулятор скорости в печени: CYP1A2",
+      bodyHTML:`
+        <p>Так что же задаёт ваш период полувыведения? Почти целиком один фермент. В печени белок под названием <strong>CYP1A2</strong> разбирает около <strong>95% всего кофеина</strong>, который вы выпиваете, нарезая его на мелкие молекулы, которые затем выводятся.</p>
+        <p>Сколько CYP1A2 вы производите — и насколько энергично он работает — колоссально различается от человека к человеку. Измеренная активность может отличаться <strong>до ~40 раз</strong>.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">~95%</div><div class="l">кофеина выводится ферментом CYP1A2</div></div>
+          <div class="stat"><div class="n">40×</div><div class="l">разброс активности фермента между людьми</div></div>
+          <div class="stat"><div class="n">1</div><div class="l">основной ген управляет всей этой линией</div></div>
+        </div>
+        <p class="dim">Люди походя говорят «быстрый метаболизатор» и «медленный метаболизатор». Речь именно про этот фермент. А что управляет ферментом? Уровнем ниже.</p>`,
+      sum:"Хорошая точка остановки: один печёночный фермент, CYP1A2, выводит ~95% кофеина, и его активность различается между людьми до ~40 раз.",
+      take:"Один фермент — CYP1A2 — выводит ~95% кофеина, и его скорость различается между людьми до 40 раз.",
+      fact:"CYP1A2 перерабатывает и ряд распространённых лекарств — именно поэтому некоторые препараты взаимодействуют с кофеином, о чём речь на уровне 8."
+    },
+    {
+      kicker:"Уровень 6 · Код",
+      title:"Генетическая лотерея",
+      bodyHTML:`
+        <p>В этой истории главенствуют два гена:</p>
+        <p><strong>CYP1A2 — ген выведения.</strong> Однобуквенный вариант (генетикам он известен как <em>rs762551</em>) делит население надвое. Люди с двумя копиями версии «A» строят быстрый, легко индуцируемый фермент и расщепляют кофеин стремительно. Носители версии «C» работают на медленной линии — та же чашка задерживается на часы дольше.</p>
+        <p><strong>ADORA2A — ген чувствительности.</strong> Он строит сам рецептор аденозина A2A — настоящую мишень кофеина. Варианты здесь (например <em>rs5751876</em>) меняют силу реакции мозга на заблокированный рецептор. Одни варианты связаны с тревожностью от кофеина и измеримо худшим сном после вечерней чашки, другие делают мозг относительно безразличным.</p>
+        <div class="callout"><span class="tag">Матрица 2×2 любителей кофе</span>
+        Быстрое выведение <em>и</em> низкая чувствительность → тот самый друг с ритуальным эспрессо после ужина. Медленное выведение <em>и</em> высокая чувствительность → человек, которого выбивает из колеи дневной зелёный чай. Большинство из нас где-то посередине.</div>`,
+      sum:"Хорошая точка остановки: варианты CYP1A2 задают скорость выведения, а варианты ADORA2A — насколько чувствителен мозг к тому, что осталось.",
+      take:"Всем заправляют два гена: варианты CYP1A2 задают скорость выведения, варианты ADORA2A — силу реакции мозга на заблокированный рецептор.",
+      fact:"Некоторые варианты ADORA2A связаны с приступами тревоги от кофеина в дозах, которые другие люди попросту не замечают."
+    },
+    {
+      kicker:"Уровень 7 · Контратака",
+      title:"Толерантность: мозг даёт сдачи",
+      bodyHTML:`
+        <p>Гены это ещё не всё — мозг приспосабливается. Блокируйте его аденозиновые рецепторы ежедневно, и он ответит как любая осаждённая система: <strong>построит больше рецепторов</strong> (и подправит смежную сигнализацию), так что та же доза будет блокировать меньшую <em>долю</em> от общего числа.</p>
+        <p>За неделю-другую ежедневного употребления большая часть бодрящего удара кофеина сходит на нет. Именно поэтому привычный любитель четырёх чашек может почти ничего не почувствовать от вечернего кофе, от которого человека без привычки трясло бы полночи.</p>
+        <p>Две оговорки. Во-первых, толерантность к <strong>нарушению сна лишь частичная</strong> — у регулярных потребителей лабораторные исследования всё равно фиксируют измеримые изменения сна. Во-вторых, все эти лишние рецепторы объясняют, почему бросать так тяжело: без кофеина в креслах обычный уровень аденозина внезапно попадает на разросшийся рецепторный массив. Отсюда головная боль и туман при отмене.</p>`,
+      sum:"Хорошая точка остановки: ежедневное употребление заставляет мозг наращивать дополнительные аденозиновые рецепторы, притупляя эффект, — но толерантность к нарушению сна лишь частичная.",
+      take:"Ежедневное употребление вырабатывает толерантность — мозг добавляет аденозиновые рецепторы, — но толерантность к нарушению сна лишь частичная.",
+      fact:"Та же самая надстройка рецепторов объясняет надёжность головной боли при отмене: уберите кофеин, и обычному аденозину внезапно достанется гораздо больше кресел."
+    },
+    {
+      kicker:"Уровень 8 · Модификаторы",
+      title:"Что незаметно сдвигает ваш регулятор",
+      bodyHTML:`
+        <p>Скорость CYP1A2 не зафиксирована при рождении навсегда. Повседневные факторы выкручивают её вверх или придушивают:</p>
+        <p><strong>Ускоряет выведение:</strong> курение примерно <em>удваивает</em> скорость расщепления кофеина (отчасти поэтому курильщики часто пьют больше кофе — и поэтому же после отказа от сигарет привычная доза вдруг становится чрезмерной). Обилие крестоцветных овощей и мяса на гриле тоже подталкивает фермент вверх.</p>
+        <p><strong>Замедляет выведение:</strong> оральные контрацептивы могут примерно удвоить период полувыведения. Беременность действует драматично — к третьему триместру он растягивается до <strong>15 часов и более</strong>. Некоторые лекарства (классический пример — антидепрессант флувоксамин) способны почти полностью выключить фермент. Болезни печени и даже недавний алкоголь тоже замедляют его.</p>
+        <div class="callout"><span class="tag">Перевод</span>
+        Ваша переносимость кофеина не просто <em>ваша</em> — она ваша <em>именно сейчас</em>. Человек, который «всегда спал после кофе», может потерять эту способность, сменив рецепт, бросив курить или забеременев.</div>`,
+      sum:"Хорошая точка остановки: курение ускоряет выведение кофеина; контрацептивы, беременность и некоторые лекарства резко его замедляют. Ваша переносимость — движущаяся мишень.",
+      take:"Жизнь двигает регулятор: курение удваивает скорость выведения; контрацептивы, беременность (период полувыведения 15 ч+) и ряд лекарств резко её снижают.",
+      fact:"Это примерно втрое больше среднего значения — одна чашка кофе в третьем триместре может продолжать действовать на следующий день после обеда."
+    },
+    {
+      kicker:"Уровень 9 · Поворот сюжета",
+      title:"«Всё равно засыпает» не равно «хорошо спит»",
+      bodyHTML:`
+        <p>Вот уровень, до которого большинство не доходит. Заснуть — лишь одно измерение, и как раз то, которое мы хуже всего оцениваем сами.</p>
+        <p>В лабораторных исследованиях сна вечерний кофеин надёжно <strong>сокращает глубокий медленноволновой сон</strong> — физически восстанавливающую стадию — и способен сдвинуть внутренние часы, отодвинув выброс мелатонина, даже у людей, которые сообщают, что спали «нормально». В известном контролируемом исследовании людям давали 400&nbsp;мг кофеина за целых <strong>шесть часов до сна</strong>: объективные приборы зафиксировали потерю более часа сна, тогда как сами участники разницы почти не заметили.</p>
+        <p>Поэтому часть честного ответа на наш главный вопрос неудобна: <strong>некоторые любители ночного кофе не «не подвержены» — они просто не в курсе.</strong> Они засыпают по расписанию, но всю ночь скользят по мелководью, а утреннюю разбитость списывают на нехватку… кофе.</p>
+        <p class="dim">При этом генетическая лотерея работает и здесь: исследования показывают, что у быстрых метаболизаторов и генотипов с низкой чувствительностью объективные нарушения сна выражены слабее. Некоторым это действительно сходит с рук. Но меньшему числу людей, чем им самим кажется.</p>`,
+      sum:"Хорошая точка остановки: многие, кто «нормально спит» после кофе, теряют глубокий сон, сами того не замечая, — заснуть это ещё не вся история.",
+      take:"«Всё равно засыпает» ≠ «хорошо спит»: вечерний кофеин сокращает глубокий медленноволновой сон даже у тех, кто ничего не замечает. Кому-то это сходит с рук, но большинству лишь кажется.",
+      fact:"400 мг — это примерно четыре чашки заварного кофе, то есть совершенно обычная дневная норма, а вовсе не экстремальная доза."
+    },
+    {
+      kicker:"Уровень 10 · Дно чашки",
+      title:"Полное уравнение — и как проверить себя",
+      bodyHTML:`
+        <p>Соберите всё вместе, и загадка растворяется в стопку множителей:</p>
+        <div class="callout"><span class="tag">Уравнение ночного кофе</span>
+        <strong>Доза × время</strong> → фильтруется <strong>скоростью фермента (ген CYP1A2 + модификаторы)</strong> → попадает в мозг, настроенный <strong>генетикой рецепторов (ADORA2A)</strong> и перестроенный <strong>толерантностью</strong> → соперничает с накопленным за день <strong>давлением сна</strong>. На выходе — заснёте ли вы и насколько глубоко.</div>
+        <p>Ваш двоюродный брат, который спит после эспрессо, скорее всего вытянул гены быстрого выведения, малочувствительные рецепторы, ежедневную привычку, выработавшую толерантность, и к десяти вечера накопил достаточно давления сна, чтобы перекрыть остатки кофеина. Вам могла достаться противоположная комбинация. Никто из вас её не выбирал.</p>
+        <p><strong>Хотите собственный ответ без ДНК-теста?</strong> Проведите десятидневный эксперимент: пять дней пейте кофе как обычно, затем пять дней держите строгий кофеиновый комендантский час (ничего после полудня). Отмечайте, сколько времени уходит на засыпание, сколько раз просыпаетесь ночью и — самое показательное — как себя чувствуете в девять утра. Если неделя с комендантским часом ощутимо лучше, ваши гены проголосовали.</p>`,
+      widget:"notePanel",
+      afterWidgetHTML:`
+        <p class="dim">Одна оговорка, которую стоит держать в голове: эта страница объясняет механизмы, а не даёт медицинских советов. Проблемы со сном, которые сохраняются независимо от кофеина, заслуживают визита к врачу.</p>`,
+      sum:"",
+      take:"Полное уравнение: доза × время × скорость фермента × генетика рецепторов × толерантность × давление сна. Проверьте себя десятидневным экспериментом с кофеиновым комендантским часом."
+    }
+  ]
+};
+
+const WIDGETS = {
+  halfLife: {
+    html: `
+      <div class="sim">
+        <h4>Симулятор кофеина перед сном</h4>
+        <div class="sim-grid">
+          <div>
+            <label>Доза кофеина · <output data-out="dose">150 мг</output> <span style="opacity:.7">(эспрессо ≈ 65, кофе ≈ 100–200)</span></label>
+            <input type="range" data-in="dose" min="30" max="300" step="5" value="150">
+          </div>
+          <div>
+            <label>Часов между чашкой и сном · <output data-out="hours">3 ч</output></label>
+            <input type="range" data-in="hours" min="0" max="12" step="0.5" value="3">
+          </div>
+          <div>
+            <label>Скорость метаболизма (период полувыведения)</label>
+            <div class="metab-toggle" data-in="metab">
+              <button data-hl="2.5" type="button">⚡ Быстро · 2,5 ч</button>
+              <button data-hl="5" class="active" type="button">Средне · 5 ч</button>
+              <button data-hl="9" type="button">🐢 Медленно · 9 ч</button>
+            </div>
+          </div>
+        </div>
+        <div class="sim-result">
+          <div class="big" data-out="mg">99 мг</div>
+          <div class="cap">всё ещё циркулирует к моменту отбоя</div>
+          <div class="sim-verdict mid" data-out="verdict">Примерно целый эспрессо всё ещё в организме.</div>
+        </div>
+      </div>`,
+    init(root){
+      const dose = root.querySelector('[data-in="dose"]');
+      const hours = root.querySelector('[data-in="hours"]');
+      const metab = root.querySelector('[data-in="metab"]');
+      const out = k => root.querySelector(`[data-out="${k}"]`);
+      let halfLife = 5;
+      function run(){
+        const d = parseFloat(dose.value), h = parseFloat(hours.value);
+        out("dose").textContent = d + " мг";
+        out("hours").textContent = h + " ч";
+        const mg = Math.round(d * Math.pow(0.5, h / halfLife));
+        out("mg").textContent = mg + " мг";
+        let cls, msg;
+        if(mg >= 90){ cls="bad"; msg="Больше целого эспрессо всё ещё в организме — рецепторы останутся заблокированы глубоко за полночь."; }
+        else if(mg >= 40){ cls="mid"; msg="Осталось примерно на один эспрессо — многим этого хватит, чтобы срезать глубокий сон."; }
+        else if(mg >= 15){ cls="mid"; msg="Остался след крепостью со слабый чай. Чувствительный мозг заметит, большинство — нет."; }
+        else { cls="good"; msg="Практически выведен — этот раунд за давлением сна."; }
+        const v = out("verdict");
+        v.className = "sim-verdict " + cls;
+        v.textContent = msg;
+      }
+      dose.addEventListener("input", run);
+      hours.addEventListener("input", run);
+      metab.addEventListener("click", e=>{
+        const btn = e.target.closest("button[data-hl]");
+        if(!btn) return;
+        metab.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        halfLife = parseFloat(btn.dataset.hl);
+        run();
+      });
+      run();
+    }
+  },
+
+  notePanel: {
+    html: `
+      <div class="sim">
+        <h4>Напишите заметку</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Попробовали сами? Нашли ошибку? Есть своя теория или вопрос, достойный собственных десяти уровней? Напишите на GitHub — почта не нужна, я читаю каждую заметку.</p>
+        <div class="share-row">
+          <a class="btn btn-deeper btn-mini" data-el="note" target="_blank" rel="noopener">✍️ Написать об этой норе</a>
+          <a class="btn btn-stop btn-mini" data-el="all" target="_blank" rel="noopener">Почитать заметки других</a>
+        </div>
+        <div class="share-note">Откроется заранее заполненная форма на GitHub. Для отправки нужен аккаунт GitHub.</div>
+      </div>`,
+    init(root){
+      const repo = REPO;
+      const params = new URLSearchParams({
+        template: "reader-note.yml",
+        title: "[Заметка] " + CONFIG.siteTitle,
+        labels: "reader-note"
+      });
+      root.querySelector('[data-el="note"]').href = `https://github.com/${repo}/issues/new?${params.toString()}`;
+      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues?q=is%3Aissue+label%3Areader-note`;
+    }
+  }
+};
+
+/* ================================================================
+   ⚙️  ENGINE — shared across every rabbit hole. No need to edit.
+   ================================================================ */
+(function(){
+  "use strict";
+  const L = CONFIG.levels, N = L.length;
+  const KEY = "rh-progress-" + CONFIG.slug;
+  let current = 1;
+
+  /* Work out the GitHub repository from the address bar when the site is
+     served from *.github.io, so the note links keep working even if the
+     CONFIG.githubRepo placeholder was never replaced. Falls back to the
+     configured value on custom domains or local files. */
+  const REPO = (function(fallback){
+    try{
+      const host = location.hostname;
+      if(host.endsWith(".github.io")){
+        const user = host.slice(0, -".github.io".length);
+        const seg  = location.pathname.split("/").filter(Boolean);
+        return user + "/" + (seg.length ? seg[0] : host);
+      }
+    }catch(e){}
+    return fallback;
+  })(CONFIG.githubRepo);
+
+  /* interface strings — English defaults, overridable per page via CONFIG.ui
+     so a translated edition can reuse this identical engine */
+  const T = Object.assign({
+    depth:"Depth", level:"Level", checkpoint:"Checkpoint",
+    goDeeper:"Go deeper ↓", nextLevel:"Level",
+    stopHere:"Stop here — I've learnt enough",
+    cpHint:"Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a {token} for the descent.",
+    unlocked:"LEVEL {n} UNLOCKED",
+    reset:"Reset my progress",
+    finaleHome:"⌂ Surface — back to all rabbit holes"
+  }, CONFIG.ui || {});
+
+  /* the reward cast — overridable per page via CONFIG.rewards */
+  const REWARDS = CONFIG.rewards || [
+    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
+    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
+    {animal:"🦊", line:"Most people stop before this one. You didn't."},
+    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
+    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
+    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
+    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
+    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
+    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
+    {animal:"🐼", line:"A fine decision. Settle in."}
+  ];
+
+  /* theme */
+  const r = document.documentElement.style;
+  r.setProperty("--accent", CONFIG.theme.accent);
+  r.setProperty("--accent-hot", CONFIG.theme.accentHot);
+  r.setProperty("--accent-deep", CONFIG.theme.accentDeep);
+  r.setProperty("--line", CONFIG.theme.line);
+
+  /* HUD */
+  const home = document.getElementById("hudHome");
+  home.textContent = CONFIG.siteTitle;
+  home.href = CONFIG.homeHref;
+  if(CONFIG.lang){
+    const ls = document.getElementById("langSwitch");
+    ls.href = CONFIG.lang.href;
+    ls.textContent = CONFIG.lang.label;
+    ls.hidden = false;
+  }
+  const depthBar = document.getElementById("depthBar");
+  for(let i=0;i<N;i++){ const s=document.createElement("div"); s.className="depth-seg"; depthBar.appendChild(s); }
+  function updateHud(){
+    depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
+    depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    const earned = current - 1;
+    document.getElementById("hudDepth").innerHTML =
+      `<span class="hide-s">${T.depth} </span><strong>${T.level} ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
+      (earned > 0 ? ` · ${CONFIG.token.emoji} ×${earned}` : "");
+  }
+
+  /* hero */
+  const main = document.getElementById("main");
+  const hero = document.createElement("section");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <div class="eyebrow">${CONFIG.hero.eyebrow}</div>
+    <h1>${CONFIG.hero.titleHTML}</h1>
+    <div class="hero-lede">${CONFIG.hero.icon}<p class="hero-note">${CONFIG.hero.ledeHTML}</p></div>
+    <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
+  main.appendChild(hero);
+
+  /* level cards */
+  L.forEach((lv,i)=>{
+    const n = i+1;
+    const card = document.createElement("section");
+    card.className = "level" + (n===1 ? "" : " locked");
+    card.id = "lv"+n;
+    let inner = `
+      <div class="level-head">
+        <div class="lv-badge">${n}</div>
+        <div class="lv-meta"><div class="lv-kicker">${lv.kicker}</div><h2>${lv.title}</h2></div>
+      </div>
+      <div class="level-body">${lv.bodyHTML}
+        ${lv.widget && WIDGETS[lv.widget] ? WIDGETS[lv.widget].html : ""}
+        ${lv.afterWidgetHTML || ""}
+      </div>`;
+    if(n < N){
+      inner += `
+      <div class="checkpoint">
+        <div class="cp-label">◈ ${T.checkpoint} ${n} / ${N}</div>
+        <div class="cp-sum">${lv.sum}</div>
+        <div class="cp-actions">
+          <button class="btn btn-deeper" type="button" data-next="${n+1}">${T.goDeeper} &nbsp;${T.nextLevel} ${n+1}: ${L[n].title}</button>
+          <button class="btn btn-stop" type="button" data-stop="${n}">${T.stopHere}</button>
+        </div>
+        <div class="cp-hint">${T.cpHint.replace("{token}", CONFIG.token.name)}</div>
+      </div>`;
+    } else {
+      inner += `
+      <div class="finale">
+        <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
+        <h2>${CONFIG.finale.title}</h2>
+        <p>${CONFIG.finale.text}</p>
+        <a class="btn btn-deeper finale-home" href="${CONFIG.homeHref}">${T.finaleHome}</a>
+      </div>`;
+    }
+    card.innerHTML = inner;
+    main.appendChild(card);
+    if(lv.widget && WIDGETS[lv.widget]) WIDGETS[lv.widget].init(card);
+  });
+
+  /* footer */
+  document.getElementById("pageFooter").innerHTML =
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">${T.reset}</button>`;
+  document.getElementById("resetProg").addEventListener("click", ()=>{
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+
+  /* progress persistence */
+  function save(){ try{ localStorage.setItem(KEY, String(current)); }catch(e){} }
+  function restore(){
+    let saved = 1;
+    try{ saved = parseInt(localStorage.getItem(KEY)||"1",10)||1; }catch(e){}
+    saved = Math.min(Math.max(saved,1), N);
+    for(let n=2;n<=saved;n++) document.getElementById("lv"+n).classList.remove("locked");
+    current = saved;
+  }
+
+  /* toast */
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
+  }
+
+    let lastReward = -1;
+  function pickReward(){
+    let i;
+    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
+    lastReward = i;
+    return REWARDS[i];
+  }
+
+  /* build the reward card shown at the top of a newly opened level.
+     `fact` comes from the level just left behind — a bonus nugget one
+     layer deeper than what they've read. */
+  function rewardCard(fromLevel){
+    const r = pickReward(), tok = CONFIG.token;
+    const fact = (L[fromLevel-1] || {}).fact;
+    return `<div class="reward">
+      <div class="reward-top">
+        <div class="reward-animal" aria-hidden="true">${r.animal}${tok.emoji}</div>
+        <div class="reward-line">${r.line}</div>
+      </div>
+      <div class="reward-token">${tok.emoji} +1 ${tok.name}${fact ? `<span class="reward-fact">${fact}</span>` : ""}</div>
+    </div>`;
+  }
+
+  /* unlock */
+  function unlock(n){
+    const card = document.getElementById("lv"+n);
+    if(!card.classList.contains("locked")){
+      card.scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+    card.classList.remove("locked");
+    card.classList.add("unlocking");
+    current = Math.max(current, n);
+    save();
+    updateHud();
+
+    /* place the descent reward at the top of the level they just opened */
+    const body = card.querySelector(".level-body");
+    if(body && !card.dataset.rewarded){
+      body.insertAdjacentHTML("afterbegin", rewardCard(n-1));
+      card.dataset.rewarded = "1";
+    }
+
+    showToast(`⬢ ${T.unlocked.replace("{n}", n)} · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
+    requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
+    card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
+  }
+
+  /* surface modal */
+  /* surface modal */
+  const scrim = document.getElementById("modalScrim");
+  const modalList = document.getElementById("modalList");
+  let stoppedAt = 1;
+  function openModal(n){
+    stoppedAt = n;
+    document.getElementById("modalLevel").textContent = n;
+    modalList.innerHTML = "";
+    for(let i=0;i<n;i++){
+      const li = document.createElement("li");
+      li.textContent = L[i].take;
+      modalList.appendChild(li);
+    }
+    scrim.classList.add("open");
+    document.getElementById("modalResume").focus();
+  }
+  function closeModal(){ scrim.classList.remove("open"); }
+  document.getElementById("modalHome").href = CONFIG.homeHref;
+  document.getElementById("modalResume").addEventListener("click", ()=>{
+    const n = Math.min(stoppedAt+1, N);
+    closeModal();
+    unlock(n);
+  });
+  scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  /* clicks */
+  document.body.addEventListener("click", e=>{
+    const deeper = e.target.closest("[data-next]");
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    const stop = e.target.closest("[data-stop]");
+    if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
+  });
+
+  restore();
+  restore();
+  updateHud();
+})();
+</script>
+</body>
+</html>

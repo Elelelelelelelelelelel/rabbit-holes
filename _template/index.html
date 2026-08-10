@@ -53,6 +53,9 @@
   .hud-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
   .hud-title{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
   .hud-title a{color:inherit;text-decoration:none}
+  .lang-switch{margin-left:10px;padding:2px 7px;border-radius:5px;font-size:10.5px;letter-spacing:.14em;
+    border:1px solid var(--line);color:var(--dim)!important;transition:color .2s ease,border-color .2s ease}
+  .lang-switch:hover{color:var(--accent)!important;border-color:var(--accent)}
   .hud-depth{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .hud-depth strong{color:var(--crema)}
   .depth-bar{margin-top:8px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
@@ -201,7 +204,7 @@
 <div class="backdrop" aria-hidden="true"></div>
 <header class="hud"><div class="hud-inner">
   <div class="hud-row">
-    <div class="hud-title"><a href="../index.html" id="hudHome"></a></div>
+    <div class="hud-title"><a href="../index.html" id="hudHome"></a><a class="lang-switch" id="langSwitch" hidden></a></div>
     <div class="hud-depth" id="hudDepth"></div>
   </div>
   <div class="depth-bar" id="depthBar"></div>
@@ -237,6 +240,10 @@ const CONFIG = {
   /* Your GitHub repository, as "username/repo". Used by the
      "Dig your own hole" suggestion form on the homepage.        */
   githubRepo: "yourusername/rabbit-holes",
+
+  /* Optional: link to a translated edition of this same hole. Remove
+     if the hole exists in one language only.                        */
+  lang: { href: "../ru/my-new-hole/", label: "RU" },
 
 
   /* ── TOKEN ────────────────────────────────────────────────────
@@ -427,7 +434,7 @@ const WIDGETS = {
         <div class="share-note">Opens a ready-filled form on GitHub. You'll need a GitHub account to post.</div>
       </div>`,
     init(root){
-      const repo = CONFIG.githubRepo;
+      const repo = REPO;
       const params = new URLSearchParams({
         template: "reader-note.yml",
         title: "[Note] " + CONFIG.siteTitle,
@@ -448,6 +455,48 @@ const WIDGETS = {
   const KEY = "rh-progress-" + CONFIG.slug;
   let current = 1;
 
+  /* Work out the GitHub repository from the address bar when the site is
+     served from *.github.io, so the note links keep working even if the
+     CONFIG.githubRepo placeholder was never replaced. Falls back to the
+     configured value on custom domains or local files. */
+  const REPO = (function(fallback){
+    try{
+      const host = location.hostname;
+      if(host.endsWith(".github.io")){
+        const user = host.slice(0, -".github.io".length);
+        const seg  = location.pathname.split("/").filter(Boolean);
+        return user + "/" + (seg.length ? seg[0] : host);
+      }
+    }catch(e){}
+    return fallback;
+  })(CONFIG.githubRepo);
+
+  /* interface strings — English defaults, overridable per page via CONFIG.ui
+     so a translated edition can reuse this identical engine */
+  const T = Object.assign({
+    depth:"Depth", level:"Level", checkpoint:"Checkpoint",
+    goDeeper:"Go deeper ↓", nextLevel:"Level",
+    stopHere:"Stop here — I've learnt enough",
+    cpHint:"Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a {token} for the descent.",
+    unlocked:"LEVEL {n} UNLOCKED",
+    reset:"Reset my progress",
+    finaleHome:"⌂ Surface — back to all rabbit holes"
+  }, CONFIG.ui || {});
+
+  /* the reward cast — overridable per page via CONFIG.rewards */
+  const REWARDS = CONFIG.rewards || [
+    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
+    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
+    {animal:"🦊", line:"Most people stop before this one. You didn't."},
+    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
+    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
+    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
+    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
+    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
+    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
+    {animal:"🐼", line:"A fine decision. Settle in."}
+  ];
+
   /* theme */
   const r = document.documentElement.style;
   r.setProperty("--accent", CONFIG.theme.accent);
@@ -459,6 +508,12 @@ const WIDGETS = {
   const home = document.getElementById("hudHome");
   home.textContent = CONFIG.siteTitle;
   home.href = CONFIG.homeHref;
+  if(CONFIG.lang){
+    const ls = document.getElementById("langSwitch");
+    ls.href = CONFIG.lang.href;
+    ls.textContent = CONFIG.lang.label;
+    ls.hidden = false;
+  }
   const depthBar = document.getElementById("depthBar");
   for(let i=0;i<N;i++){ const s=document.createElement("div"); s.className="depth-seg"; depthBar.appendChild(s); }
   function updateHud(){
@@ -466,7 +521,7 @@ const WIDGETS = {
     depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
     const earned = current - 1;
     document.getElementById("hudDepth").innerHTML =
-      `<span class="hide-s">Depth </span><strong>Level ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
+      `<span class="hide-s">${T.depth} </span><strong>${T.level} ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
       (earned > 0 ? ` · ${CONFIG.token.emoji} ×${earned}` : "");
   }
 
@@ -499,13 +554,13 @@ const WIDGETS = {
     if(n < N){
       inner += `
       <div class="checkpoint">
-        <div class="cp-label">◈ Checkpoint ${n} / ${N}</div>
+        <div class="cp-label">◈ ${T.checkpoint} ${n} / ${N}</div>
         <div class="cp-sum">${lv.sum}</div>
         <div class="cp-actions">
-          <button class="btn btn-deeper" type="button" data-next="${n+1}">Go deeper ↓ &nbsp;Level ${n+1}: ${L[n].title}</button>
-          <button class="btn btn-stop" type="button" data-stop="${n}">Stop here — I've learnt enough</button>
+          <button class="btn btn-deeper" type="button" data-next="${n+1}">${T.goDeeper} &nbsp;${T.nextLevel} ${n+1}: ${L[n].title}</button>
+          <button class="btn btn-stop" type="button" data-stop="${n}">${T.stopHere}</button>
         </div>
-        <div class="cp-hint">Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a ${CONFIG.token.name} for the descent.</div>
+        <div class="cp-hint">${T.cpHint.replace("{token}", CONFIG.token.name)}</div>
       </div>`;
     } else {
       inner += `
@@ -513,7 +568,7 @@ const WIDGETS = {
         <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
         <h2>${CONFIG.finale.title}</h2>
         <p>${CONFIG.finale.text}</p>
-        <a class="btn btn-deeper finale-home" href="${CONFIG.homeHref}">⌂ Surface — back to all rabbit holes</a>
+        <a class="btn btn-deeper finale-home" href="${CONFIG.homeHref}">${T.finaleHome}</a>
       </div>`;
     }
     card.innerHTML = inner;
@@ -523,7 +578,7 @@ const WIDGETS = {
 
   /* footer */
   document.getElementById("pageFooter").innerHTML =
-    CONFIG.footerHTML + ` · <button type="button" id="resetProg">Reset my progress</button>`;
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">${T.reset}</button>`;
   document.getElementById("resetProg").addEventListener("click", ()=>{
     try{ localStorage.removeItem(KEY); }catch(e){}
     location.reload();
@@ -549,23 +604,7 @@ const WIDGETS = {
     toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
   }
 
-  /* a little cast of characters who greet the reader each time they choose
-     to descend — each holding this hole's own token (CONFIG.token.emoji).
-     Picked at random, never the same one twice in a row. Lines stay
-     subject-neutral so the cast works on every hole in the series. */
-  const REWARDS = [
-    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
-    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
-    {animal:"🦊", line:"Most people stop before this one. You didn't."},
-    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
-    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
-    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
-    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
-    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
-    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
-    {animal:"🐼", line:"A fine decision. Settle in."}
-  ];
-  let lastReward = -1;
+    let lastReward = -1;
   function pickReward(){
     let i;
     do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
@@ -608,7 +647,7 @@ const WIDGETS = {
       card.dataset.rewarded = "1";
     }
 
-    showToast(`⬢ LEVEL ${n} UNLOCKED · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
+    showToast(`⬢ ${T.unlocked.replace("{n}", n)} · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
     requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
     card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
   }

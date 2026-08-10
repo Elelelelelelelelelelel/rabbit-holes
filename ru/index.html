@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Rabbit Holes — everyday mysteries, ten levels deep</title>
-<meta name="description" content="Interactive descents into everyday mysteries. Each question runs ten levels deep — stop whenever you're satisfied, or go all the way to the bottom.">
-<meta property="og:title" content="The Rabbit Holes">
-<meta property="og:description" content="Everyday mysteries, ten levels deep. Choose a question and descend.">
+<title>Кроличьи норы — обыденные загадки на десять уровней вглубь</title>
+<meta name="description" content="Интерактивные объяснения обыденных загадок. Каждый вопрос уходит на десять уровней вглубь — остановитесь, когда захотите, или дойдите до самого дна.">
+<meta property="og:title" content="Кроличьи норы">
+<meta property="og:description" content="Обыденные загадки на десять уровней вглубь. Выберите вопрос и спускайтесь.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,32 +128,32 @@
 
 <main>
   <header class="masthead">
-    <div class="eyebrow">Interactive explainers · Choose your descent · <a href="ru/index.html" style="color:#FFC46B">Русский</a></div>
-    <h1>The <span class="shaft">Rabbit&nbsp;Holes</span></h1>
-    <p>Everyday mysteries, ten levels deep. Each question starts with the honest short answer and descends towards the strange machinery underneath. Stop whenever you're satisfied — every checkpoint is a proper ending.</p>
+    <div class="eyebrow">Интерактивные объяснения · Выберите спуск · <a href="../index.html" style="color:#FFC46B">English</a></div>
+    <h1><span class="shaft">Кроличьи&nbsp;норы</span></h1>
+    <p>Обыденные загадки на десять уровней вглубь. Каждый вопрос начинается с честного короткого ответа и спускается к странному механизму под ним. Остановитесь, когда захотите, — каждая контрольная точка это полноценный финал.</p>
   </header>
 
   <div class="total" id="totalWrap" hidden>
-    <div class="t-label">Total depth explored</div>
+    <div class="t-label">Общая пройденная глубина</div>
     <div class="t-bar"><div class="t-fill" id="totalFill"></div></div>
-    <div class="t-cap"><b id="totalNum">0</b> of <span id="totalMax">0</span> levels descended across all holes</div>
+    <div class="t-cap"><b id="totalNum">0</b> из <span id="totalMax">0</span> уровней пройдено во всех норах</div>
   </div>
 
   <div class="grid" id="grid"></div>
 
   <section class="dig" aria-labelledby="digTitle">
-    <h2 id="digTitle">Dig <span>your</span> own hole</h2>
-    <p>You spot the hole — I do the digging. Propose a question that deserves ten levels, and the best suggestions become full descents in this series, credited to whoever found them.</p>
+    <h2 id="digTitle">Выкопайте <span>свою</span> нору</h2>
+    <p>Вы находите нору — я копаю. Предложите вопрос, достойный десяти уровней: лучшие идеи станут полноценными спусками этой серии с указанием того, кто их нашёл.</p>
     <div class="dig-row">
-      <input id="digQ" type="text" maxlength="180" placeholder="Why do we…?" aria-label="Your question">
-      <a class="dig-btn" id="digBtn" href="#" target="_blank" rel="noopener">Suggest it on GitHub →</a>
+      <input id="digQ" type="text" maxlength="180" placeholder="Почему мы…?" aria-label="Ваш вопрос">
+      <a class="dig-btn" id="digBtn" href="#" target="_blank" rel="noopener">Предложить на GitHub →</a>
     </div>
-    <p class="dig-small">Opens a ready-filled suggestion in this project's GitHub issues — you'll need a <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a> to post it.</p>
-    <p class="dig-small">Already descended one and want to compare notes, flag an error, or argue with a level? <a id="digNote" href="#" target="_blank" rel="noopener">Send a note</a> — or <a id="digRead" href="#" target="_blank" rel="noopener">read what others sent</a>.</p>
+    <p class="dig-small">Откроется заранее заполненная форма в GitHub Issues этого проекта — чтобы отправить, нужен <a href="https://github.com/signup" target="_blank" rel="noopener">аккаунт GitHub</a>.</p>
+    <p class="dig-small">Уже спустились и хотите поделиться наблюдением, указать на ошибку или поспорить с уровнем? <a id="digNote" href="#" target="_blank" rel="noopener">Напишите заметку</a> — или <a id="digRead" href="#" target="_blank" rel="noopener">почитайте, что пишут другие</a>.</p>
   </section>
 </main>
 
-<footer>The Rabbit Holes · a series of ten-level descents · progress is saved privately in your own browser · <a id="footNote" href="#" target="_blank" rel="noopener">Send a note</a></footer>
+<footer>Кроличьи норы · серия десятиуровневых спусков · прогресс сохраняется приватно в вашем браузере · <a id="footNote" href="#" target="_blank" rel="noopener">Написать заметку</a></footer>
 
 <script>
 /* ================================================================
@@ -183,30 +183,30 @@ const GITHUB_REPO = (function(fallback){
 const HOLES = [
   {
     slug:"coffee", status:"live", href:"coffee/",
-    emoji:"☕", kicker:"Sleep · Pharmacology · Genetics",
-    title:"Why can some people drink coffee at night and still sleep?",
-    blurb:"Adenosine impostors, a 40-fold enzyme lottery, and the plot twist nobody notices about their own sleep.",
+    emoji:"☕", kicker:"Сон · Фармакология · Генетика",
+    title:"Почему одни пьют кофе на ночь и спокойно засыпают?",
+    blurb:"Самозванцы аденозина, 40-кратная ферментная лотерея и поворот сюжета, которого никто не замечает в собственном сне.",
     accent:"#E8A44C", hot:"#FFC46B", deep:"#8A5A1E"
   },
   {
     slug:"dejavu", status:"live", href:"dejavu/",
-    emoji:"🌀", kicker:"Memory · Neuroscience",
-    title:"Why do we get déjà vu?",
-    blurb:"Two competing memory systems, a mistimed neural signal, and the theory that it's your brain quietly checking its own work.",
+    emoji:"🌀", kicker:"Память · Нейронаука",
+    title:"Почему возникает дежавю?",
+    blurb:"Две конкурирующие системы памяти, сигнал не в такт и теория о том, что мозг тихо проверяет собственную работу.",
     accent:"#9B7BE8", hot:"#C0A8FF", deep:"#4E3A8A"
   },
   {
     slug:"time", status:"soon",
-    emoji:"⏳", kicker:"Perception · Ageing",
-    title:"Why does time speed up as you get older?",
-    blurb:"Novelty, memory density, and why a childhood summer lasted a decade whilst last year lasted a fortnight.",
+    emoji:"⏳", kicker:"Восприятие · Возраст",
+    title:"Почему с возрастом время ускоряется?",
+    blurb:"Новизна, плотность воспоминаний и почему летние каникулы длились десятилетие, а прошлый год — две недели.",
     accent:"#5CC8C2", hot:"#8FE8E2", deep:"#26635F"
   },
   {
     slug:"earworms", status:"soon",
-    emoji:"🎵", kicker:"Music · Cognition",
-    title:"Why do songs get stuck in your head?",
-    blurb:"Unfinished loops, the Zeigarnik effect, and the strange science of evicting an earworm.",
+    emoji:"🎵", kicker:"Музыка · Когнитивистика",
+    title:"Почему песни застревают в голове?",
+    blurb:"Незавершённые петли, эффект Зейгарник и странная наука выселения навязчивой мелодии.",
     accent:"#E86A9C", hot:"#FFA0C4", deep:"#7E2E52"
   }
 ];
@@ -235,20 +235,20 @@ const HOLES = [
     if(h.status === "live"){
       let segs = "";
       for(let i=0;i<10;i++) segs += `<div class="mini-seg${i<depth?" filled":""}"></div>`;
-      const label = depth === 0 ? "Not yet descended"
-                  : depth >= 10 ? "Bottom reached"
-                  : `Depth <b>${depth} / 10</b>`;
+      const label = depth === 0 ? "Ещё не спускались"
+                  : depth >= 10 ? "Дно достигнуто"
+                  : `Глубина <b>${depth} / 10</b>`;
       foot = `<div class="hole-foot">
-        <div class="mini-label"><span>${label}</span><span>${depth === 0 ? "Begin ↓" : depth >= 10 ? "★" : "Resume ↓"}</span></div>
+        <div class="mini-label"><span>${label}</span><span>${depth === 0 ? "Начать ↓" : depth >= 10 ? "★" : "Продолжить ↓"}</span></div>
         <div class="mini-bar">${segs}</div></div>`;
     } else {
-      foot = `<div class="hole-foot">This shaft is still being dug. Check back soon.</div>`;
+      foot = `<div class="hole-foot">Эта шахта ещё копается. Загляните позже.</div>`;
     }
 
     el.innerHTML = `
       <div class="hole-top">
         <div class="hole-emoji" aria-hidden="true">${h.emoji}</div>
-        <div class="hole-status ${h.status}">${h.status === "live" ? "Open" : "In the works"}</div>
+        <div class="hole-status ${h.status}">${h.status === "live" ? "Открыта" : "В работе"}</div>
       </div>
       <div class="hole-body">
         <div class="hole-kicker">${h.kicker}</div>
@@ -266,7 +266,7 @@ const HOLES = [
     const base = `https://github.com/${GITHUB_REPO}/issues/new`;
     const params = new URLSearchParams({
       template: "rabbit-hole-request.yml",
-      title: "[Rabbit hole] " + (q || "your question here"),
+      title: "[Кроличья нора] " + (q || "ваш вопрос"),
       labels: "rabbit-hole-request"
     });
     if(q) params.set("question", q);
@@ -279,7 +279,7 @@ const HOLES = [
   /* note links — everything routes through GitHub issues, no email exposed */
   const noteParams = new URLSearchParams({
     template: "reader-note.yml",
-    title: "[Note] ",
+    title: "[Заметка] ",
     labels: "reader-note"
   });
   const noteHref = `https://github.com/${GITHUB_REPO}/issues/new?${noteParams.toString()}`;

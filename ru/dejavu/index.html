@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Почему возникает дежавю? — Кроличьи норы</title>
+<meta name="description" content="Интерактивный спуск на десять уровней в науку о дежавю: две системы памяти, ринальная кора, жамевю и теория о том, что мозг проверяет собственную работу.">
+<meta property="og:title" content="Почему возникает дежавю?">
+<meta property="og:description" content="Спуститесь на десять уровней в науку о дежавю. Остановитесь, когда захотите, — или дойдите до самого дна.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-deep:#070B14;
+    --ink:#0D1424;
+    --ink-raise:#16203A;
+    --accent:#E8A44C;       /* set per rabbit hole via CONFIG.theme */
+    --accent-hot:#FFC46B;
+    --accent-deep:#8A5A1E;
+    --crema:#F2E7D5;
+    --dim:#8FA3C4;
+    --line:rgba(232,164,76,.16);
+    --danger:#E86A5C;
+    --ok:#7BC68F;
+    --display:'Chakra Petch',sans-serif;
+    --body:'Karla',sans-serif;
+    --radius:14px;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink-deep);color:var(--crema);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden}
+  ::selection{background:var(--accent);color:var(--ink-deep)}
+  a{color:var(--accent-hot)}
+
+  .backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 500px at 80% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(30,43,77,.55), transparent 65%),
+      var(--ink-deep);}
+  .backdrop::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1.2px 1.2px at 12% 22%, rgba(242,231,213,.35), transparent 100%),
+      radial-gradient(1px 1px at 34% 64%, rgba(242,231,213,.22), transparent 100%),
+      radial-gradient(1.4px 1.4px at 58% 18%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 72% 48%, rgba(242,231,213,.20), transparent 100%),
+      radial-gradient(1.2px 1.2px at 88% 76%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 100%),
+      radial-gradient(1px 1px at 22% 86%, rgba(242,231,213,.18), transparent 100%);}
+
+  .hud{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(7,11,20,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .hud-inner{max-width:var(--maxw);margin:0 auto;padding:10px 20px 12px}
+  .hud-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .hud-title{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  .hud-title a{color:inherit;text-decoration:none}
+  .lang-switch{margin-left:10px;padding:2px 7px;border-radius:5px;font-size:10.5px;letter-spacing:.14em;
+    border:1px solid var(--line);color:var(--dim)!important;transition:color .2s ease,border-color .2s ease}
+  .lang-switch:hover{color:var(--accent)!important;border-color:var(--accent)}
+  .hud-depth{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hud-depth strong{color:var(--crema)}
+  .depth-bar{margin-top:8px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+  .depth-seg{height:6px;border-radius:3px;background:var(--ink-raise);border:1px solid rgba(143,163,196,.15);transition:background .5s ease, box-shadow .5s ease}
+  .depth-seg.filled{background:linear-gradient(90deg,var(--accent-deep),var(--accent));border-color:transparent;box-shadow:0 0 10px color-mix(in srgb, var(--accent) 45%, transparent)}
+
+  main{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:120px 20px 80px}
+
+  .hero{padding:40px 0 24px}
+  .hero .eyebrow{font-family:var(--display);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5.6vw,46px);line-height:1.14;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero-lede{display:flex;align-items:flex-end;gap:14px;margin:26px 0 8px}
+  .hero-lede svg{flex:none}
+  .steam path{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:.55;animation:steam 4s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:1.3s;opacity:.35}
+  .steam path:nth-child(3){animation-delay:2.4s;opacity:.45}
+  @keyframes steam{0%{transform:translateY(4px);opacity:0}35%{opacity:.55}100%{transform:translateY(-10px);opacity:0}}
+  .hero-note{font-size:14px;color:var(--dim)}
+  .hero-note b{color:var(--crema);font-weight:700}
+
+  .level{margin:34px 0;border:1px solid var(--line);border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(22,32,58,.55), rgba(13,20,36,.9));
+    box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+  .level.locked{display:none}
+  .level.unlocking{animation:unlock .8s cubic-bezier(.2,.9,.25,1) both}
+  @keyframes unlock{
+    0%{opacity:0;transform:translateY(46px) scale(.97);filter:brightness(2) saturate(0)}
+    60%{filter:brightness(1.25)}
+    100%{opacity:1;transform:none;filter:none}}
+  .level-head{display:flex;align-items:center;gap:14px;padding:18px 26px;border-bottom:1px solid var(--line);background:rgba(7,11,20,.35)}
+  .lv-badge{flex:none;width:44px;height:44px;border-radius:10px;display:grid;place-items:center;
+    font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink-deep);
+    background:linear-gradient(135deg,var(--accent-hot),var(--accent-deep));
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .lv-meta .lv-kicker{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+  .lv-meta h2{font-family:var(--display);font-weight:600;font-size:clamp(19px,3.4vw,24px);line-height:1.2}
+  .level-body{padding:26px}
+  .level-body p{margin-bottom:16px}
+  .level-body p:last-child{margin-bottom:0}
+  .level-body .dim{color:var(--dim)}
+  .callout{margin:20px 0;padding:16px 18px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 6%, transparent);font-size:15.5px}
+  .callout .tag{font-family:var(--display);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+  .stat{flex:1 1 140px;padding:14px 16px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.14)}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent)}
+  .stat .l{font-size:13px;color:var(--dim);line-height:1.4;margin-top:2px}
+
+  .checkpoint{padding:20px 26px 24px;border-top:1px dashed rgba(143,163,196,.25);background:rgba(7,11,20,.3)}
+  .checkpoint .cp-label{font-family:var(--display);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .checkpoint .cp-sum{font-size:15.5px;margin-bottom:16px}
+  .cp-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{font-family:var(--display);font-weight:700;letter-spacing:.08em;border-radius:10px;cursor:pointer;border:none;
+    padding:13px 22px;font-size:14.5px;transition:transform .15s ease, box-shadow .2s ease}
+  .btn:focus-visible{outline:2px solid var(--accent-hot);outline-offset:3px}
+  a.btn{text-decoration:none;display:inline-block;text-align:center}
+  .btn-deeper{color:var(--ink-deep);background:linear-gradient(135deg,var(--accent-hot),var(--accent));
+    box-shadow:0 6px 22px color-mix(in srgb, var(--accent) 35%, transparent)}
+  .btn-deeper:hover{transform:translateY(-2px);box-shadow:0 10px 28px color-mix(in srgb, var(--accent) 50%, transparent)}
+  .btn-deeper:active{transform:translateY(0)}
+  .btn-stop{color:var(--dim);background:transparent;border:1px solid rgba(143,163,196,.3);font-weight:600}
+  .btn-stop:hover{color:var(--crema);border-color:var(--dim)}
+  .cp-hint{font-size:13px;color:var(--dim);flex-basis:100%}
+
+  .toast{position:fixed;top:76px;right:18px;z-index:60;background:var(--ink-raise);border:1px solid var(--accent);
+    border-radius:10px;padding:12px 18px;font-family:var(--display);font-size:13px;letter-spacing:.1em;color:var(--accent-hot);
+    box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+    opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;max-width:min(86vw,360px)}
+  .toast.show{opacity:1;transform:none}
+
+  .modal-scrim{position:fixed;inset:0;z-index:70;background:rgba(7,11,20,.7);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-scrim.open{display:flex}
+  .modal{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--ink);border:1px solid var(--line);
+    border-radius:var(--radius);padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .modal h3{font-family:var(--display);font-size:20px;margin-bottom:4px}
+  .modal .sub{color:var(--dim);font-size:14px;margin-bottom:18px}
+  .modal ul{list-style:none;margin-bottom:20px}
+  .modal li{padding:9px 0 9px 26px;position:relative;font-size:15px;border-bottom:1px solid rgba(143,163,196,.1)}
+  .modal li::before{content:"";position:absolute;left:4px;top:16px;width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+  .modal .cp-actions{margin-top:4px}
+
+  .sim{margin:22px 0;padding:20px;border-radius:12px;background:rgba(7,11,20,.55);border:1px solid rgba(143,163,196,.16)}
+  .sim h4{font-family:var(--display);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .sim-grid{display:grid;gap:16px}
+  .sim label{font-size:13.5px;color:var(--dim);display:block;margin-bottom:6px}
+  .sim label output{color:var(--crema);font-weight:700}
+  input[type=range]{width:100%;appearance:none;height:6px;border-radius:3px;background:var(--ink-raise);outline:none}
+  input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);
+    border:3px solid var(--ink-deep);box-shadow:0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--ink-deep);cursor:pointer}
+  .metab-toggle{display:flex;gap:8px;flex-wrap:wrap}
+  .metab-toggle button{flex:1 1 90px;padding:9px 10px;border-radius:8px;cursor:pointer;font-family:var(--display);font-size:12.5px;
+    letter-spacing:.05em;background:var(--ink-raise);color:var(--dim);border:1px solid rgba(143,163,196,.2);transition:all .2s ease}
+  .metab-toggle button.active{background:color-mix(in srgb, var(--accent) 15%, transparent);color:var(--accent-hot);border-color:var(--accent)}
+  .sim-result{margin-top:6px;padding:16px;border-radius:10px;text-align:center;background:color-mix(in srgb, var(--accent) 7%, transparent);border:1px solid var(--line)}
+  .sim-result .big{font-family:var(--display);font-weight:700;font-size:32px;color:var(--accent-hot)}
+  .sim-result .cap{font-size:13.5px;color:var(--dim);margin-top:4px}
+  .sim-verdict{font-size:14px;margin-top:10px;font-weight:700}
+  .sim-verdict.bad{color:var(--danger)}
+  .sim-verdict.mid{color:var(--accent)}
+  .sim-verdict.good{color:var(--ok)}
+
+  /* descent reward card — shown at the top of each newly opened level */
+  .reward{margin:0 0 20px;padding:15px 17px;border-radius:10px;border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 7%, rgba(7,11,20,.5));animation:rewardIn .6s ease both}
+  @keyframes rewardIn{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+  .reward-top{display:flex;align-items:center;gap:14px}
+  .reward-animal{font-size:34px;line-height:1;flex:none}
+  .reward-line{font-size:14.5px;font-style:italic;color:var(--crema)}
+  .reward-token{font-family:var(--display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-top:12px}
+  .reward-fact{display:block;margin-top:7px;font-size:14px;font-style:normal;letter-spacing:0;
+    text-transform:none;color:var(--dim);font-family:var(--body)}
+
+  /* contact + shared button row */
+  /* contact panel + shared button row */
+  .share-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .btn-mini{padding:10px 16px;font-size:13px}
+  .share-note{font-size:12.5px;color:var(--dim);margin-top:8px}
+
+  .finale{text-align:center;padding:40px 26px 44px}
+  .finale .medal{width:92px;height:92px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 35% 30%, var(--accent-hot), var(--accent-deep));
+    box-shadow:0 0 40px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 0 20px rgba(0,0,0,.25);
+    animation:medal 3.2s ease-in-out infinite}
+  @keyframes medal{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .finale h2{font-family:var(--display);font-size:26px;margin-bottom:8px}
+  .finale p{color:var(--dim);max-width:52ch;margin:0 auto 10px}
+  .finale .finale-home{margin-top:20px}
+
+  footer{position:relative;z-index:1;text-align:center;color:var(--dim);font-size:12.5px;padding:0 20px 46px;max-width:var(--maxw);margin:0 auto}
+  footer button{background:none;border:none;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit}
+
+  @media (max-width:560px){
+    .level-head{padding:16px 18px}.level-body{padding:20px 18px}.checkpoint{padding:18px}
+    .hud-depth span.hide-s{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"></div>
+<header class="hud"><div class="hud-inner">
+  <div class="hud-row">
+    <div class="hud-title"><a href="../index.html" id="hudHome"></a><a class="lang-switch" id="langSwitch" hidden></a></div>
+    <div class="hud-depth" id="hudDepth"></div>
+  </div>
+  <div class="depth-bar" id="depthBar"></div>
+</div></header>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<main id="main"></main>
+<footer id="pageFooter"></footer>
+<div class="modal-scrim" id="modalScrim" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h3 id="modalTitle">Вы всплыли на уровне <span id="modalLevel">1</span></h3>
+    <div class="sub">Полноценный ответ на выбранной вами глубине. Вот что вы забираете с собой:</div>
+    <ul id="modalList"></ul>
+    <div class="cp-actions">
+      <button class="btn btn-deeper" id="modalResume" type="button">Хотя нет… глубже ↓</button>
+      <a class="btn btn-stop" id="modalHome" href="../index.html">Достаточно — на поверхность</a>
+      <div class="cp-hint">Ваша глубина сохранена — вы можете спуститься обратно в любой момент.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ✏️  EDIT THIS SECTION ONLY — everything below "ENGINE" is shared
+   ================================================================ */
+const CONFIG = {
+  slug: "dejavu-ru",
+  siteTitle: "🌀 Нора дежавю",
+  homeHref: "../index.html",
+
+  githubRepo: "yourusername/rabbit-holes",
+
+  lang: { href: "../../dejavu/", label: "EN" },
+
+  token: { emoji: "🌀", name: "отголосок" },
+
+  ui: {
+    depth:"Глубина", level:"Уровень", checkpoint:"Контрольная точка",
+    goDeeper:"Глубже ↓", nextLevel:"Уровень",
+    stopHere:"Остановиться — мне достаточно",
+    cpHint:"Остановиться здесь — полноценный финал: каждый уровень выше это законченный ответ на своей глубине. Решите спуститься глубже — и получите {token} за спуск.",
+    unlocked:"УРОВЕНЬ {n} ОТКРЫТ",
+    reset:"Сбросить прогресс",
+    finaleHome:"⌂ На поверхность — ко всем норам"
+  },
+
+  rewards: [
+    {animal:"🦥", line:"Здесь некуда спешить. Идите в своём темпе."},
+    {animal:"🦉", line:"Любопытство вам к лицу. Идём дальше."},
+    {animal:"🦊", line:"Большинство останавливается раньше. Но не вы."},
+    {animal:"🐧", line:"Спускаемся — на уровень холоднее и на уровень яснее."},
+    {animal:"🐨", line:"Удобно устроились? Дальше будет только страннее."},
+    {animal:"🐿️", line:"Ещё один слой, ещё одна вещь, которую стоит запомнить."},
+    {animal:"🦔", line:"Смело. Здесь внизу уютнее, чем кажется."},
+    {animal:"🐢", line:"Не торопитесь. Глубина никуда не денется."},
+    {animal:"🦦", line:"Рад, что вы всё ещё с нами. Вперёд."},
+    {animal:"🐼", line:"Отличное решение. Располагайтесь."}
+  ],
+
+  depthNames: ["Поверхность","Миф","Две системы","Совпадение","Ринальная кора",
+               "Двойной сигнал","Кривая частоты","Жамевю","Сигнализация","Скальное дно"],
+
+  hero: {
+    eyebrow: "Интерактивный спуск · 10 уровней вглубь",
+    titleHTML: 'Почему возникает <em>дежавю?</em>',
+    icon: `<svg width="72" height="70" viewBox="0 0 72 70" fill="none" aria-hidden="true">
+      <circle cx="24" cy="34" r="17" stroke="var(--accent)" stroke-width="2" opacity=".9"/>
+      <circle cx="24" cy="34" r="17" stroke="var(--accent)" stroke-width="2" opacity=".35" transform="translate(9 -6)"/>
+      <path d="M46 20c6 2 10 8 10 14s-4 12-10 14" stroke="var(--accent)" stroke-width="2" fill="none" opacity=".6"/>
+    </svg>`,
+    ledeHTML: `Вы сворачиваете за угол в городе, где никогда не были, и на две секунды точно знаете, что произойдёт дальше. Ощущение исчезает раньше, чем вы успеваете его описать. <b>Почти две трети людей</b> хоть раз это переживали — и это не сбой мироздания.`,
+    noteHTML: `Спускайтесь настолько глубоко, насколько захотите. Каждый уровень заканчивается <b>контрольной точкой</b>: остановитесь с полноценным ответом или сделайте ещё шаг вниз.`
+  },
+
+  footerHTML: `Интерактивное объяснение · Цифры (распространённость, области мозга, результаты исследований) отражают опубликованные работы по памяти и нейронауке и приблизительны для конкретного человека.`,
+
+  finale: {
+    emoji: "🌀",
+    title: "Глубина 10 / 10 — дно достигнуто",
+    text: "Вы спустились от «наверное, я уже это проживал» к двум конкурирующим системам памяти, сигналу не в такт и мозгу, который, возможно, тихо проверяет собственную работу. Это вся нора целиком. В следующий раз вы будете точно знать, что именно дало осечку."
+  },
+
+  levels: [
+    {
+      kicker:"Уровень 1 · Поверхность",
+      title:"Система памяти ненадолго путается сама в себе",
+      bodyHTML:`
+        <p>Короткий ответ: дежавю возникает, когда <strong>чувство узнавания</strong> срабатывает без реального воспоминания за ним. На секунду-другую нечто совершенно новое кажется безошибочно знакомым — а потом ощущение проходит, потому что за ним действительно ничего нет.</p>
+        <p>Это на удивление распространено и само по себе совершенно безобидно: опросы дают распространённость в течение жизни примерно <strong>60–70% людей</strong>, чаще всего в подростковом возрасте и в двадцать с небольшим. Ничего паранормального не требуется, и с вами всё в порядке.</p>
+        <p class="dim">Всё, что ниже, объясняет, <em>почему</em> здоровый мозг проделывает такое с самим собой.</p>`,
+      sum:"Хорошая точка остановки: дежавю это узнавание, сработавшее без реального воспоминания, — распространённое, безобидное и не сбой реальности.",
+      take:"Дежавю это сигнал узнавания, за которым нет ничего реального. Оно распространено и безвредно.",
+      fact:"У детей младше восьми лет дежавю фиксируют заметно реже — похоже, для такой осечки система памяти должна сначала достаточно созреть."
+    },
+    {
+      kicker:"Уровень 2 · Миф",
+      title:"Это не память о прошлой жизни, не сбой симуляции и не ясновидение",
+      bodyHTML:`
+        <p>Вокруг дежавю накопилось много мистического багажа: воспоминания прошлых жизней, проблески параллельных вселенных, доказательство того, что мы внутри симуляции, которая пропустила кадр. Ничто из этого не выдерживает проверки, и ничто из этого не нужно — обыденное объяснение оказывается страннее и куда лучше обосновано, чем эффектные версии.</p>
+        <p>Настоящая подсказка пряталась в том, что люди почти никогда не формулируют точно: они описывают дежавю как воспоминание о <em>том же самом событии</em>, но обнаружить могут лишь ощущение знакомости — и никогда конкретное воспоминание о том, когда, где и как это якобы было. Этот разрыв и есть вся загадка, и указывает он прямо на механику памяти, а не на метафизику.</p>
+        <div class="callout"><span class="tag">Ключевая идея</span>
+        Будь это настоящим воспоминанием, вы могли бы описать тот прежний случай. Вы никогда не можете. Эта недостающая деталь — отпечаток пальца сигнала узнавания, сработавшего в одиночку.</div>`,
+      sum:"Хорошая точка остановки: дежавю не воспоминание о реальном прошлом событии — иначе вы могли бы его описать. Вы никогда не можете, и это указывает на особенность работы памяти, а не на паранормальное.",
+      take:"При дежавю вы никогда не можете описать «то прежнее» событие — потому что его не было. Эта недостающая деталь исключает настоящее воспоминание.",
+      fact:"Исследователи памяти называют это «обманчивой знакомостью» — ощущением уже прожитого момента, полностью оторванным от какого-либо реального момента."
+    },
+    {
+      kicker:"Уровень 3 · Две системы",
+      title:"Знакомость и припоминание — разные системы мозга",
+      bodyHTML:`
+        <p>Учёные разделяют узнавание на два отдельных процесса, которые обычно работают вместе так гладко, что шва вы не замечаете. <strong>Знакомость</strong> быстрая и расплывчатая — интуитивное «я с этим сталкивался» без единой детали. <strong>Припоминание</strong> медленнее и конкретнее — вы можете сказать когда, где и откуда вы это знаете.</p>
+        <p>Обычно знакомость почти мгновенно подтверждается припоминанием: вам кажется, что вы знаете лицо, и через полсекунды вы вспоминаете, что это ваш сосед. <strong>Дежавю — это знакомость, сработавшая в одиночку</strong>, когда припоминание не может её подтвердить, потому что подходящего воспоминания попросту не существует.</p>
+        <p class="dim">Идея двух процессов не была придумана задним числом ради объяснения дежавю — её независимо установили в исследованиях памяти десятилетиями раньше, изучая обычное узнавание и пациентов с избирательными нарушениями памяти.</p>`,
+      sum:"Хорошая точка остановки: узнавание работает на двух отдельных системах — знакомости и припоминании, — и дежавю это знакомость, сработавшая без подтверждения.",
+      take:"У узнавания два отдельных канала: быстрая расплывчатая знакомость и медленное конкретное припоминание. Дежавю — знакомость в одиночку.",
+      fact:"Эти системы можно разделить в лаборатории: некоторые пациенты с амнезией сохраняют работающую знакомость, почти полностью утратив способность припоминать конкретные события."
+    },
+    {
+      kicker:"Уровень 4 · Совпадение",
+      title:"Нужна одна совпавшая деталь, а не вся сцена",
+      bodyHTML:`
+        <p>Чтобы комната показалась жутковато знакомой, вовсе не нужно бывать в похожей раньше — достаточно, чтобы нынешняя обстановка разделяла <strong>одну структурную черту</strong> с местом, где вы действительно были, даже если вы этого совпадения осознанно не замечаете.</p>
+        <p>Психолог <strong>Энн Клири</strong> проверила это напрямую на сценах в виртуальной реальности, собранных в The Sims: она показывала людям сцену, а позже — совершенно другую, которая тайно повторяла ту же пространственную планировку (лампа в том же углу, дверной проём на том же месте). Участники сообщали о дежавю заметно чаще именно для пространственно совпадающих сцен, хотя общей планировки осознанно не замечали.</p>
+        <p>Попробуйте ниже: две комнаты, одна-единственная общая деталь.</p>`,
+      widget:"overlapGame",
+      afterWidgetHTML:`<p class="dim">Ваша система знакомости уловила гештальт прежней комнаты — форму пространства, — так и не сообщив сознанию, что именно она заметила.</p>`,
+      sum:"Хорошая точка остановки: одной общей структурной детали между двумя в остальном разными сценами достаточно, чтобы запустить неосознанную знакомость, — это исследования планировок Энн Клири.",
+      take:"Нужна не совпадающая сцена, а одна совпадающая структурная деталь — это прямо доказали эксперименты Энн Клири со сценами из The Sims.",
+      fact:"Позже команда Клири обнаружила у дежавю характерного спутника: ложное ощущение способности предсказать, что произойдёт дальше, — эта нить возвращается на уровне 9."
+    },
+    {
+      kicker:"Уровень 5 · Механизм",
+      title:"Одна область мозга умеет выдавать знакомость сама",
+      bodyHTML:`
+        <p>Знакомость и припоминание не просто ведут себя по-разному — похоже, они живут в разных районах системы памяти. <strong>Гиппокамп</strong> ключевой для припоминания: он связывает события со временем, местом и контекстом. Рядом <strong>ринальная кора</strong> (точнее, периринальная) способна порождать голый сигнал знакомости во многом самостоятельно.</p>
+        <p>Невролог <strong>Крис Мулен</strong> с коллегами предположили, что дежавю возникает, когда ринальная кора выдаёт свой сигнал знакомости изолированно — по сути даёт осечку, — а гиппокамп молчит, потому что извлекать нечего.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">2</div><div class="l">отдельные области памяти: гиппокамп и ринальная кора</div></div>
+          <div class="stat"><div class="n">60–70%</div><div class="l">людей хоть раз переживали дежавю</div></div>
+          <div class="stat"><div class="n">1</div><div class="l">из двух областей достаточно, чтобы дать осечку</div></div>
+        </div>`,
+      sum:"Хорошая точка остановки: знакомость и припоминание соответствуют разным областям мозга — ринальной коре и гиппокампу, — и дежавю выглядит как одиночное срабатывание ринальной коры.",
+      take:"Ринальная кора, по-видимому, порождает чистую знакомость сама; дежавю может быть этим сигналом без подтверждения гиппокампа.",
+      fact:"Ринальная кора расположена вплотную к гиппокампу в височной доле — две соседние области с двумя совершенно разными задачами в памяти."
+    },
+    {
+      kicker:"Уровень 6 · Двойной сигнал",
+      title:"Классическая теория: мозг обрабатывает момент дважды",
+      bodyHTML:`
+        <p>Одно из старейших научных объяснений дежавю, предложенное нейробиологом <strong>Робертом Эфроном</strong> в 1963 году, указывает на сбой во времени, а не на ошибку в содержании. Эфрон утверждал, что мозг обрабатывает поступающую сенсорную информацию <strong>дважды подряд</strong> — быстрая перепроверка, которая обычно проходит бесшовно.</p>
+        <p>Если второй проход приходит в центр узнавания с необычно большой задержкой, мозг, согласно теории, может принять вторую копию за <em>отдельный, более старый</em> опыт, а не за дубликат происходящего прямо сейчас, — и рождается ощущение, что этот самый момент уже когда-то был.</p>
+        <p class="dim">Эту идею с тех пор не отменили, а дополнили объяснением через ринальную кору: обе версии описывают одно событие на разных уровнях — одна о том, какая область даёт осечку, другая о времени между проходами обработки.</p>`,
+      sum:"Хорошая точка остановки: по одной классической теории дежавю рождается из крошечной задержки — мозг перепроверяет момент и принимает второй проход за более старое воспоминание.",
+      take:"Теория Роберта Эфрона 1963 года: мозг обрабатывает каждый момент дважды, и небольшая задержка между проходами может заставить вторую копию ощущаться как старое воспоминание.",
+      fact:"Эфрон развивал эту идею, изучая пациентов с эпилепсией — группу, которая, как показывает следующий уровень, переживает дежавю необычно часто."
+    },
+    {
+      kicker:"Уровень 7 · Кривая частоты",
+      title:"Моложе, больше путешествий, больше усталости — закономерность неожиданная",
+      bodyHTML:`
+        <p>Если бы дежавю было просто «износом мозга», можно было бы ждать роста с возрастом. Всё ровно наоборот: заявляемая частота <strong>достигает пика в позднем подростковом возрасте и в двадцать с небольшим</strong>, а затем неуклонно снижается, хотя у пожилых людей было куда больше времени накопить пересекающиеся воспоминания.</p>
+        <p>Другие устойчивые корреляты: люди, которые <strong>больше путешествуют</strong>, чаще <strong>запоминают свои сны</strong> и имеют <strong>более высокий уровень образования</strong>, сообщают о дежавю чаще. Усталость и стресс тоже повышают частоту. Одна из ведущих теорий связывает это воедино: новая обстановка и более высокая когнитивная вовлечённость просто дают системе знакомости больше материала — больше сцен с частичными совпадениями, — на котором можно дать осечку.</p>
+        <div class="callout"><span class="tag">Контринтуитивно</span>
+        Снижение дежавю с возрастом — один из самых сильных доводов против того, что это признак ухудшения памяти. Скорее данные указывают в обратную сторону.</div>`,
+      sum:"Хорошая точка остановки: дежавю достигает пика в молодости и снижается с возрастом, а также связано с путешествиями, запоминанием снов и образованием — обратная закономерность по сравнению с ухудшением памяти.",
+      take:"Частота дежавю достигает пика в позднем подростковом возрасте и в двадцать с небольшим, а затем снижается — противоположно тому, что предсказывало бы ухудшение памяти.",
+      fact:"По некоторым оценкам, у людей старше 60 распространённость дежавю падает ниже 40% — примерно вдвое меньше, чем у двадцатилетних."
+    },
+    {
+      kicker:"Уровень 8 · Жамевю",
+      title:"Зеркальный сбой: когда знакомое вдруг перестаёт быть знакомым",
+      bodyHTML:`
+        <p>Если дежавю это ложная знакомость, то существует и обратное: <strong>жамевю</strong> — когда по-настоящему знакомая вещь внезапно и ненадолго кажется совершенно чужой. Мягкую версию вы наверняка вызывали сами: вглядитесь в обычное слово или напишите его много раз подряд, и через пару десятков повторений оно начнёт выглядеть бессмыслицей, будто никогда ничего не значило.</p>
+        <p>Исследователи <strong>Акира О'Коннор и Крис Мулен</strong> проверили это напрямую в работе 2021 года: добровольцы от руки писали обычное слово, например «дверь», до 30 раз подряд. Большинство — около <strong>68%</strong> — сообщили, что слово начало казаться странным, чужим или будто утратившим смысл: воспроизводимый в лаборатории привкус жамевю.</p>
+        <p class="dim">Считается, что жамевю это та же система знакомости, дающая осечку в обратную сторону — сообщающая «новое» там, где следовало бы сообщить «знакомое».</p>`,
+      sum:"Хорошая точка остановки: жамевю это зеркальное отражение дежавю — знакомое вдруг кажется чужим, — и его можно вызвать в лаборатории простым повторным написанием слова.",
+      take:"Жамевю — обратный сбой: знакомое внезапно кажется чужим. Написание слова от руки ~30 раз надёжно вызывает его у большинства людей.",
+      fact:"У эффекта есть собственное имя в психолингвистике — семантическое насыщение, — и его описали за десятилетия до того, как связали именно с жамевю."
+    },
+    {
+      kicker:"Уровень 9 · Поворот сюжета",
+      title:"Дежавю может бытьфункцией, а не ошибкой",
+      bodyHTML:`
+        <p>Вот уровень, до которого большинство не доходит. Вместо того чтобы считать дежавю чистым шумом, часть исследователей полагает, что это видимый результат <strong>работающей системы проверки ошибок</strong> — мозг тихо отмечает расхождение между тем, что он ожидает вспомнить, и тем, что реально может извлечь.</p>
+        <p>Поздние работы Энн Клири обнаружили примечательное: дежавю часто приходит в паре с ложным ощущением способности <strong>предсказать, что будет дальше</strong>, — чувством «я знаю, что сейчас произойдёт», которое при проверке оказывается не точнее случайного угадывания. Эта пара намекает, что дежавю не просто изолированный сбой знакомости: возможно, это осознаваемая подпись системы мониторинга, проверяющей извлечение из памяти на конфликты, подобно схемам обнаружения ошибок, описанным в лобных отделах.</p>
+        <p class="dim">С этой точки зрения дежавю — версия проверки орфографии для вашей памяти: не доказательство поломки, а свидетельство того, что проверка работает ровно так, как задумано.</p>`,
+      sum:"Хорошая точка остановки: дежавю может быть видимым признаком системы мониторинга памяти, поймавшей конфликт извлечения, — доказательством, что система работает, а не сломана.",
+      take:"Дежавю может работать как сигнализация о конфликте памяти, а не как ошибка: мозг отмечает расхождение, подобно проверке орфографии, споткнувшейся о слово.",
+      fact:"Когда исследователи проверили сами «предсказания» людей во время дежавю, точность статистически не отличалась от случайного угадывания — ощущение предвидения само оказалось иллюзией поверх первой."
+    },
+    {
+      kicker:"Уровень 10 · Скальное дно",
+      title:"Полная картина — и собственный эксперимент с жамевю",
+      bodyHTML:`
+        <p>Сложите слои вместе, и дежавю перестаёт быть загадочным и становится хорошо описанным швом в обычной памяти: сигнал знакомости <strong>ринальной коры</strong> срабатывает — возможно, из-за единственной структурной детали, общей с местом, где вы действительно были, — а <strong>гиппокамп</strong> не предоставляет подходящего припоминания. Лобная <strong>система мониторинга</strong> замечает расхождение и отмечает его, и именно этот флажок вы осознаёте как дежавю, иногда вместе с ложным попутным ощущением предвидения.</p>
+        <div class="callout"><span class="tag">Уравнение дежавю</span>
+        <strong>Знакомость ринальной коры срабатывает в одиночку</strong> → <strong>припоминание гиппокампа молчит</strong> (реального совпадающего воспоминания нет) → <strong>система мониторинга конфликтов</strong> отмечает расхождение → вы осознанно чувствуете «я здесь уже был», иногда с ложным ощущением предсказания.</div>
+        <p><strong>Хотите почувствовать зеркальный эффект сами?</strong> Возьмите любое короткое обычное слово — «дверь», «трава», «окно» — и напишите его от руки, медленно, примерно 25–30 раз. Большинство замечает, что где-то на середине слово начинает выглядеть чужим или терять смысл: маленький безопасный самостоятельно вызываемый привкус жамевю и наглядная демонстрация того, что систему знакомости можно подтолкнуть в обе стороны.</p>`,
+      widget:"notePanel",
+      afterWidgetHTML:`
+        <p class="dim">Одна оговорка: эпизодическое дежавю у здорового взрослого совершенно нормально. Очень частое дежавю, особенно вместе с другими необычными ощущениями, изредка может быть ранним симптомом височной эпилепсии, и об этом стоит сказать врачу — но у подавляющего большинства людей это просто система памяти, делающая свою обычную, чуть несовершенную работу.</p>`,
+      sum:"",
+      take:"Полная картина: знакомость ринальной коры срабатывает без припоминания гиппокампа, система мониторинга отмечает расхождение, и вы чувствуете дежавю — иногда с ложным ощущением предвидения. Попробуйте эксперимент с повторным написанием слова."
+    }
+  ]
+};
+
+const WIDGETS = {
+  /* Level 4: two "rooms" that share exactly one structural detail —
+     illustrating that a single overlap, not a whole matching scene,
+     is enough to trigger a false sense of familiarity. */
+  overlapGame: {
+    html: `
+      <div class="sim">
+        <h4>Найдите единственное совпадение</h4>
+        <p style="font-size:14.5px;color:var(--dim);margin-bottom:14px">Две совершенно разные комнаты. Прежде чем открыть подсказку, обратите внимание: сама по себе ни одна из них не кажется чем-то особенным.</p>
+        <div class="sim-grid" style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <div style="padding:14px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.15)">
+            <div style="font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Комната А · кухня у друга</div>
+            <div style="font-size:14px;line-height:1.5">Жёлтые стены. Круглый стол у окна. Кот спит на табурете. <span data-el="tagA" style="color:var(--accent-hot);font-weight:700">Лампа в дальнем левом углу.</span></div>
+          </div>
+          <div style="padding:14px;border-radius:10px;background:rgba(7,11,20,.5);border:1px solid rgba(143,163,196,.15)">
+            <div style="font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Комната Б · холл отеля в другой стране</div>
+            <div style="font-size:14px;line-height:1.5">Мраморный пол. Высокое растение у двери. Тихо играет пианино. <span data-el="tagB" style="color:var(--accent-hot);font-weight:700">Лампа в дальнем левом углу.</span></div>
+          </div>
+        </div>
+        <button class="btn btn-deeper" type="button" data-el="reveal" style="margin-top:16px;width:100%">Показать совпадение</button>
+        <div class="sim-result" data-el="result" hidden style="margin-top:14px">
+          <div class="cap">Одной общей детали — положения лампы — структурно достаточно, чтобы система знакомости пометила комнату Б как «знакомую», хотя больше ничего не совпадает и вы никогда не бывали ни там, ни там.</div>
+        </div>
+      </div>`,
+    init(root){
+      root.querySelector('[data-el="tagA"]').style.display = "inline";
+      root.querySelector('[data-el="tagB"]').style.opacity = "0";
+      root.querySelector('[data-el="tagB"]').style.transition = "opacity .6s ease";
+      root.querySelector('[data-el="reveal"]').addEventListener("click", e=>{
+        root.querySelector('[data-el="tagB"]').style.opacity = "1";
+        root.querySelector('[data-el="result"]').hidden = false;
+        e.target.disabled = true;
+        e.target.textContent = "Совпадение показано ↑";
+      });
+    }
+  },
+
+  notePanel: {
+    html: `
+      <div class="sim">
+        <h4>Напишите заметку</h4>
+        <p style="font-size:14.5px;color:var(--dim)">Попробовали сами? Нашли ошибку? Есть своя теория или вопрос, достойный собственных десяти уровней? Напишите на GitHub — почта не нужна, я читаю каждую заметку.</p>
+        <div class="share-row">
+          <a class="btn btn-deeper btn-mini" data-el="note" target="_blank" rel="noopener">✍️ Написать об этой норе</a>
+          <a class="btn btn-stop btn-mini" data-el="all" target="_blank" rel="noopener">Почитать заметки других</a>
+        </div>
+        <div class="share-note">Откроется заранее заполненная форма на GitHub. Для отправки нужен аккаунт GitHub.</div>
+      </div>`,
+    init(root){
+      const repo = REPO;
+      const params = new URLSearchParams({
+        template: "reader-note.yml",
+        title: "[Заметка] " + CONFIG.siteTitle,
+        labels: "reader-note"
+      });
+      root.querySelector('[data-el="note"]').href = `https://github.com/${repo}/issues/new?${params.toString()}`;
+      root.querySelector('[data-el="all"]').href = `https://github.com/${repo}/issues?q=is%3Aissue+label%3Areader-note`;
+    }
+  }
+};
+
+/* ================================================================
+   ⚙️  ENGINE — shared across every rabbit hole. No need to edit.
+   ================================================================ */
+(function(){
+  "use strict";
+  const L = CONFIG.levels, N = L.length;
+  const KEY = "rh-progress-" + CONFIG.slug;
+  let current = 1;
+
+  /* Work out the GitHub repository from the address bar when the site is
+     served from *.github.io, so the note links keep working even if the
+     CONFIG.githubRepo placeholder was never replaced. Falls back to the
+     configured value on custom domains or local files. */
+  const REPO = (function(fallback){
+    try{
+      const host = location.hostname;
+      if(host.endsWith(".github.io")){
+        const user = host.slice(0, -".github.io".length);
+        const seg  = location.pathname.split("/").filter(Boolean);
+        return user + "/" + (seg.length ? seg[0] : host);
+      }
+    }catch(e){}
+    return fallback;
+  })(CONFIG.githubRepo);
+
+  /* interface strings — English defaults, overridable per page via CONFIG.ui
+     so a translated edition can reuse this identical engine */
+  const T = Object.assign({
+    depth:"Depth", level:"Level", checkpoint:"Checkpoint",
+    goDeeper:"Go deeper ↓", nextLevel:"Level",
+    stopHere:"Stop here — I've learnt enough",
+    cpHint:"Stopping here is a legitimate ending — every level above is a complete answer at its own depth. Choose to go deeper and you'll earn a {token} for the descent.",
+    unlocked:"LEVEL {n} UNLOCKED",
+    reset:"Reset my progress",
+    finaleHome:"⌂ Surface — back to all rabbit holes"
+  }, CONFIG.ui || {});
+
+  /* the reward cast — overridable per page via CONFIG.rewards */
+  const REWARDS = CONFIG.rewards || [
+    {animal:"🦥", line:"No rush down here. Take it at your own pace."},
+    {animal:"🦉", line:"Curiosity suits you. Let's go further."},
+    {animal:"🦊", line:"Most people stop before this one. You didn't."},
+    {animal:"🐧", line:"Down we go — one level colder, one level clearer."},
+    {animal:"🐨", line:"Comfortable? Good. It gets stranger from here."},
+    {animal:"🐿️", line:"Another layer, another thing worth keeping."},
+    {animal:"🦔", line:"Brave of you. It's cosier down here than it looks."},
+    {animal:"🐢", line:"Steady as you like. The depth isn't going anywhere."},
+    {animal:"🦦", line:"Delighted you're still with us. Onwards."},
+    {animal:"🐼", line:"A fine decision. Settle in."}
+  ];
+
+  /* theme */
+  const r = document.documentElement.style;
+  r.setProperty("--accent", CONFIG.theme.accent);
+  r.setProperty("--accent-hot", CONFIG.theme.accentHot);
+  r.setProperty("--accent-deep", CONFIG.theme.accentDeep);
+  r.setProperty("--line", CONFIG.theme.line);
+
+  /* HUD */
+  const home = document.getElementById("hudHome");
+  home.textContent = CONFIG.siteTitle;
+  home.href = CONFIG.homeHref;
+  if(CONFIG.lang){
+    const ls = document.getElementById("langSwitch");
+    ls.href = CONFIG.lang.href;
+    ls.textContent = CONFIG.lang.label;
+    ls.hidden = false;
+  }
+  const depthBar = document.getElementById("depthBar");
+  for(let i=0;i<N;i++){ const s=document.createElement("div"); s.className="depth-seg"; depthBar.appendChild(s); }
+  function updateHud(){
+    depthBar.querySelectorAll(".depth-seg").forEach((s,i)=>s.classList.toggle("filled", i<current));
+    depthBar.setAttribute("aria-label", `Depth progress: level ${current} of ${N}`);
+    const earned = current - 1;
+    document.getElementById("hudDepth").innerHTML =
+      `<span class="hide-s">${T.depth} </span><strong>${T.level} ${current} / ${N}</strong> · ${CONFIG.depthNames[current-1]}` +
+      (earned > 0 ? ` · ${CONFIG.token.emoji} ×${earned}` : "");
+  }
+
+  /* hero */
+  const main = document.getElementById("main");
+  const hero = document.createElement("section");
+  hero.className = "hero";
+  hero.innerHTML = `
+    <div class="eyebrow">${CONFIG.hero.eyebrow}</div>
+    <h1>${CONFIG.hero.titleHTML}</h1>
+    <div class="hero-lede">${CONFIG.hero.icon}<p class="hero-note">${CONFIG.hero.ledeHTML}</p></div>
+    <p class="hero-note">${CONFIG.hero.noteHTML}</p>`;
+  main.appendChild(hero);
+
+  /* level cards */
+  L.forEach((lv,i)=>{
+    const n = i+1;
+    const card = document.createElement("section");
+    card.className = "level" + (n===1 ? "" : " locked");
+    card.id = "lv"+n;
+    let inner = `
+      <div class="level-head">
+        <div class="lv-badge">${n}</div>
+        <div class="lv-meta"><div class="lv-kicker">${lv.kicker}</div><h2>${lv.title}</h2></div>
+      </div>
+      <div class="level-body">${lv.bodyHTML}
+        ${lv.widget && WIDGETS[lv.widget] ? WIDGETS[lv.widget].html : ""}
+        ${lv.afterWidgetHTML || ""}
+      </div>`;
+    if(n < N){
+      inner += `
+      <div class="checkpoint">
+        <div class="cp-label">◈ ${T.checkpoint} ${n} / ${N}</div>
+        <div class="cp-sum">${lv.sum}</div>
+        <div class="cp-actions">
+          <button class="btn btn-deeper" type="button" data-next="${n+1}">${T.goDeeper} &nbsp;${T.nextLevel} ${n+1}: ${L[n].title}</button>
+          <button class="btn btn-stop" type="button" data-stop="${n}">${T.stopHere}</button>
+        </div>
+        <div class="cp-hint">${T.cpHint.replace("{token}", CONFIG.token.name)}</div>
+      </div>`;
+    } else {
+      inner += `
+      <div class="finale">
+        <div class="medal" aria-hidden="true">${CONFIG.finale.emoji}</div>
+        <h2>${CONFIG.finale.title}</h2>
+        <p>${CONFIG.finale.text}</p>
+        <a class="btn btn-deeper finale-home" href="${CONFIG.homeHref}">${T.finaleHome}</a>
+      </div>`;
+    }
+    card.innerHTML = inner;
+    main.appendChild(card);
+    if(lv.widget && WIDGETS[lv.widget]) WIDGETS[lv.widget].init(card);
+  });
+
+  /* footer */
+  document.getElementById("pageFooter").innerHTML =
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">${T.reset}</button>`;
+  document.getElementById("resetProg").addEventListener("click", ()=>{
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+
+  /* progress persistence */
+  function save(){ try{ localStorage.setItem(KEY, String(current)); }catch(e){} }
+  function restore(){
+    let saved = 1;
+    try{ saved = parseInt(localStorage.getItem(KEY)||"1",10)||1; }catch(e){}
+    saved = Math.min(Math.max(saved,1), N);
+    for(let n=2;n<=saved;n++) document.getElementById("lv"+n).classList.remove("locked");
+    current = saved;
+  }
+
+  /* toast */
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove("show"), 2600);
+  }
+
+    let lastReward = -1;
+  function pickReward(){
+    let i;
+    do{ i = Math.floor(Math.random()*REWARDS.length); } while(i === lastReward && REWARDS.length > 1);
+    lastReward = i;
+    return REWARDS[i];
+  }
+
+  /* build the reward card shown at the top of a newly opened level.
+     `fact` comes from the level just left behind — a bonus nugget one
+     layer deeper than what they've read. */
+  function rewardCard(fromLevel){
+    const r = pickReward(), tok = CONFIG.token;
+    const fact = (L[fromLevel-1] || {}).fact;
+    return `<div class="reward">
+      <div class="reward-top">
+        <div class="reward-animal" aria-hidden="true">${r.animal}${tok.emoji}</div>
+        <div class="reward-line">${r.line}</div>
+      </div>
+      <div class="reward-token">${tok.emoji} +1 ${tok.name}${fact ? `<span class="reward-fact">${fact}</span>` : ""}</div>
+    </div>`;
+  }
+
+  /* unlock */
+  function unlock(n){
+    const card = document.getElementById("lv"+n);
+    if(!card.classList.contains("locked")){
+      card.scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+    card.classList.remove("locked");
+    card.classList.add("unlocking");
+    current = Math.max(current, n);
+    save();
+    updateHud();
+
+    /* place the descent reward at the top of the level they just opened */
+    const body = card.querySelector(".level-body");
+    if(body && !card.dataset.rewarded){
+      body.insertAdjacentHTML("afterbegin", rewardCard(n-1));
+      card.dataset.rewarded = "1";
+    }
+
+    showToast(`⬢ ${T.unlocked.replace("{n}", n)} · ${CONFIG.token.emoji} +1 ${CONFIG.token.name.toUpperCase()}`);
+    requestAnimationFrame(()=>setTimeout(()=>card.scrollIntoView({behavior:"smooth", block:"start"}), 60));
+    card.addEventListener("animationend", ()=>card.classList.remove("unlocking"), {once:true});
+  }
+
+  /* surface modal */
+  /* surface modal */
+  const scrim = document.getElementById("modalScrim");
+  const modalList = document.getElementById("modalList");
+  let stoppedAt = 1;
+  function openModal(n){
+    stoppedAt = n;
+    document.getElementById("modalLevel").textContent = n;
+    modalList.innerHTML = "";
+    for(let i=0;i<n;i++){
+      const li = document.createElement("li");
+      li.textContent = L[i].take;
+      modalList.appendChild(li);
+    }
+    scrim.classList.add("open");
+    document.getElementById("modalResume").focus();
+  }
+  function closeModal(){ scrim.classList.remove("open"); }
+  document.getElementById("modalHome").href = CONFIG.homeHref;
+  document.getElementById("modalResume").addEventListener("click", ()=>{
+    const n = Math.min(stoppedAt+1, N);
+    closeModal();
+    unlock(n);
+  });
+  scrim.addEventListener("click", e=>{ if(e.target===scrim) closeModal(); });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  /* clicks */
+  document.body.addEventListener("click", e=>{
+    const deeper = e.target.closest("[data-next]");
+    if(deeper){ unlock(parseInt(deeper.dataset.next,10)); return; }
+    const stop = e.target.closest("[data-stop]");
+    if(stop){ openModal(parseInt(stop.dataset.stop,10)); }
+  });
+
+  restore();
+  restore();
+  updateHud();
+})();
+</script>
+</body>
+</html>
