@@ -593,7 +593,7 @@ const WIDGETS = {
 
   /* footer */
   document.getElementById("pageFooter").innerHTML =
-    CONFIG.footerHTML + ` · <button type="button" id="resetProg">${T.reset}</button>`;
+    CONFIG.footerHTML + ` · <button type="button" id="resetProg">${T.reset}</button> · <span style="opacity:.7">v1.2</span>`;
   document.getElementById("resetProg").addEventListener("click", ()=>{
     try{ localStorage.removeItem(KEY); }catch(e){}
     location.reload();
